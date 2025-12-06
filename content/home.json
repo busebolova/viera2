@@ -1,7 +1,15 @@
 {
-  "video": {
-    "url": "",
-    "title": "Viera & Alkan Yapı"
+  "heroTitle": "Viera & Alkan Yapı",
+  "heroSubtitle": "60 yılı aşkın deneyimimizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
+  "stats": {
+    "yearFounded": "1964",
+    "yearFoundedLabel": "KURULUŞ YILI",
+    "employees": "50+",
+    "employeesLabel": "ÇALIŞAN",
+    "projects": "100+",
+    "projectsLabel": "TAMAMLANAN PROJE",
+    "experience": "60+",
+    "experienceLabel": "YIL DENEYİM"
   },
   "experience": {
     "title": "60 Yılı Aşkın Tecrübe",
@@ -11,5 +19,26 @@
     "title": "Hakkımızda",
     "description": "Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
     "image": "/about-office.jpg"
+  },
+  "whyUs": {
+    "title": "Neden VIERA Construction?",
+    "items": [
+      {
+        "title": "Kalite",
+        "description": "Her projede en yüksek kalite standartlarını uyguluyoruz."
+      },
+      {
+        "title": "Güvenilirlik",
+        "description": "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz."
+      },
+      {
+        "title": "Yenilikçilik",
+        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz."
+      },
+      {
+        "title": "Sürdürülebilirlik",
+        "description": "Çevreye duyarlı projeler geliştiriyoruz."
+      }
+    ]
   }
 }
