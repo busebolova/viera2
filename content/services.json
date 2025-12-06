@@ -5,20 +5,18 @@
     {
       "id": "konut",
       "title": "Konut Projeleri",
-      "description": "Modern yaşam alanları tasarlıyor ve inşa ediyoruz",
-      "image": "/service-residential.jpg"
+      "description": "Modern yaşam alanları tasarlıyor ve inşa ediyoruz. Aile yaşamına uygun, konforlu ve güvenli konutlar üretiyoruz.",
+      "image": "/service-residential.jpg",
+      "features": ["Modern tasarım", "Depreme dayanıklı yapı", "Enerji verimli sistemler", "Sosyal alanlar"]
     },
     {
       "id": "isyeri",
       "title": "İş Yeri Projeleri",
-      "description": "Ticari ve kurumsal yapılar için profesyonel çözümler",
-      "image": "/service-commercial.jpg"
+      "description": "Ticari ve kurumsal yapılar için profesyonel çözümler sunuyoruz. Ofis, plaza ve iş merkezi projeleri geliştiriyoruz.",
+      "image": "/service-commercial.jpg",
+      "features": ["Akıllı bina sistemleri", "Geniş otopark alanları", "Merkezi konum", "A sınıfı ofis standartları"]
     },
     {
       "id": "karma",
       "title": "Karma Projeler",
-      "description": "Konut ve ticari alanları bir arada sunan projeler",
-      "image": "/service-mixed.jpg"
-    }
-  ]
-}
+      "description": "Konut ve ticari alanları bir arada sunan karma kullanımlı projeler geliştiriyo
