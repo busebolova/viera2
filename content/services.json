@@ -1,4 +1,24 @@
 {
   "title": "Hizmetlerimiz",
-  "services": [...]
+  "description": "Konut ve iş yeri üretiminde kapsamlı çözümler sunuyoruz",
+  "services": [
+    {
+      "id": "konut",
+      "title": "Konut Projeleri",
+      "description": "Modern yaşam alanları tasarlıyor ve inşa ediyoruz",
+      "image": "/service-residential.jpg"
+    },
+    {
+      "id": "isyeri",
+      "title": "İş Yeri Projeleri",
+      "description": "Ticari ve kurumsal yapılar için profesyonel çözümler",
+      "image": "/service-commercial.jpg"
+    },
+    {
+      "id": "karma",
+      "title": "Karma Projeler",
+      "description": "Konut ve ticari alanları bir arada sunan projeler",
+      "image": "/service-mixed.jpg"
+    }
+  ]
 }
