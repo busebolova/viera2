@@ -268,7 +268,7 @@ export default function YonetimPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-zinc-800 bg-zinc-900/50 overflow-x-auto">
+      <div className="flex border-b border-zinc-800 bg-zinc-950/50 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -619,9 +619,16 @@ function AboutEditor({ content, updateValue, getValue, openImageUpload, uploadin
   return (
     <>
       <Section title="Genel Bilgiler">
-        <Field label="Sayfa Basligi" path={["title"]} getValue={getValue} updateValue={updateValue} />
+        <Field label="Sayfa Basligi" path={["pageTitle"]} getValue={getValue} updateValue={updateValue} />
         <Field label="Aciklama" path={["description"]} getValue={getValue} updateValue={updateValue} textarea />
         <Field label="Sertifika" path={["certificate"]} getValue={getValue} updateValue={updateValue} />
+        <Field
+          label="Sertifika Aciklamasi"
+          path={["certificateDescription"]}
+          getValue={getValue}
+          updateValue={updateValue}
+          textarea
+        />
         <ImageField
           label="Hero Gorsel"
           path={["heroImage"]}
@@ -680,18 +687,24 @@ function AboutEditor({ content, updateValue, getValue, openImageUpload, uploadin
 
       <Section title="Firma Bilgileri">
         <Field label="Firma Adi" path={["company", "name"]} getValue={getValue} updateValue={updateValue} />
-        <Field label="Alt Baslik" path={["company", "subtitle"]} getValue={getValue} updateValue={updateValue} />
+        <Field
+          label="Alt Baslik (Badge)"
+          path={["company", "subtitle"]}
+          getValue={getValue}
+          updateValue={updateValue}
+        />
         <Field label="Kurucu" path={["company", "founder"]} getValue={getValue} updateValue={updateValue} />
         <Field label="Kurucu Unvani" path={["company", "founderTitle"]} getValue={getValue} updateValue={updateValue} />
       </Section>
 
       <Section title="Iletisim Bilgileri">
         <Field label="Adres" path={["contact", "address"]} getValue={getValue} updateValue={updateValue} textarea />
-        <Field label="Yetkili" path={["contact", "authorized"]} getValue={getValue} updateValue={updateValue} />
+        <Field label="Yetkili Kisi" path={["contact", "authorized"]} getValue={getValue} updateValue={updateValue} />
         <Field label="Telefon" path={["contact", "phone"]} getValue={getValue} updateValue={updateValue} />
+        <Field label="Cep Telefonu" path={["contact", "mobile"]} getValue={getValue} updateValue={updateValue} />
         <Field label="Fax" path={["contact", "fax"]} getValue={getValue} updateValue={updateValue} />
-        <Field label="Cep" path={["contact", "mobile"]} getValue={getValue} updateValue={updateValue} />
         <Field label="E-posta" path={["contact", "email"]} getValue={getValue} updateValue={updateValue} />
+        <Field label="Calisma Saatleri" path={["contact", "hours"]} getValue={getValue} updateValue={updateValue} />
       </Section>
 
       <Section title="Vizyon">

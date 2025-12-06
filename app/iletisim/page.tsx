@@ -9,7 +9,7 @@ export const metadata = {
     "VIERA - Alkan Yapı & Viera Ortaklığı iletişim bilgileri. Adres: Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/İstanbul.",
 }
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 export default async function ContactPage() {
   const data = await getContent<typeof defaultContact>("contact")

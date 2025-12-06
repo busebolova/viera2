@@ -1,8 +1,6 @@
 {
   "title": "Hakkımızda",
   "pageTitle": "Firmamız Hakkında",
-  "heroImage": "/modern-construction-office-building.jpg",
-  "officeImage": "/modern-office-interior.jpg",
   "description": "VIERA Construction - Alkan Yapı & Viera Ortaklığı olarak konut ve iş yeri üretimine aralıksız devam etmekteyiz. Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
   "certificate": "D Sınıfı Müteahhitlik Belgesi",
   "certificateDescription": "Deneyimli kadromuz ve modern ekipmanlarımızla müşterilerimizin ihtiyaçlarına en uygun çözümleri sunmaktayız.",
@@ -62,5 +60,6 @@
         "description": "Çevreye duyarlı projeler geliştiriyoruz."
       }
     ]
-  }
+  },
+  "image": "/about-office.jpg"
 }

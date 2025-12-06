@@ -2,20 +2,20 @@
   "hero": {
     "title": "Hizmetlerimiz",
     "subtitle": "VIERA - Alkan Yapı & Viera Ortaklığı olarak 60 yılı aşkın tecrübemizle modern yaşam alanları inşa ediyoruz.",
-    "image": "/services-hero.jpg"
+    "image": "/modern-construction-site.png"
   },
   "intro": {
     "badge": "Uzmanlık Alanlarımız",
     "title": "Sunduğumuz Hizmetler",
-    "description": "60 yılı aşkın süredir inşaat sektöründe edindiğimiz tecrübeyle modern ve kaliteli projeler üretiyoruz."
+    "description": "1961 yılından bu yana inşaat sektöründe edindiğimiz tecrübeyle modern ve kaliteli projeler üretiyoruz."
   },
   "services": [
     {
       "id": "konut",
       "icon": "Home",
       "title": "Konut Projeleri",
-      "description": "Modern yaşam standartlarına uygun, konforu ve estetiği bir araya getiren konut projeleri geliştiriyoruz. 60 yılı aşkın tecrübemizle, her detayın özenle planlandığı yaşam alanları inşa ediyoruz.",
-      "image": "/service-residential.jpg",
+      "description": "VIERA - Alkan Yapı & Viera Ortaklığı olarak, modern yaşam standartlarına uygun, konforu ve estetiği bir araya getiren konut projeleri geliştiriyoruz. 60 yılı aşkın tecrübemizle, her detayın özenle planlandığı yaşam alanları inşa ediyoruz.",
+      "image": "/modern-apartment-building.png",
       "items": [
         {
           "title": "Lüks Apartman Kompleksleri",
@@ -35,8 +35,8 @@
       "id": "ticari",
       "icon": "Building",
       "title": "Ticari Projeler",
-      "description": "Fonksiyonel ve prestijli ticari binalar inşa ediyoruz. Modern iş merkezlerinden alışveriş komplekslerine kadar geniş bir yelpazede hizmet sunuyoruz.",
-      "image": "/service-commercial.jpg",
+      "description": "İş dünyasının dinamik ihtiyaçlarına yönelik, fonksiyonel ve prestijli ticari binalar inşa ediyoruz. Modern iş merkezlerinden alışveriş komplekslerine, turizm tesislerinden karma kullanımlı projelere kadar geniş bir yelpazede hizmet sunuyoruz.",
+      "image": "/modern-office-building.png",
       "items": [
         {
           "title": "İş Merkezleri ve Plazalar",
@@ -56,8 +56,8 @@
       "id": "karma",
       "icon": "Landmark",
       "title": "Karma Kullanımlı Projeler",
-      "description": "Yaşam, iş ve alışveriş alanlarını bir araya getiren entegre yaşam merkezleri tasarlıyoruz.",
-      "image": "/service-mixed.jpg",
+      "description": "Yaşam, iş ve alışveriş alanlarını bir araya getiren entegre yaşam merkezleri tasarlıyoruz. Modern şehir yaşamının tüm ihtiyaçlarını tek bir noktada karşılayan, sürdürülebilir ve akıllı bina teknolojileriyle donatılmış projeler geliştiriyoruz.",
+      "image": "/commercial-building-construction.png",
       "items": [
         {
           "title": "Rezidans-Ofis Kompleksleri",

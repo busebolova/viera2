@@ -23,7 +23,7 @@ export const metadata = {
     "VIERA Construction - Alkan Yapı & Viera Ortaklığı. D sınıfı Müteahhitlik Belgesiyle İstanbul'da konut ve iş yeri üretimi.",
 }
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 export default async function AboutPage() {
   const data = await getContent<typeof defaultAbout>("about")

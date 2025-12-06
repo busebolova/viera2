@@ -10,7 +10,7 @@ export const metadata = {
     "VIERA - Alkan Yapı & Viera Ortaklığı inşaat hizmetleri: Konut projeleri, ticari binalar ve karma kullanımlı projeler.",
 }
 
-export const revalidate = 60
+export const dynamic = "force-dynamic"
 
 const iconMap: Record<string, any> = {
   Home,

@@ -16,7 +16,7 @@ export async function getContent<T>(file: string): Promise<T | null> {
         Authorization: `Bearer ${GITHUB_TOKEN}`,
         Accept: "application/vnd.github.v3+json",
       },
-      next: { revalidate: 60 }, // 1 dakikada bir yenile
+      cache: "no-store",
     })
 
     if (!res.ok) {

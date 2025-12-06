@@ -10,7 +10,7 @@ export const metadata = {
   description: "VIERA - Alkan Yapı & Viera Ortaklığı tamamlanan, devam eden ve yakında başlayacak inşaat projeleri.",
 }
 
-export const revalidate = 60 // Her 1 dakikada bir yeniden oluştur
+export const dynamic = "force-dynamic"
 
 export default async function ProjectsPage() {
   const data = await getContent<typeof defaultProjects>("projects")
