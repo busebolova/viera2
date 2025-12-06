@@ -1,6 +1,7 @@
 {
   "pageTitle": "Projelerimiz",
   "pageDescription": "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
+  "heroImage": "/projects-hero.jpg",
   "categories": {
     "completed": "Tamamlanan Projeler",
     "ongoing": "Devam Eden Projeler",
@@ -11,8 +12,8 @@
       "id": "validebag-27-28",
       "slug": "validebag-27-28-blok",
       "title": "Validebağ 27-28 Blok",
-      "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
-      "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
+      "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok. - 56 Daire",
+      "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır.",
       "details": "56 Daire",
       "year": "2024",
       "location": "Altunizade, Üsküdar - İstanbul",
@@ -20,27 +21,16 @@
       "units": "56 Daire",
       "floors": "8 Kat",
       "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
-      "features": [
-        "Modern mimari tasarım",
-        "Depreme dayanıklı yapı",
-        "Kapalı otopark",
-        "Güvenlik sistemi",
-        "Jeneratör",
-        "Asansör"
-      ]
+      "mainImage": "/project-validebag-27-28.jpg",
+      "gallery": [],
+      "features": ["Modern mimari tasarım", "Depreme dayanıklı yapı", "Kapalı otopark", "Güvenlik sistemi"]
     },
     {
       "id": "azade-86",
       "slug": "azade-evleri-86-parsel",
       "title": "AZADE Evleri 86 Parsel",
-      "shortDescription": "Barbaros Mah. Mütevelliçeşme Cad.",
-      "fullDescription": "Barbaros Mahallesi Mütevelliçeşme Caddesi'nde yer alan AZADE Evleri 86 Parsel projemiz, şehrin merkezinde huzurlu bir yaşam sunmaktadır. 36 daireden oluşan projemiz, kaliteli malzeme ve işçilik anlayışıyla tamamlanmıştır.",
+      "shortDescription": "Barbaros Mah. Mütevelliçeşme Cad. - 36 Daire",
+      "fullDescription": "Barbaros Mahallesi Mütevelliçeşme Caddesi'nde yer alan AZADE Evleri 86 Parsel projemiz, şehrin merkezinde huzurlu bir yaşam sunmaktadır.",
       "details": "36 Daire",
       "year": "2021",
       "location": "Barbaros, Üsküdar - İstanbul",
@@ -48,16 +38,16 @@
       "units": "36 Daire",
       "floors": "6 Kat",
       "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
+      "mainImage": "/project-azade-86.jpg",
+      "gallery": [],
+      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi"]
     },
     {
       "id": "eski-anadolu-b",
       "slug": "eski-anadolu-sitesi-b-blok",
       "title": "Eski Anadolu Sitesi B Blok",
-      "shortDescription": "Eski Anadolu Sitesi B Blok Apartmanı",
-      "fullDescription": "Eski Anadolu Sitesi B Blok projemiz, kentsel dönüşüm kapsamında yenilenerek modern bir yapıya kavuşturulmuştur. Depreme dayanıklı yapısı ve modern altyapısıyla güvenli bir yaşam sunmaktadır.",
+      "shortDescription": "Eski Anadolu Sitesi B Blok Apartmanı - Kentsel Dönüşüm",
+      "fullDescription": "Eski Anadolu Sitesi B Blok projemiz, kentsel dönüşüm kapsamında yenilenerek modern bir yapıya kavuşturulmuştur.",
       "details": "Kentsel Dönüşüm",
       "year": "2021",
       "location": "Üsküdar - İstanbul",
@@ -65,9 +55,9 @@
       "units": "32 Daire",
       "floors": "7 Kat",
       "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "/project-eski-anadolu.jpg",
       "gallery": [],
-      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
+      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı"]
     }
   ],
   "ongoing": [
@@ -76,8 +66,8 @@
       "slug": "validebag-29-kentsel-donusum",
       "title": "Validebağ 29 Kentsel Dönüşüm",
       "shortDescription": "38 Daire - Kaba inşaat tamamlandı",
-      "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
-      "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
+      "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir.",
+      "details": "2025 Q3 tamamlanacak",
       "year": "2025",
       "expectedCompletion": "2025 Q3",
       "location": "Altunizade, Üsküdar - İstanbul",
@@ -86,25 +76,14 @@
       "floors": "8 Kat",
       "progress": 65,
       "status": "ongoing",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": [
-        "Kentsel dönüşüm projesi",
-        "Modern mimari",
-        "Kapalı otopark",
-        "Sosyal alanlar",
-        "Akıllı ev sistemleri"
-      ],
+      "mainImage": "/project-validebag-29.jpg",
+      "gallery": [],
+      "features": ["Kentsel dönüşüm projesi", "Modern mimari", "Kapalı otopark", "Akıllı ev sistemleri"],
       "updates": [
         {
           "date": "2024-12",
           "title": "Kaba İnşaat Tamamlandı",
           "description": "Projenin kaba inşaat aşaması başarıyla tamamlanmıştır."
-        },
-        {
-          "date": "2024-10",
-          "title": "Çatı Katı Tamamlandı",
-          "description": "Çatı katı betonarme işleri tamamlanmıştır."
         }
       ]
     }
@@ -121,7 +100,7 @@
       "expectedStart": "2025 Q2",
       "location": "İstanbul",
       "status": "upcoming",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "/project-upcoming.jpg",
       "gallery": [],
       "features": []
     }
