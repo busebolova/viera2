@@ -1,0 +1,43 @@
+{
+  "title": "Projelerimiz",
+  "description": "Tamamlanan, devam eden ve planlanan projelerimiz",
+  "completed": [
+    {
+      "id": "proje-1",
+      "slug": "ornek-proje-1",
+      "title": "Örnek Tamamlanan Proje",
+      "location": "Üsküdar, İstanbul",
+      "year": "2023",
+      "description": "Proje açıklaması buraya gelecek",
+      "image": "/project-1.jpg",
+      "gallery": ["/project-1.jpg", "/project-1-2.jpg"],
+      "features": ["3 Blok", "120 Daire", "Otopark", "Sosyal Tesisler"]
+    }
+  ],
+  "ongoing": [
+    {
+      "id": "proje-2",
+      "slug": "devam-eden-proje",
+      "title": "Devam Eden Proje",
+      "location": "Kadıköy, İstanbul",
+      "year": "2024-2025",
+      "description": "Devam eden proje açıklaması",
+      "image": "/project-2.jpg",
+      "gallery": [],
+      "features": ["2 Blok", "80 Daire"]
+    }
+  ],
+  "upcoming": [
+    {
+      "id": "proje-3",
+      "slug": "baslayacak-proje",
+      "title": "Başlayacak Proje",
+      "location": "Beşiktaş, İstanbul",
+      "year": "2025",
+      "description": "Yakında başlayacak proje",
+      "image": "/project-3.jpg",
+      "gallery": [],
+      "features": ["Planlama aşamasında"]
+    }
+  ]
+}
