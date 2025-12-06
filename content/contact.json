@@ -1,21 +1,10 @@
 {
-  "title": "İletişim",
-  "description": "Bizimle iletişime geçin",
-  "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
+  "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
   "phone": "0216 391 49 40",
-  "fax": "0216 310 90 74",
   "mobile": "0533 479 83 87",
-  "email": "info@vierayapi.com",
+  "email": "info@alkanyapi.com.tr",
+  "fax": "0216 310 90 74",
   "authorized": "Erdem Alkan",
-  "workingHours": {
-    "weekdays": "09:00 - 18:00",
-    "saturday": "09:00 - 14:00",
-    "sunday": "Kapalı"
-  },
-  "social": {
-    "instagram": "",
-    "facebook": "",
-    "linkedin": ""
-  },
-  "mapEmbed": ""
+  "hours": "Pazartesi - Cuma: 09:00 - 18:00",
+  "heroImage": "/modern-office-building-exterior-istanbul.jpg"
 }
