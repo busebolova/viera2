@@ -1,22 +1,54 @@
 {
-  "title": "Hizmetlerimiz",
-  "description": "Konut ve iş yeri üretiminde kapsamlı çözümler sunuyoruz",
+  "hero": {
+    "title": "Hizmetlerimiz",
+    "subtitle": "VIERA - Alkan Yapı & Viera Ortaklığı olarak 60 yılı aşkın tecrübemizle modern yaşam alanları inşa ediyoruz.",
+    "image": "/services-hero.jpg"
+  },
+  "intro": {
+    "badge": "Uzmanlık Alanlarımız",
+    "title": "Sunduğumuz Hizmetler",
+    "description": "60 yılı aşkın süredir inşaat sektöründe edindiğimiz tecrübeyle modern ve kaliteli projeler üretiyoruz."
+  },
   "services": [
     {
       "id": "konut",
+      "icon": "Home",
       "title": "Konut Projeleri",
-      "description": "Modern yaşam alanları tasarlıyor ve inşa ediyoruz. Aile yaşamına uygun, konforlu ve güvenli konutlar üretiyoruz.",
+      "description": "Modern yaşam standartlarına uygun, konforu ve estetiği bir araya getiren konut projeleri geliştiriyoruz.",
       "image": "/service-residential.jpg",
-      "features": ["Modern tasarım", "Depreme dayanıklı yapı", "Enerji verimli sistemler", "Sosyal alanlar"]
+      "items": [
+        {"title": "Lüks Apartman Kompleksleri", "description": "Modern mimarisi ve sosyal olanaklarıyla"},
+        {"title": "Rezidans Projeleri", "description": "Premium hizmet anlayışıyla donatılmış"},
+        {"title": "Villa ve Müstakil Konutlar", "description": "Özel yaşam alanları için özel tasarımlar"}
+      ]
     },
     {
-      "id": "isyeri",
-      "title": "İş Yeri Projeleri",
-      "description": "Ticari ve kurumsal yapılar için profesyonel çözümler sunuyoruz. Ofis, plaza ve iş merkezi projeleri geliştiriyoruz.",
+      "id": "ticari",
+      "icon": "Building",
+      "title": "Ticari Projeler",
+      "description": "Fonksiyonel ve prestijli ticari binalar inşa ediyoruz.",
       "image": "/service-commercial.jpg",
-      "features": ["Akıllı bina sistemleri", "Geniş otopark alanları", "Merkezi konum", "A sınıfı ofis standartları"]
+      "items": [
+        {"title": "İş Merkezleri ve Plazalar", "description": "Kurumsal kimliğe uygun prestijli ofis alanları"},
+        {"title": "Alışveriş Kompleksleri", "description": "Modern perakende ve eğlence merkezleri"},
+        {"title": "Otel ve Turizm Tesisleri", "description": "Konuk memnuniyeti odaklı konaklama projeleri"}
+      ]
     },
     {
       "id": "karma",
-      "title": "Karma Projeler",
-      "description": "Konut ve ticari alanları bir arada sunan karma kullanımlı projeler geliştiriyo
+      "icon": "Landmark",
+      "title": "Karma Kullanımlı Projeler",
+      "description": "Yaşam, iş ve alışveriş alanlarını bir araya getiren entegre yaşam merkezleri tasarlıyoruz.",
+      "image": "/service-mixed.jpg",
+      "items": [
+        {"title": "Rezidans-Ofis Kompleksleri", "description": "Yaşam ve iş alanlarını entegre eden projeler"},
+        {"title": "Karma Kullanım Alışveriş Merkezleri", "description": "Ticaret, eğlence ve konut konseptleri"},
+        {"title": "Yerleşke Projeleri", "description": "Bütünleşik şehir içinde şehir konseptleri"}
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim",
+    "description": "60 yılı aşkın tecrübemiz ve uzman ekibimizle projelerinizi hayata geçirmek için hazırız."
+  }
+}
