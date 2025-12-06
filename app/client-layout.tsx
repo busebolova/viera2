@@ -20,6 +20,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     whatsapp: "905334798387",
   })
 
+  const isYonetimPage = pathname === "/yonetim"
+
   useEffect(() => {
     setMounted(true)
 
@@ -29,14 +31,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     checkScreenSize()
     window.addEventListener("resize", checkScreenSize)
 
-    fetch("/data/contact.json")
+    fetch("/api/github/content?file=contact")
       .then((r) => r.json())
       .then((data) => {
-        if (data.phone) {
+        if (data.data?.phone) {
           setContactInfo({
-            phone: data.phone,
-            mobile: data.mobile || data.phone,
-            whatsapp: data.whatsapp || "905334798387",
+            phone: data.data.phone,
+            mobile: data.data.mobile || data.data.phone,
+            whatsapp: data.data.whatsapp || "905334798387",
           })
         }
       })
@@ -72,6 +74,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     bottomNavBg: isDark ? "#18181b" : "#ffffff",
     bottomNavActive: isDark ? "#fafafa" : "#18181b",
     bottomNavInactive: isDark ? "#71717a" : "#a1a1aa",
+  }
+
+  if (isYonetimPage) {
+    return <>{children}</>
   }
 
   if (!mounted) {
@@ -353,7 +359,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </nav>
       )}
 
-      {/* WhatsApp Floating Button - always visible */}
+      {/* WhatsApp Floating Button */}
       <WhatsAppButton />
     </>
   )

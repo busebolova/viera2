@@ -1,6 +1,6 @@
 {
   "pageTitle": "Projelerimiz",
-  "pageDescription": "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler 2",
+  "pageDescription": "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
   "categories": {
     "completed": "Tamamlanan Projeler",
     "ongoing": "Devam Eden Projeler",
@@ -10,7 +10,7 @@
     {
       "id": "validebag-27-28",
       "slug": "validebag-27-28-blok",
-      "title": "Validebağ 27-28 Blok 2",
+      "title": "Validebağ 27-28 Blok",
       "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
       "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
       "details": "56 Daire",
@@ -49,17 +49,8 @@
       "floors": "6 Kat",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
-      "features": [
-        "Merkezi konum",
-        "Kaliteli malzeme",
-        "Kapalı otopark",
-        "Peyzaj düzenlemesi",
-        "Çocuk oyun alanı"
-      ]
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
     },
     {
       "id": "eski-anadolu-b",
@@ -76,26 +67,7 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": [
-        "Kentsel dönüşüm projesi",
-        "Depreme dayanıklı yapı",
-        "Modern altyapı",
-        "Yalıtım sistemi"
-      ]
-    },
-    {
-      "id": "project-1765043740972",
-      "slug": "proje-1765043740972",
-      "title": "Yeni Proje",
-      "shortDescription": "",
-      "fullDescription": "",
-      "location": "",
-      "year": "2025",
-      "details": "",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [],
-      "features": [],
-      "updates": []
+      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
     }
   ],
   "ongoing": [
@@ -115,10 +87,7 @@
       "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
@@ -156,6 +125,5 @@
       "gallery": [],
       "features": []
     }
-  ],
-  "heroImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/Ekran%20Resmi%202025-12-02%2014.31.02.png"
+  ]
 }
