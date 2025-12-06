@@ -1,6 +1,21 @@
 {
   "title": "Hakkımızda",
-  "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız...",
-  "founder": { "name": "Servet Alkan", "role": "Kurucu" },
-  "contact": { "phone": "02163914940", "address": "..." }
+  "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, 60 yılı aşkın deneyimi ve köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir. Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
+  "certificate": "D Sınıfı Müteahhitlik Belgesi",
+  "founder": {
+    "name": "Servet Alkan",
+    "role": "Kurucu"
+  },
+  "contact": {
+    "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
+    "phone": "02163914940",
+    "fax": "02163109074",
+    "mobile": "05334798387",
+    "authorized": "Erdem Alkan"
+  },
+  "values": [
+    {"title": "Güven", "description": "60 yılı aşkın tecrübemizle güvenilir iş ortağınız"},
+    {"title": "Kalite", "description": "En yüksek standartlarda malzeme ve işçilik"},
+    {"title": "Profesyonellik", "description": "Uzman kadromuzla profesyonel hizmet"}
+  ]
 }
