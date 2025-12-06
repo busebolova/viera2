@@ -1,6 +1,15 @@
 {
-  "heroTitle": "Viera & Alkan Yapı",
-  "heroSubtitle": "60 yılı aşkın deneyimimiz...",
-  "experienceYears": "60+",
-  "experienceTitle": "60 Yılı Aşkın Tecrübe"
+  "video": {
+    "url": "",
+    "title": "Viera & Alkan Yapı"
+  },
+  "experience": {
+    "title": "60 Yılı Aşkın Tecrübe",
+    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, 60 yılı aşkın deneyimi ve köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
+  },
+  "about": {
+    "title": "Hakkımızda",
+    "description": "Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
+    "image": "/about-office.jpg"
+  }
 }
