@@ -21,10 +21,10 @@ export async function GET(request: Request) {
     }
 
     const data = await res.json()
-    const content = JSON.parse(Buffer.from(data.content, "base64").toString("utf-8"))
+    const content = JSON.parse(Buffer.from(data.content, "base64").toString("utf8"))
 
     return NextResponse.json({
-      content,      // panelin beklediği key
+      content,   // PANELİN OKUDUĞU TEK KEY
       sha: data.sha
     })
   } catch {
