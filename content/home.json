@@ -1,55 +1,68 @@
 {
-  "home": {
-    "video": {
-      "url": "/construction-site-timelapse.mp4",
-      "thumbnail": "/construction-thumbnail.jpg"
-    },
-    "stats": {
-      "founded": "1965",
-      "projects": "150+",
-      "experience": "60 Yıl"
-    },
-    "experience": {
-      "title": "Deneyim ve Uzmanlık",
-      "description": "60 yılı aşkın tecrübemiz ve uzman kadromuzla, her projeyi en yüksek kalite standartlarında teslim ediyoruz. Modern yapı teknolojileri ve sürdürülebilir inşaat yöntemleriyle geleceği inşa ediyoruz."
-    },
-    "process": {
-      "title": "Çalışma Sürecimiz",
-      "description": "Projelerinizi nasıl hayata geçiriyoruz",
-      "steps": [
-        {
-          "number": 1,
-          "title": "Planlama",
-          "description": "Projenizi detaylı analiz ediyor ve en uygun çözümleri sunuyoruz"
-        },
-        {
-          "number": 2,
-          "title": "Tasarım",
-          "description": "Mimarlar ve mühendislerimiz projenizi tasarlıyor"
-        },
-        {
-          "number": 3,
-          "title": "İnşaat",
-          "description": "Uzman ekibimizle projenizi kaliteli bir şekilde inşa ediyoruz"
-        },
-        {
-          "number": 4,
-          "title": "Teslim",
-          "description": "Projenizi zamanında ve eksiksiz olarak teslim ediyoruz"
-        }
-      ]
-    },
-    "cta": {
-      "title": "Projeniz İçin Bizimle İletişime Geçin",
-      "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."
-    }
+  "video": {
+    "url": "/construction-site-timelapse.jpg",
+    "title": "VIERA - Alkan Yapı & Viera Ortaklığı",
+    "subtitle": "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri"
   },
-  "projects": [
-    {
-      "slug": "ornek-proje",
-      "title": "Örnek Proje",
-      "description": "Bu örnek bir projedir.",
-      "image": "/projects/ornek.jpg"
-    }
-  ]
+  "stats": {
+    "founded": "1965",
+    "foundedLabel": "Kuruluş Yılı",
+    "employees": "50+",
+    "employeesLabel": "Çalışan",
+    "completedProjects": "150+",
+    "completedProjectsLabel": "Tamamlanan Proje",
+    "experience": "60+",
+    "experienceLabel": "Yıllık Tecrübe"
+  },
+  "experience": {
+    "title": "Deneyim ve Uzmanlık",
+    "description": "60 yılı aşkın tecrübemiz ve uzman kadromuzla, her projeyi en yüksek kalite standartlarında teslim ediyoruz. Modern yapı teknolojileri ve sürdürülebilir inşaat yöntemleriyle geleceği inşa ediyoruz."
+  },
+  "process": {
+    "title": "Çalışma Sürecimiz",
+    "subtitle": "Projelerinizi nasıl hayata geçiriyoruz",
+    "steps": [
+      {
+        "title": "Planlama",
+        "description": "Projenizi detaylı analiz ediyor ve en uygun çözümleri sunuyoruz"
+      },
+      {
+        "title": "Tasarım",
+        "description": "Mimarlar ve mühendislerimiz projenizi tasarlıyor"
+      },
+      {
+        "title": "İnşaat",
+        "description": "Uzman ekibimizle projenizi kaliteli bir şekilde inşa ediyoruz"
+      },
+      {
+        "title": "Teslim",
+        "description": "Projenizi zamanında ve eksiksiz olarak teslim ediyoruz"
+      }
+    ]
+  },
+  "whyUs": {
+    "title": "Neden Bizi Seçmelisiniz?",
+    "items": [
+      {
+        "title": "60+ Yıllık Tecrübe",
+        "description": "1965'ten beri inşaat sektöründe güvenilir hizmet"
+      },
+      {
+        "title": "Kaliteli İşçilik",
+        "description": "Uzman kadromuz ve modern tekniklerle kusursuz işçilik"
+      },
+      {
+        "title": "Zamanında Teslimat",
+        "description": "Projelerinizi planlanan sürede tamamlıyoruz"
+      },
+      {
+        "title": "Müşteri Memnuniyeti",
+        "description": "Müşterilerimizin %95'i bizi tekrar tercih ediyor"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Projeniz İçin Bizimle İletişime Geçin",
+    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."
+  }
 }
