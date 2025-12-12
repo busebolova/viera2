@@ -1,14 +1,12 @@
 {
-  "hero": {
-    "title": "Viera & Alkan Yapı",
-    "subtitle": "Güven, Kalite, Profesyonellik",
-    "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
-    "image": "/hero-bg.jpg"
-  },
   "video": {
     "url": "https://cdn.pixabay.com/video/2020/06/23/42926-434300944_large.mp4",
-    "title": "Viera & Alkan Yapı 2",
+    "title": "Viera & Alkan Yapı 22",
     "subtitle": "Güven, Kalite, Profesyonellik"
+  },
+  "experience": {
+    "title": "60 Yılı Aşkın Tecrübe",
+    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
   "stats": {
     "founded": "1965",
@@ -19,10 +17,6 @@
     "completedProjectsLabel": "TAMAMLANAN PROJE",
     "experience": "60+",
     "experienceLabel": "YIL DENEYİM"
-  },
-  "experience": {
-    "title": "60 Yılı Aşkın Tecrübe",
-    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
   "about": {
     "badge": "Hakkımızda",
