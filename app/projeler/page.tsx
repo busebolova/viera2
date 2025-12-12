@@ -2,7 +2,7 @@ import Link from "next/link"
 import { ChevronRight, Clock, CheckCircle, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectCard } from "@/components/project-card"
-import { getContent } from "@/lib/github-content"
+import { getProjects } from "@/lib/github-content"
 
 interface Project {
   id: string
@@ -36,7 +36,7 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function ProjectsPage() {
-  const projectsData = await getContent<ProjectsData>("projects")
+  const projectsData = await getProjects()
 
   console.log("[v0] Projects loaded - completed:", projectsData.completed?.length || 0)
   console.log("[v0] Projects loaded - ongoing:", projectsData.ongoing?.length || 0)

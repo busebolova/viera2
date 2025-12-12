@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle2, ArrowRight, Phone, Mail } from "lucide-react"
-import { getContent } from "@/lib/github-content"
+import { getContent, getProjects } from "@/lib/github-content"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -14,16 +14,98 @@ export const metadata = {
     "VIERA - Alkan Yapı & Viera Ortaklığı, Üsküdar merkezli 60 yılı aşkın deneyimle konut projeleri, ticari binalar ve karma kullanımlı yapı projeleri. İstanbul'un güvenilir inşaat ve müteahhitlik firması.",
 }
 
+const defaultContent = {
+  video: {
+    url: "/construction-site-timelapse.jpg",
+    title: "VIERA - Alkan Yapı & Viera Ortaklığı",
+    subtitle: "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri",
+  },
+  stats: {
+    founded: "1965",
+    foundedLabel: "Kuruluş Yılı",
+    employees: "50+",
+    employeesLabel: "Çalışan",
+    completedProjects: "150+",
+    completedProjectsLabel: "Tamamlanan Proje",
+    experience: "60+",
+    experienceLabel: "Yıllık Tecrübe",
+  },
+  experience: {
+    title: "Deneyim ve Uzmanlık",
+    description:
+      "60 yılı aşkın tecrübemiz ve uzman kadromuzla, her projeyi en yüksek kalite standartlarında teslim ediyoruz. Modern yapı teknolojileri ve sürdürülebilir inşaat yöntemleriyle geleceği inşa ediyoruz.",
+  },
+  process: {
+    title: "Çalışma Sürecimiz",
+    subtitle: "Projelerinizi nasıl hayata geçiriyoruz",
+    steps: [
+      {
+        title: "Planlama",
+        description: "Projenizi detaylı analiz ediyor ve en uygun çözümleri sunuyoruz",
+      },
+      {
+        title: "Tasarım",
+        description: "Mimarlar ve mühendislerimiz projenizi tasarlıyor",
+      },
+      {
+        title: "İnşaat",
+        description: "Uzman ekibimizle projenizi kaliteli bir şekilde inşa ediyoruz",
+      },
+      {
+        title: "Teslim",
+        description: "Projenizi zamanında ve eksiksiz olarak teslim ediyoruz",
+      },
+    ],
+  },
+  whyUs: {
+    title: "Neden Bizi Seçmelisiniz?",
+    items: [
+      {
+        title: "60+ Yıllık Tecrübe",
+        description: "1965'ten beri inşaat sektöründe güvenilir hizmet",
+      },
+      {
+        title: "Kaliteli İşçilik",
+        description: "Uzman kadromuz ve modern tekniklerle kusursuz işçilik",
+      },
+      {
+        title: "Zamanında Teslimat",
+        description: "Projelerinizi planlanan sürede tamamlıyoruz",
+      },
+      {
+        title: "Müşteri Memnuniyeti",
+        description: "Müşterilerimizin %95'i bizi tekrar tercih ediyor",
+      },
+    ],
+  },
+  cta: {
+    title: "Projeniz İçin Bizimle İletişime Geçin",
+    description: "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim.",
+  },
+}
+
 async function getHomeContent() {
-  const data = await getContent("home")
-  console.log("[v0] Home data loaded from GitHub")
-  return data
+  try {
+    const data = await getContent("home")
+    return {
+      video: data?.video || defaultContent.video,
+      stats: data?.stats || defaultContent.stats,
+      experience: data?.experience || defaultContent.experience,
+      process: data?.process || defaultContent.process,
+      whyUs: data?.whyUs || defaultContent.whyUs,
+      cta: data?.cta || defaultContent.cta,
+    }
+  } catch (error) {
+    return defaultContent
+  }
 }
 
 async function getProjectsContent() {
-  const data = await getContent("projects")
-  console.log("[v0] Projects data loaded from GitHub")
-  return data
+  try {
+    return await getProjects()
+  } catch (error) {
+    return { completed: [], ongoing: [], upcoming: [] }
+  }
 }
 
 async function getServicesContent() {
@@ -36,23 +118,35 @@ async function getServicesContent() {
 }
 
 export default async function HomePage() {
-  const [home, projects, services] = await Promise.all([getHomeContent(), getProjectsContent(), getServicesContent()])
+  const [home, projectsData, services] = await Promise.all([
+    getHomeContent(),
+    getProjectsContent(),
+    getServicesContent(),
+  ])
 
-  const completedProjects = projects?.completed || []
-  const ongoingProjects = projects?.ongoing || []
+  const completedProjects = projectsData?.completed || []
+  const ongoingProjects = projectsData?.ongoing || []
+
+  const videoUrl = home?.video?.url || defaultContent.video.url
 
   return (
     <div className="min-h-screen">
       {/* Hero Video Section */}
       <section className="relative h-[600px] overflow-hidden">
-        <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
-          <source src={home?.video?.url} type="video/mp4" />
-        </video>
+        {videoUrl.includes(".mp4") ? (
+          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
+            <source src={videoUrl} type="video/mp4" />
+          </video>
+        ) : (
+          <Image src={videoUrl || "/placeholder.svg"} alt="Hero background" fill className="object-cover" priority />
+        )}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
           <div className="container px-4">
-            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">{home?.video?.title}</h1>
-            <p className="text-xl md:text-2xl">{home?.video?.subtitle}</p>
+            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">
+              {home?.video?.title || defaultContent.video.title}
+            </h1>
+            <p className="text-xl md:text-2xl">{home?.video?.subtitle || defaultContent.video.subtitle}</p>
           </div>
         </div>
       </section>
@@ -218,8 +312,8 @@ export default async function HomePage() {
         <section className="bg-zinc-900 py-20 text-white">
           <div className="container px-4">
             <div className="mb-12 text-center">
-              <h2 className="mb-4 text-3xl font-bold">{home.process.title || "Çalışma Sürecimiz"}</h2>
-              <p className="text-zinc-300">{home.process.subtitle || "Projelerinizi nasıl hayata geçiriyoruz"}</p>
+              <h2 className="mb-4 text-3xl font-bold">{home.process.title}</h2>
+              <p className="text-zinc-300">{home.process.subtitle}</p>
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               {home.process.steps.map((step: any, index: number) => (

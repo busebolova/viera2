@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, Calendar, MapPin, Building2, Layers, ArrowRight, CheckCircle2 } from "lucide-react"
-import { getContent } from "@/lib/github-content"
+import { getProjects } from "@/lib/github-content"
 
 interface Project {
   id: string
@@ -36,7 +36,7 @@ interface ProjectsData {
 
 async function getProject(slug: string): Promise<Project | null> {
   try {
-    const data = await getContent<ProjectsData>("projects")
+    const data = await getProjects()
 
     // Tüm projeleri birleştir
     const allProjects = [...(data.completed || []), ...(data.ongoing || []), ...(data.upcoming || [])]

@@ -1,112 +1,67 @@
 "use client"
 
 import type React from "react"
+
 import { useState, useEffect } from "react"
 import { Upload, Save, Plus, Trash2 } from "lucide-react"
 import Image from "next/image" // Import Image component
 
 type ContentType = "home" | "about" | "services" | "projects" | "contact"
 
-type ContentState = {
+const emptyDefaults = {
   home: {
-    video: { url: string; title: string; subtitle: string }
-    experience: { title: string; description: string }
-    stats: Record<string, string>
-    about: Record<string, string>
-    whyUs: Record<string, string>
-    process: { title: string; subtitle: string; steps: Array<{ title: string; description: string }> }
-    clients: { title: string; subtitle: string; logos: Array<{ name: string; logo: string }> }
-    cta: { title: string; description: string }
-  }
+    video: { url: "", title: "", subtitle: "" },
+    stats: { founded: "", employees: "", completedProjects: "", experience: "" },
+    experience: { title: "", description: "" },
+    process: { title: "", subtitle: "", steps: [] },
+    whyUs: { title: "", items: [] },
+    cta: { title: "", description: "" },
+  },
   about: {
-    title: string
-    pageTitle: string
-    description: string
-    stats: Record<string, string>
-    company: Record<string, string>
-    contact: Record<string, string>
-    vision: Record<string, string>
-    mission: Record<string, string>
-    values: Record<string, string>
-    whyUs: Record<string, string>
-  }
+    title: "",
+    description: "",
+    mission: "",
+    vision: "",
+    values: [],
+    stats: {},
+    company: {},
+  },
   services: {
-    hero: Record<string, string>
-    intro: Record<string, string>
-    services: Array<{ id: string; icon: string; title: string; description: string; image: string; items: Array<any> }>
-    cta: Record<string, string>
-  }
+    hero: { title: "", description: "" },
+    services: [],
+    intro: {},
+    cta: {},
+  },
   projects: {
-    pageTitle: string
-    pageDescription: string
-    categories: Record<string, string>
-    completed: Array<{
-      id: string
-      slug: string
-      title: string
-      shortDescription: string
-      fullDescription: string
-      details: string
-      year: string
-      location: string
-      area: string
-      units: string
-      floors: string
-      status: string
-      mainImage: string
-      gallery: Array<string>
-      features: Array<string>
-    }>
-    ongoing: Array<{
-      id: string
-      slug: string
-      title: string
-      shortDescription: string
-      fullDescription: string
-      details: string
-      year: string
-      location: string
-      area: string
-      units: string
-      floors: string
-      progress: number
-      status: string
-      mainImage: string
-      gallery: Array<string>
-      features: Array<string>
-      updates: Array<{ date: string; title: string; description: string }>
-    }>
-    upcoming: Array<{
-      id: string
-      slug: string
-      title: string
-      shortDescription: string
-      fullDescription: string
-      details: string
-      year: string
-      location: string
-      status: string
-      mainImage: string
-      gallery: Array<string>
-      features: Array<string>
-    }>
-  }
+    pageTitle: "",
+    pageDescription: "",
+    categories: { completed: "", ongoing: "", upcoming: "" },
+    completed: [],
+    ongoing: [],
+    upcoming: [],
+  },
   contact: {
-    address: string
-    phone: string
-    mobile: string
-    email: string
-    fax: string
-    authorized: string
-    hours: string
-    whatsapp: string
-    authorizedPersons: Array<{
-      name: string
-      title: string
-      phone: string
-      email: string
-    }>
+    address: "",
+    phone: "",
+    mobile: "",
+    email: "",
+    whatsapp: "",
+    fax: "",
+    hours: "",
+    authorizedPersons: [],
+  },
+}
+
+interface ContentState {
+  home: Record<string, any>
+  about: Record<string, any>
+  services: Record<string, any>
+  projects: {
+    completed: any[]
+    ongoing: any[]
+    upcoming: any[]
   }
+  contact: Record<string, any>
 }
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "viera2025"
@@ -332,22 +287,27 @@ const defaultContact = {
   heroImage: "/contact-hero.jpg",
 }
 
+interface ShaState {
+  home?: string
+  about?: string
+  services?: string
+  projects?: string
+  contact?: string
+}
+
 export default function AdminPanel() {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
-  const [activeTab, setActiveTab] = useState<ContentType>("home")
-  const [projectTab, setProjectTab] = useState<"completed" | "ongoing" | "upcoming">("completed")
-  const [content, setContent] = useState<ContentState>({
-    home: defaultHome,
-    about: defaultAbout,
-    services: defaultServices,
-    projects: defaultProjects,
-    contact: defaultContact,
-  })
-  const [shas, setShas] = useState<Record<string, string>>({})
+  const [error, setError] = useState("")
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState("")
+  const [shas, setShas] = useState<ShaState>({})
+  const [activeTab, setActiveTab] = useState<ContentType>("home")
+  const [projectTab, setProjectTab] = useState<"completed" | "ongoing" | "upcoming">("completed")
+
+  const [content, setContent] = useState<ContentState>(emptyDefaults)
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // State for mobile menu
 
   useEffect(() => {
@@ -357,90 +317,46 @@ export default function AdminPanel() {
   const loadContent = async (file: ContentType) => {
     const timestamp = Date.now()
     try {
-      console.log(`[v0] Loading ${file}...`)
+      console.log(`[v0] CLIENT: Loading ${file}...`)
       const res = await fetch(`/api/github/content?file=${file}&t=${timestamp}`, {
         cache: "no-store",
       })
 
       if (!res.ok) {
-        console.log(`[v0] Failed to load ${file}, status:`, res.status)
+        console.log(`[v0] CLIENT: Failed to load ${file}, status:`, res.status)
         return
       }
 
       const data = await res.json()
-      console.log(`[v0] Received data for ${file}:`, data)
+      console.log(`[v0] CLIENT: Received data for ${file}:`, data)
 
       if (data.content) {
-        let mergedContent = data.content
-
-        if (file === "home") {
-          mergedContent = {
-            video: { ...defaultHome.video, ...(data.content.video || {}) },
-            experience: { ...defaultHome.experience, ...(data.content.experience || {}) },
-            stats: { ...defaultHome.stats, ...(data.content.stats || {}) },
-            about: { ...defaultHome.about, ...(data.content.about || {}) },
-            whyUs: { ...defaultHome.whyUs, ...(data.content.whyUs || {}) },
-            process: { ...defaultHome.process, ...(data.content.process || {}) },
-            clients: { ...defaultHome.clients, ...(data.content.clients || {}) },
-            cta: { ...defaultHome.cta, ...(data.content.cta || {}) },
-          }
-        } else if (file === "contact") {
-          mergedContent = { ...defaultContact, ...data.content }
-        } else if (file === "about") {
-          mergedContent = {
-            ...defaultAbout,
-            ...data.content,
-            stats: { ...defaultAbout.stats, ...(data.content.stats || {}) },
-            company: { ...defaultAbout.company, ...(data.content.company || {}) },
-            contact: { ...defaultAbout.contact, ...(data.content.contact || {}) },
-            vision: { ...defaultAbout.vision, ...(data.content.vision || {}) },
-            mission: { ...defaultAbout.mission, ...(data.content.mission || {}) },
-            values: { ...defaultAbout.values, ...(data.content.values || {}) },
-            whyUs: { ...defaultAbout.whyUs, ...(data.content.whyUs || {}) },
-          }
-        } else if (file === "services") {
-          mergedContent = {
-            ...defaultServices,
-            ...data.content,
-            hero: { ...defaultServices.hero, ...(data.content.hero || {}) },
-            intro: { ...defaultServices.intro, ...(data.content.intro || {}) },
-            cta: { ...defaultServices.cta, ...(data.content.cta || {}) },
-          }
-        } else if (file === "projects") {
-          mergedContent = {
-            pageTitle: data.content.pageTitle || defaultProjects.pageTitle,
-            pageDescription: data.content.pageDescription || defaultProjects.pageDescription,
-            categories: data.content.categories || defaultProjects.categories,
-            completed: data.content.completed || defaultProjects.completed,
-            ongoing: data.content.ongoing || defaultProjects.ongoing,
-            upcoming: data.content.upcoming || defaultProjects.upcoming,
-          }
-        }
-
         setContent((prev) => ({
           ...prev,
-          [file]: mergedContent,
+          [file]: data.content,
         }))
 
         if (data.sha) {
           setShas((prev) => ({ ...prev, [file]: data.sha }))
         }
 
-        console.log(`[v0] Successfully loaded and merged ${file}`)
+        console.log(`[v0] CLIENT: Successfully loaded ${file}`)
       }
     } catch (err) {
-      console.log(`[v0] Error loading ${file}:`, err)
+      console.error(`[v0] CLIENT: Error loading ${file}:`, err)
     }
   }
 
   const loadAllContent = async () => {
+    console.log("[v0] CLIENT: Loading all content...")
     setLoading(true)
-    const files: ContentType[] = ["home", "about", "services", "projects", "contact"]
-
-    for (const file of files) {
-      await loadContent(file)
-    }
-
+    await Promise.all([
+      loadContent("home"),
+      loadContent("about"),
+      loadContent("services"),
+      loadContent("projects"),
+      loadContent("contact"),
+    ])
     setLoading(false)
   }
 
@@ -559,9 +475,10 @@ export default function AdminPanel() {
     e.preventDefault()
     if (password === ADMIN_PASSWORD) {
       setAuthenticated(true)
+      setError("")
     } else {
-      setMessage("Yanlış şifre!")
-      setTimeout(() => setMessage(""), 3000)
+      setError("Yanlış şifre!")
+      setTimeout(() => setError(""), 3000)
     }
   }
 
@@ -581,7 +498,7 @@ export default function AdminPanel() {
                 placeholder="Şifrenizi girin"
               />
             </div>
-            {message && <p className="text-destructive text-sm">{message}</p>}
+            {error && <p className="text-destructive text-sm">{error}</p>}
             <button
               type="submit"
               className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-colors"
