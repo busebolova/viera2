@@ -1,330 +1,104 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
-import { Upload, Save, Plus, Trash2 } from "lucide-react"
-import Image from "next/image" // Import Image component
-import { Label } from "@/components/ui/label" // Assuming Label component is available
+import { Save, Upload, Plus, Trash2, Building2, Users, Briefcase, Mail, Home } from "lucide-react"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { put } from "@vercel/blob"
 
 type ContentType = "home" | "about" | "services" | "projects" | "contact"
 
-const emptyDefaults = {
-  home: {
-    video: { url: "", title: "", subtitle: "" },
-    stats: { founded: "", employees: "", completedProjects: "", experience: "" },
-    experience: { title: "", description: "" },
-    process: { title: "", subtitle: "", steps: [] },
-    whyUs: { title: "", items: [] },
-    cta: { title: "", description: "" },
-  },
-  about: {
-    title: "",
-    description: "",
-    mission: "",
-    vision: "",
-    values: [],
-    stats: {},
-    company: {},
-  },
-  services: {
-    hero: { title: "", description: "" },
-    services: [],
-    intro: {},
-    cta: {},
-  },
-  projects: {
-    pageTitle: "",
-    pageDescription: "",
-    categories: { completed: "", ongoing: "", upcoming: "" },
-    completed: [],
-    ongoing: [],
-    upcoming: [],
-  },
-  contact: {
-    address: "",
-    phone: "",
-    mobile: "",
-    email: "",
-    whatsapp: "",
-    fax: "",
-    hours: "",
-    authorizedPersons: [],
-  },
+interface Project {
+  id: string
+  title: string
+  location: string
+  year: number
+  area: number
+  units: number
+  floors: number
+  status: string
+  description: string
+  features: string[]
+  image: string
+  gallery?: string[]
+  progress?: number
+  updates?: Array<{
+    date: string
+    title: string
+    description: string
+    images?: string[]
+  }>
 }
 
-interface ContentState {
-  home: Record<string, any>
-  about: Record<string, any>
-  services: Record<string, any>
-  projects: {
-    completed: any[]
-    ongoing: any[]
-    upcoming: any[]
-  }
-  contact: Record<string, any>
-}
-
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "viera2025"
-
-const defaultHome = {
-  video: {
-    url: "https://cdn.pixabay.com/video/2020/06/23/42926-434300944_large.mp4",
-    title: "Viera & Alkan Yapı",
-    subtitle: "Güven, Kalite, Profesyonellik",
-  },
-  experience: {
-    title: "60 Yılı Aşkın Tecrübe",
-    description:
-      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
-  },
-  stats: {
-    founded: "1965",
-    foundedLabel: "KURULUŞ YILI",
-    employees: "50+",
-    employeesLabel: "ÇALIŞAN",
-    completedProjects: "100+",
-    completedProjectsLabel: "TAMAMLANAN PROJE",
-    experience: "60+",
-    experienceLabel: "YIL DENEYİM",
-  },
-  about: {
-    badge: "Hakkımızda",
-    title: "Firma Geçmişimiz",
-    description:
-      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, 60 yılı aşkın deneyimi ve köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
-    image: "/about-office.jpg",
-  },
-  whyUs: {
-    title: "Neden VIERA Construction?",
-    items: [
-      { title: "Kalite", description: "Her projede en yüksek kalite standartlarını uyguluyoruz." },
-      { title: "Güvenilirlik", description: "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz." },
-      { title: "Yenilikçilik", description: "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz." },
-      { title: "Sürdürülebilirlik", description: "Çevreye duyarlı projeler geliştiriyoruz." },
-    ],
-  },
-  process: {
-    title: "Çalışma Sürecimiz",
-    subtitle: "Proje aşamalarını adım adım takip ediyoruz.",
-    steps: [
-      { title: "Planlama", description: "İhtiyaçlarınızı analiz edip detaylı planlama yapıyoruz." },
-      { title: "Tasarım", description: "Modern ve fonksiyonel tasarımlar geliştiriyoruz." },
-      { title: "İnşaat", description: "Kaliteli malzemeler ve uzman ekibimizle inşa ediyoruz." },
-      { title: "Teslimat", description: "Projelerinizi zamanında ve eksiksiz teslim ediyoruz." },
-    ],
-  },
-  clients: {
-    title: "Referanslarımız",
-    subtitle: "Güvenilir iş ortaklarımızla başarıya ulaşıyoruz.",
-    logos: [
-      { name: "Örnek Firma 1", logo: "/client-logo-1.png" },
-      { name: "Örnek Firma 2", logo: "/client-logo-2.png" },
-      { name: "Örnek Firma 3", logo: "/client-logo-3.png" },
-    ],
-  },
-  cta: {
-    title: "Hayalinizdeki Yapıyı Birlikte İnşa Edelim",
-    description: "Detaylı bilgi ve teklif için bizimle iletişime geçin.",
-  },
-}
-
-const defaultAbout = {
-  title: "Hakkımızda",
-  pageTitle: "Firmamız Hakkında",
-  heroImage: "/modern-construction-office-building.jpg",
-  officeImage: "/modern-office-interior.jpg",
-  description: "VIERA Construction - Alkan Yapı & Viera Ortaklığı olarak konut ve iş yeri üretimine devam etmekteyiz.",
-  certificate: "D Sınıfı Müteahhitlik Belgesi",
-  certificateDescription:
-    "Deneyimli kadromuz ve modern ekipmanlarımızla müşterilerimizin ihtiyaçlarına en uygun çözümleri sunmaktayız.",
-  stats: {
-    founded: "1965",
-    foundedLabel: "KURULUŞ YILI",
-    employees: "50+",
-    employeesLabel: "ÇALIŞAN",
-    completedProjects: "100+",
-    completedProjectsLabel: "TAMAMLANAN PROJE",
-    experience: "60+",
-    experienceLabel: "YIL DENEYİM",
-  },
-  company: {
-    name: "VIERA Construction",
-    subtitle: "Alkan Yapı & Viera Ortaklığı",
-    founder: "Servet Alkan",
-    founderTitle: "Kurucu",
-  },
-  contact: {
-    address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
-    authorized: "Erdem Alkan",
-    phone: "0216 391 49 40",
-    fax: "0216 310 90 74",
-    mobile: "0533 479 83 87",
-    email: "info@vieraconstruction.com",
-  },
-  vision: { title: "Vizyonumuz", description: "Türkiye'nin en güvenilir inşaat firması olmak." },
-  mission: { title: "Misyonumuz", description: "Kaliteli ve güvenilir projeler üretmek." },
-  values: { title: "Değerlerimiz", description: "Dürüstlük, şeffaflık, müşteri odaklılık." },
-  whyUs: {
-    title: "Neden VIERA Construction?",
-    items: [
-      { title: "Kalite", description: "En yüksek kalite standartları." },
-      { title: "Güvenilirlik", description: "Zamanında teslim." },
-    ],
-  },
-}
-
-const defaultServices = {
-  hero: {
-    title: "Hizmetlerimiz",
-    subtitle: "60 yılı aşkın tecrübemizle modern yaşam alanları inşa ediyoruz.",
-    image: "/services-hero.jpg",
-  },
-  intro: {
-    badge: "Uzmanlık Alanlarımız",
-    title: "Sunduğumuz Hizmetler",
-    description: "Modern ve kaliteli projeler üretiyoruz.",
-  },
-  services: [
-    {
-      id: "konut",
-      icon: "Home",
-      title: "Konut Projeleri",
-      description: "Modern konut projeleri.",
-      image: "/service-residential.jpg",
-      items: [],
-    },
-    {
-      id: "ticari",
-      icon: "Building",
-      title: "Ticari Projeler",
-      description: "Ticari binalar.",
-      image: "/service-commercial.jpg",
-      items: [],
-    },
-  ],
-  cta: { title: "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim", description: "Bizimle iletişime geçin." },
-}
-
-const defaultProjects = {
-  pageTitle: "Projelerimiz",
-  pageDescription: "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
-  heroImage: "/projects-hero.jpg",
-  categories: {},
-  completed: [
-    {
-      id: "validebag-27-28",
-      slug: "validebag-27-28-blok",
-      title: "Validebağ 27-28 Blok",
-      shortDescription: "56 Daire - Altunizade",
-      fullDescription: "Modern mimari anlayışı ile inşa edilen projemiz.",
-      details: "56 Daire",
-      year: "2024",
-      location: "Altunizade, Üsküdar - İstanbul",
-      area: "8.500 m²",
-      units: "56 Daire",
-      floors: "8 Kat",
-      status: "completed",
-      mainImage: "/project-1.jpg",
-      gallery: [],
-      features: ["Modern mimari", "Depreme dayanıklı", "Kapalı otopark"],
-    },
-  ],
-  ongoing: [
-    {
-      id: "validebag-29",
-      slug: "validebag-29-kentsel-donusum",
-      title: "Validebağ 29 Kentsel Dönüşüm",
-      shortDescription: "38 Daire - Devam ediyor",
-      fullDescription: "Kentsel dönüşüm projemiz.",
-      details: "2025 Q3 tamamlanacak",
-      year: "2025",
-      location: "Altunizade, Üsküdar - İstanbul",
-      area: "6.200 m²",
-      units: "38 Daire",
-      floors: "8 Kat",
-      progress: 65,
-      status: "ongoing",
-      mainImage: "/project-ongoing.jpg",
-      gallery: [],
-      features: ["Kentsel dönüşüm", "Modern mimari"],
-      updates: [{ date: "2024-12", title: "Kaba İnşaat Tamamlandı", description: "Kaba inşaat bitti." }],
-    },
-  ],
-  upcoming: [
-    {
-      id: "yeni-proje-2025",
-      slug: "yeni-proje-2025",
-      title: "Yeni Proje 2025",
-      shortDescription: "Yakında başlayacak",
-      fullDescription: "2025 yılında başlayacak projemiz.",
-      details: "Detaylar yakında",
-      year: "2025",
-      location: "İstanbul",
-      status: "upcoming",
-      mainImage: "/project-upcoming.jpg",
-      gallery: [],
-      features: [],
-    },
-  ],
-}
-
-const defaultContact = {
-  address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
-  phone: "0216 391 49 40",
-  mobile: "0533 479 83 87",
-  whatsapp: "905334798387",
-  email: "info@alkanyapi.com.tr",
-  fax: "0216 310 90 74",
-  authorizedPersons: [
-    {
-      name: "Erdem Alkan",
-      title: "Genel Müdür",
-      phone: "0533 479 83 87",
-      email: "erdem@alkanyapi.com.tr",
-    },
-  ],
-  hours: "Pazartesi - Cuma: 09:00 - 18:00",
-  heroImage: "/contact-hero.jpg",
-}
-
-interface ShaState {
-  home?: string
-  about?: string
-  services?: string
-  projects?: string
-  contact?: string
-}
-
-export default function AdminPanel() {
+const AdminPanel = () => {
+  const router = useRouter()
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [saving, setSaving] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState("")
-  const [shas, setShas] = useState<ShaState>({})
   const [activeTab, setActiveTab] = useState<ContentType>("home")
-  const [projectTab, setProjectTab] = useState<"completed" | "ongoing" | "upcoming">("completed")
+  const [content, setContent] = useState<Record<ContentType, any>>({
+    home: {},
+    about: {},
+    services: {},
+    projects: [],
+    contact: {},
+  })
+  const [shas, setShas] = useState<Record<ContentType, string>>({
+    home: "",
+    about: "",
+    services: "",
+    projects: "",
+    contact: "",
+  })
+  const [saving, setSaving] = useState(false)
+  const [message, setMessage] = useState("")
 
-  const [content, setContent] = useState<ContentState>(emptyDefaults)
-
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // State for mobile menu
+  const emptyDefaults: Record<ContentType, any> = {
+    home: {
+      video: { url: "", title: "", subtitle: "" },
+      stats: {},
+      experience: { title: "", description: "" },
+      process: { title: "", subtitle: "", steps: [] },
+      whyUs: { title: "", items: [] },
+      cta: { title: "", description: "" },
+    },
+    about: { hero: {}, mission: "", vision: "", values: [], team: [] },
+    services: { hero: {}, services: [] },
+    projects: [],
+    contact: {},
+  }
 
   useEffect(() => {
-    if (authenticated) loadAllContent()
-  }, [authenticated])
+    const isAuth = sessionStorage.getItem("admin_authenticated") === "true"
+    setAuthenticated(isAuth)
+    if (isAuth) {
+      loadContent("home")
+      loadContent("about")
+      loadContent("services")
+      loadContent("projects")
+      loadContent("contact")
+    }
+  }, [])
+
+  const handleLogin = () => {
+    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD || password === "viera2025") {
+      setAuthenticated(true)
+      sessionStorage.setItem("admin_authenticated", "true")
+      loadContent("home")
+      loadContent("about")
+      loadContent("services")
+      loadContent("projects")
+      loadContent("contact")
+    }
+  }
 
   const loadContent = async (file: ContentType) => {
     const timestamp = Date.now()
     try {
-      console.log(`[v0] CLIENT: Loading ${file}...`)
       const res = await fetch(`/api/github/content?file=${file}&t=${timestamp}`, {
         cache: "no-store",
       })
 
       if (!res.ok) {
-        console.log(`[v0] CLIENT: Failed to load ${file}, status:`, res.status)
         if (res.status === 404) {
           setContent((prev) => ({
             ...prev,
@@ -335,8 +109,6 @@ export default function AdminPanel() {
       }
 
       const data = await res.json()
-      console.log(`[v0] CLIENT: Received data for ${file}:`, data)
-
       const contentData = data.content || data
 
       setContent((prev) => ({
@@ -347,8 +119,6 @@ export default function AdminPanel() {
       if (data.sha) {
         setShas((prev) => ({ ...prev, [file]: data.sha }))
       }
-
-      console.log(`[v0] CLIENT: Successfully loaded ${file}`)
     } catch (err) {
       console.error(`[v0] CLIENT: Error loading ${file}:`, err)
       setContent((prev) => ({
@@ -358,28 +128,15 @@ export default function AdminPanel() {
     }
   }
 
-  const loadAllContent = async () => {
-    console.log("[v0] CLIENT: Loading all content...")
-    setLoading(true)
-    await Promise.all([
-      loadContent("home"),
-      loadContent("about"),
-      loadContent("services"),
-      loadContent("projects"),
-      loadContent("contact"),
-    ])
-    setLoading(false)
-  }
-
   const handleSave = async (file?: string) => {
     const fileToSave = file || activeTab
     setSaving(true)
     setMessage("")
 
     try {
-      console.log(`[v0] CLIENT: Starting save for ${fileToSave}`)
-      console.log(`[v0] CLIENT: Content keys:`, Object.keys(content[fileToSave] || {}))
-      console.log(`[v0] CLIENT: SHA exists:`, !!shas[fileToSave])
+      console.log("[v0] CLIENT: Attempting to save", fileToSave)
+      console.log("[v0] CLIENT: Content being saved:", JSON.stringify(content[fileToSave], null, 2))
+      console.log("[v0] CLIENT: Using SHA:", shas[fileToSave])
 
       const res = await fetch("/api/github/content", {
         method: "PUT",
@@ -392,38 +149,39 @@ export default function AdminPanel() {
         cache: "no-store",
       })
 
-      console.log(`[v0] CLIENT: Response status:`, res.status)
       const text = await res.text()
-      console.log(`[v0] CLIENT: Response text:`, text.substring(0, 200))
+      console.log("[v0] CLIENT: Response text:", text)
 
       let data
       try {
         data = JSON.parse(text)
-      } catch (e) {
-        console.log("[v0] CLIENT: Save error - Invalid JSON response")
-        setMessage("❌ Sunucu hatası: Geçersiz yanıt")
+      } catch (parseErr) {
+        console.error("[v0] CLIENT: Failed to parse JSON:", parseErr)
+        setMessage("❌ Sunucu yanıtı geçersiz.")
+        setSaving(false)
         return
       }
 
       if (res.ok && data.success) {
-        console.log(`[v0] CLIENT: Save successful for ${fileToSave}`)
-        if (data.sha) setShas((prev) => ({ ...prev, [fileToSave]: data.sha }))
-        // Mesaj güncellendi ve yenileme talimatı eklendi
-        setMessage("✅ Kaydedildi! Lütfen sayfayı yenileyin (Ctrl+Shift+R veya Cmd+Shift+R)")
+        if (data.sha) {
+          setShas((prev) => ({ ...prev, [fileToSave]: data.sha }))
+        }
+        setMessage("✅ Başarıyla kaydedildi! Yayın tarafı yenileniyor...")
+        console.log("[v0] CLIENT: Save successful, refreshing router")
 
-        setTimeout(async () => {
-          console.log(`[v0] CLIENT: Reloading content for ${fileToSave}`)
-          await loadContent(fileToSave)
-          setMessage("✅ Başarıyla kaydedildi ve yenilendi!")
-          setTimeout(() => setMessage(""), 5000)
+        router.refresh()
+        await loadContent(fileToSave)
+
+        setTimeout(() => {
+          setMessage("✅ Kaydedildi! Sayfa yenilendi. Değişiklikleri görmek için anasayfayı ziyaret edin.")
         }, 1000)
       } else {
-        console.log("[v0] CLIENT: Save failed:", data)
-        setMessage(`❌ Hata: ${data.error || "Kayıt başarısız"}`)
+        console.error("[v0] CLIENT: Save failed:", data.error)
+        setMessage(`❌ Hata: ${data.error || "Bilinmeyen hata"}`)
       }
     } catch (err: any) {
-      console.error("[v0] CLIENT: Save error:", err)
-      setMessage(`❌ Kayıt hatası: ${err.message}`)
+      console.error("[v0] CLIENT: Save exception:", err)
+      setMessage(`❌ Hata: ${err.message}`)
     } finally {
       setSaving(false)
     }
@@ -433,26 +191,17 @@ export default function AdminPanel() {
     const input = document.createElement("input")
     input.type = "file"
     input.accept = "image/*"
-    input.onchange = async (e) => {
-      const target = e.target as HTMLInputElement
-      const selectedFile = target.files?.[0]
-      if (!selectedFile) return
-
-      const formData = new FormData()
-      formData.append("file", selectedFile)
+    input.onchange = async (e: any) => {
+      const file = e.target?.files?.[0]
+      if (!file) return
 
       try {
-        setMessage("Görsel yükleniyor...")
-        const res = await fetch("/api/upload", { method: "POST", body: formData })
-        const data = await res.json()
-
-        if (data.url) {
-          updateNestedValue(path, data.url)
-          setMessage("Görsel yüklendi!")
-          setTimeout(() => setMessage(""), 3000)
-        }
-      } catch (err) {
-        setMessage("Görsel yüklenemedi!")
+        const blob = await put(file.name, file, { access: "public" })
+        updateNestedValue(path, blob.url)
+        setMessage("✅ Görsel yüklendi!")
+        setTimeout(() => setMessage(""), 2000)
+      } catch (err: any) {
+        setMessage(`❌ Yükleme hatası: ${err.message}`)
       }
     }
     input.click()
@@ -480,46 +229,6 @@ export default function AdminPanel() {
       obj = obj[key]
     }
     return obj ?? defaultValue
-  }
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
-      setAuthenticated(true)
-      setError("")
-    } else {
-      setError("Yanlış şifre!")
-      setTimeout(() => setError(""), 3000)
-    }
-  }
-
-  if (!authenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-card rounded-xl p-8 shadow-lg border">
-          <h1 className="text-3xl font-bold text-center mb-6">Yönetim Paneli</h1>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Şifre</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Şifrenizi girin"
-              />
-            </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <button
-              type="submit"
-              className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-colors"
-            >
-              Giriş Yap
-            </button>
-          </form>
-        </div>
-      </div>
-    )
   }
 
   const renderInput = (
@@ -621,53 +330,14 @@ export default function AdminPanel() {
 
       <div className="bg-card rounded-xl p-6 border">
         <h3 className="text-lg font-semibold text-primary mb-4">İstatistikler</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {renderInput("Kuruluş Yılı", ["stats", "founded"])}
-          {renderInput("Kuruluş Etiketi", ["stats", "foundedLabel"])}
-          {renderInput("Çalışan Sayısı", ["stats", "employees"])}
-          {renderInput("Çalışan Etiketi", ["stats", "employeesLabel"])}
-          {renderInput("Tamamlanan Proje", ["stats", "completedProjects"])}
-          {renderInput("Proje Etiketi", ["stats", "completedProjectsLabel"])}
-          {renderInput("Deneyim Yılı", ["stats", "experience"])}
-          {renderInput("Deneyim Etiketi", ["stats", "experienceLabel"])}
-        </div>
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Çalışma Süreci Bölümü</h3>
-        {renderInput("Başlık", ["process", "title"])}
-        {renderInput("Alt Başlık", ["process", "subtitle"])}
-        <div className="mt-4">
-          <label className="text-sm font-medium mb-2 block">Adımlar</label>
-          {(getNestedValue(["process", "steps"], []) as Array<{ title: string; description: string }>).map(
-            (step, index) => (
-              <div key={index} className="space-y-2 mb-4 p-4 border border-muted rounded-lg bg-muted/30">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-semibold text-primary">Adım {index + 1}</span>
-                </div>
-                {renderInput("Başlık", ["process", "steps", index.toString(), "title"])}
-                {renderInput("Açıklama", ["process", "steps", index.toString(), "description"], "textarea")}
-              </div>
-            ),
-          )}
-        </div>
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Neden Biz Bölümü</h3>
-        {renderInput("Başlık", ["whyUs", "title"])}
-        {(getNestedValue(["whyUs", "items"], []) as Array<{ title: string; description: string }>).map(
-          (item, index) => (
-            <div key={index} className="space-y-2 mb-4 p-4 border border-muted rounded-lg">
-              {renderInput(`Öğe ${index + 1} Başlık`, ["whyUs", "items", index.toString(), "title"])}
-              {renderInput(
-                `Öğe ${index + 1} Açıklama`,
-                ["whyUs", "items", index.toString(), "description"],
-                "textarea",
-              )}
-            </div>
-          ),
-        )}
+        {renderInput("Kuruluş Yılı", ["stats", "founded"])}
+        {renderInput("Kuruluş Yılı Etiketi", ["stats", "foundedLabel"])}
+        {renderInput("Çalışan Sayısı", ["stats", "employees"])}
+        {renderInput("Çalışan Etiketi", ["stats", "employeesLabel"])}
+        {renderInput("Tamamlanan Proje", ["stats", "completedProjects"])}
+        {renderInput("Proje Etiketi", ["stats", "completedProjectsLabel"])}
+        {renderInput("Tecrübe", ["stats", "experience"])}
+        {renderInput("Tecrübe Etiketi", ["stats", "experienceLabel"])}
       </div>
 
       <div className="bg-card rounded-xl p-6 border">
@@ -681,48 +351,15 @@ export default function AdminPanel() {
   const renderAboutEditor = () => (
     <div className="space-y-6">
       <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Sayfa Bilgileri</h3>
-        {renderInput("Sayfa Başlığı", ["title"])}
-        {renderInput("Alt Başlık", ["pageTitle"])}
-        {renderInput("Açıklama", ["description"], "textarea")}
+        <h3 className="text-lg font-semibold text-primary mb-4">Hero Bölümü</h3>
+        {renderInput("Başlık", ["hero", "title"])}
+        {renderInput("Açıklama", ["hero", "description"], "textarea")}
       </div>
 
       <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Firma Bilgileri</h3>
-        {renderInput("Firma Adı", ["company", "name"])}
-        {renderInput("Alt Başlık (Badge)", ["company", "subtitle"])}
-        {renderInput("Kurucu", ["company", "founder"])}
-        {renderInput("Kurucu Ünvanı", ["company", "founderTitle"])}
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Sertifika</h3>
-        {renderInput("Sertifika Başlığı", ["certificate"])}
-        {renderInput("Sertifika Açıklaması", ["certificateDescription"], "textarea")}
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Vizyon / Misyon / Değerler</h3>
-        {renderInput("Vizyon Başlığı", ["vision", "title"])}
-        {renderInput("Vizyon Açıklaması", ["vision", "description"], "textarea")}
-        {renderInput("Misyon Başlığı", ["mission", "title"])}
-        {renderInput("Misyon Açıklaması", ["mission", "description"], "textarea")}
-        {renderInput("Değerler Başlığı", ["values", "title"])}
-        {renderInput("Değerler Açıklaması", ["values", "description"], "textarea")}
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">İstatistikler</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {renderInput("Kuruluş Yılı", ["stats", "founded"])}
-          {renderInput("Kuruluş Etiketi", ["stats", "foundedLabel"])}
-          {renderInput("Çalışan Sayısı", ["stats", "employees"])}
-          {renderInput("Çalışan Etiketi", ["stats", "employeesLabel"])}
-          {renderInput("Tamamlanan Proje", ["stats", "completedProjects"])}
-          {renderInput("Proje Etiketi", ["stats", "completedProjectsLabel"])}
-          {renderInput("Deneyim Yılı", ["stats", "experience"])}
-          {renderInput("Deneyim Etiketi", ["stats", "experienceLabel"])}
-        </div>
+        <h3 className="text-lg font-semibold text-primary mb-4">Misyon, Vizyon, Değerler</h3>
+        {renderInput("Misyon", ["mission"], "textarea")}
+        {renderInput("Vizyon", ["vision"], "textarea")}
       </div>
     </div>
   )
@@ -732,470 +369,253 @@ export default function AdminPanel() {
       <div className="bg-card rounded-xl p-6 border">
         <h3 className="text-lg font-semibold text-primary mb-4">Hero Bölümü</h3>
         {renderInput("Başlık", ["hero", "title"])}
-        {renderInput("Alt Başlık", ["hero", "subtitle"], "textarea")}
-      </div>
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">Giriş Bölümü</h3>
-        {renderInput("Badge", ["intro", "badge"])}
-        {renderInput("Başlık", ["intro", "title"])}
-        {renderInput("Açıklama", ["intro", "description"], "textarea")}
-      </div>
-
-      {(getNestedValue(["services"], []) as any[]).map((service: any, index: number) => (
-        <div key={service.id || index} className="bg-card rounded-xl p-6 border">
-          <h3 className="text-lg font-semibold text-primary mb-4">Hizmet: {service.title}</h3>
-          {renderInput("Başlık", ["services", index.toString(), "title"])}
-          {renderInput("Açıklama", ["services", index.toString(), "description"], "textarea")}
-
-          <div className="mt-4">
-            <h4 className="text-md font-medium mb-2">Alt Hizmetler</h4>
-            {(service.items || []).map((item: any, itemIndex: number) => (
-              <div key={itemIndex} className="mb-3 p-3 bg-muted/50 rounded-lg">
-                {renderInput(`${itemIndex + 1}. Alt Hizmet Başlık`, [
-                  "services",
-                  index.toString(),
-                  "items",
-                  itemIndex.toString(),
-                  "title",
-                ])}
-                {renderInput(`${itemIndex + 1}. Alt Hizmet Açıklama`, [
-                  "services",
-                  index.toString(),
-                  "items",
-                  itemIndex.toString(),
-                  "description",
-                ])}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-
-      <div className="bg-card rounded-xl p-6 border">
-        <h3 className="text-lg font-semibold text-primary mb-4">CTA Bölümü</h3>
-        {renderInput("Başlık", ["cta", "title"])}
-        {renderInput("Açıklama", ["cta", "description"], "textarea")}
+        {renderInput("Açıklama", ["hero", "description"], "textarea")}
       </div>
     </div>
   )
 
-  const renderProjectsEditor = () => {
-    const projectCategories = [
-      { key: "completed", label: "Tamamlanan", color: "bg-green-600" },
-      { key: "ongoing", label: "Devam Eden", color: "bg-blue-600" },
-      { key: "upcoming", label: "Başlayacak", color: "bg-amber-600" },
-    ]
-
-    const currentProjects = (getNestedValue([projectTab], []) as any[]) || []
-
-    const addProject = () => {
-      const newProject = {
-        id: `project-${Date.now()}`,
-        slug: `yeni-proje-${Date.now()}`,
-        title: "Yeni Proje",
-        shortDescription: "Proje kısa açıklaması",
-        fullDescription: "Proje detaylı açıklaması",
-        details: "Detaylar",
-        year: new Date().getFullYear().toString(),
-        location: "İstanbul",
-        area: "",
-        units: "",
-        floors: "",
-        status: projectTab,
-        mainImage: "",
-        gallery: [],
-        features: [],
-        ...(projectTab === "ongoing" ? { progress: 50, updates: [] } : {}),
-      }
-
-      const updated = [...currentProjects, newProject]
-      updateNestedValue([projectTab], updated)
-    }
-
-    const removeProject = (index: number) => {
-      const updated = currentProjects.filter((_: any, i: number) => i !== index)
-      updateNestedValue([projectTab], updated)
-    }
-
-    // No changes here, keeping as is.
-    const addFeature = (projectIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const features = project.features || []
-      features.push("Yeni özellik")
-      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
-    }
-
-    // No changes here, keeping as is.
-    const removeFeature = (projectIndex: number, featureIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const features = (project.features || []).filter((_: any, i: number) => i !== featureIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
-    }
-
-    const addGalleryImage = (projectIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const gallery = project.gallery || []
-      gallery.push("")
-      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
-    }
-
-    const removeGalleryImage = (projectIndex: number, imageIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const gallery = (project.gallery || []).filter((_: any, i: number) => i !== imageIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
-    }
-
-    const addUpdate = (projectIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const updates = project.updates || []
-      updates.push({ date: new Date().toISOString().slice(0, 7), title: "Yeni Güncelleme", description: "" })
-      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
-    }
-
-    const removeUpdate = (projectIndex: number, updateIndex: number) => {
-      const project = currentProjects[projectIndex]
-      const updates = (project.updates || []).filter((_: any, i: number) => i !== updateIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
-    }
-
-    return (
-      <div className="space-y-6">
-        <div className="bg-card rounded-xl p-6 border">
-          <h3 className="text-lg font-semibold text-primary mb-4">Sayfa Bilgileri</h3>
-          {renderInput("Sayfa Başlığı", ["pageTitle"])}
-          {renderInput("Sayfa Açıklaması", ["pageDescription"], "textarea")}
-          {renderInput("Hero Görseli", ["heroImage"], "image")}
-        </div>
-
-        <div className="flex flex-wrap gap-2 mb-6">
-          {projectCategories.map((cat) => (
-            <button
-              key={cat.key}
-              onClick={() => setProjectTab(cat.key as any)}
-              className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                projectTab === cat.key ? `${cat.color} text-white shadow-lg` : "bg-muted hover:bg-muted/80"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="bg-muted/50 rounded-lg p-4 mb-6">
-          <p className="text-sm text-muted-foreground">
-            <strong className="text-foreground">{currentProjects.length}</strong> adet{" "}
-            <strong className="text-foreground">{projectCategories.find((c) => c.key === projectTab)?.label}</strong>{" "}
-            proje
-          </p>
-        </div>
-
-        <button
-          onClick={addProject}
-          className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center justify-center gap-2"
-        >
-          <Plus className="h-5 w-5" />
-          Yeni Proje Ekle ({projectCategories.find((c) => c.key === projectTab)?.label})
-        </button>
-
-        {currentProjects.map((project: any, index: number) => (
-          <div key={project.id || index} className="bg-card rounded-xl p-6 border space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-primary">{project.title || "Proje"}</h3>
-              <button
-                onClick={() => removeProject(index)}
-                className="p-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {renderInput("Proje Adı", [projectTab, index.toString(), "title"])}
-              {renderInput("Slug (URL)", [projectTab, index.toString(), "slug"])}
-              {renderInput("Kısa Açıklama", [projectTab, index.toString(), "shortDescription"])}
-              {renderInput("Yıl", [projectTab, index.toString(), "year"])}
-              {renderInput("Konum", [projectTab, index.toString(), "location"])}
-              {renderInput("Alan (m²)", [projectTab, index.toString(), "area"])}
-              {renderInput("Birim Sayısı", [projectTab, index.toString(), "units"])}
-              {renderInput("Kat Sayısı", [projectTab, index.toString(), "floors"])}
-              {renderInput("Detaylar", [projectTab, index.toString(), "details"])}
-            </div>
-
-            {renderInput("Detaylı Açıklama", [projectTab, index.toString(), "fullDescription"], "textarea")}
-            {renderInput("Ana Görsel", [projectTab, index.toString(), "mainImage"], "image")}
-
-            {projectTab === "ongoing" && (
-              <>
-                {renderInput(
-                  "İlerleme Durumu (%)",
-                  [projectTab, index.toString(), "progress"],
-                  "number",
-                  "0-100 arası bir değer girin",
-                )}
-              </>
-            )}
-
-            <div className="bg-card rounded-xl p-6 border">
-              <h3 className="text-lg font-semibold text-primary mb-4">Proje Özellikleri</h3>
-              <div className="space-y-2">
-                <Label>Özellikler (Her satır bir özellik)</Label>
-                <textarea
-                  className="w-full min-h-[150px] rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  placeholder="Kentsel dönüşüm projesi&#10;Kapalı otopark&#10;Akıllı ev sistemleri"
-                  value={(project.features || []).join("\n")}
-                  onChange={(e) => {
-                    const features = e.target.value.split("\n").filter((f) => f.trim())
-                    updateNestedValue([projectTab, index.toString(), "features"], features)
-                  }}
-                />
-              </div>
-            </div>
-
-            <div className="p-4 bg-muted rounded-lg space-y-2">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-medium">Galeri Görselleri</h4>
-                <button
-                  onClick={() => addGalleryImage(index)}
-                  className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
-                >
-                  + Ekle
-                </button>
-              </div>
-              {(project.gallery || []).map((img: string, gIndex: number) => (
-                <div key={gIndex} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={img}
-                    onChange={(e) => {
-                      const gallery = [...(project.gallery || [])]
-                      gallery[gIndex] = e.target.value
-                      updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
-                    }}
-                    placeholder="Görsel URL"
-                    className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <button
-                    onClick={() => {
-                      const input = document.createElement("input")
-                      input.type = "file"
-                      input.accept = "image/*"
-                      input.onchange = async (e) => {
-                        const file = (e.target as HTMLInputElement).files?.[0]
-                        if (!file) return
-                        const formData = new FormData()
-                        formData.append("file", file)
-                        const res = await fetch("/api/upload", { method: "POST", body: formData })
-                        const data = await res.json()
-                        if (data.url) {
-                          const gallery = [...(project.gallery || [])]
-                          gallery[gIndex] = data.url
-                          updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
-                        }
-                      }
-                      input.click()
-                    }}
-                    className="px-3 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg"
-                  >
-                    <Upload className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => removeGalleryImage(index, gIndex)}
-                    className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {projectTab === "ongoing" && (
-              <div className="p-4 bg-muted rounded-lg space-y-2">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-sm font-medium">Proje Güncellemeleri</h4>
-                  <button
-                    onClick={() => addUpdate(index)}
-                    className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
-                  >
-                    + Ekle
-                  </button>
-                </div>
-                {(project.updates || []).map((update: any, uIndex: number) => (
-                  <div key={uIndex} className="space-y-2 p-3 bg-background rounded-lg border">
-                    <div className="flex justify-between items-center">
-                      <input
-                        type="month"
-                        value={update.date}
-                        onChange={(e) => {
-                          const updates = [...(project.updates || [])]
-                          updates[uIndex].date = e.target.value
-                          updateNestedValue([projectTab, index.toString(), "updates"], updates)
-                        }}
-                        className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                      <button
-                        onClick={() => removeUpdate(index, uIndex)}
-                        className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      value={update.title}
-                      onChange={(e) => {
-                        const updates = [...(project.updates || [])]
-                        updates[uIndex].title = e.target.value
-                        updateNestedValue([projectTab, index.toString(), "updates"], updates)
-                      }}
-                      placeholder="Güncelleme Başlığı"
-                      className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                    <textarea
-                      value={update.description}
-                      onChange={(e) => {
-                        const updates = [...(project.updates || [])]
-                        updates[uIndex].description = e.target.value
-                        updateNestedValue([projectTab, index.toString(), "updates"], updates)
-                      }}
-                      placeholder="Güncelleme Açıklaması"
-                      rows={3}
-                      className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="bg-card rounded-xl p-6 border">
-              <h3 className="text-lg font-semibold text-primary mb-4">Yetkili Kişi</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {renderInput("Ad Soyad", [projectTab, index.toString(), "contact", "name"])}
-                {renderInput("Ünvan", [projectTab, index.toString(), "contact", "title"])}
-                {renderInput("Telefon", [projectTab, index.toString(), "contact", "phone"])}
-                {renderInput("E-posta", [projectTab, index.toString(), "contact", "email"])}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   const ContactEditor = () => {
-    const contactData = content.contact
-
-    const addAuthorizedPerson = () => {
-      const newPerson = { name: "", title: "", phone: "", email: "" }
-      const updatedPersons = [...(contactData.authorizedPersons || []), newPerson]
-      // Ensure updateNestedValue correctly handles the path for contact's authorizedPersons
-      const currentContact = content.contact
-      setContent((prev) => ({
-        ...prev,
-        contact: {
-          ...currentContact,
-          authorizedPersons: updatedPersons,
-        },
-      }))
-    }
-
-    const removeAuthorizedPerson = (index: number) => {
-      const updatedPersons = (contactData.authorizedPersons || []).filter((_, i) => i !== index)
-      const currentContact = content.contact
-      setContent((prev) => ({
-        ...prev,
-        contact: {
-          ...currentContact,
-          authorizedPersons: updatedPersons,
-        },
-      }))
-    }
-
-    const updatePerson = (index: number, field: string, value: string) => {
-      const updatedPersons = [...(contactData.authorizedPersons || [])]
-      updatedPersons[index] = { ...updatedPersons[index], [field]: value }
-      const currentContact = content.contact
-      setContent((prev) => ({
-        ...prev,
-        contact: {
-          ...currentContact,
-          authorizedPersons: updatedPersons,
-        },
-      }))
-    }
+    const contactData = content.contact || {}
 
     return (
       <div className="space-y-6">
         <div className="bg-card rounded-xl p-6 border">
           <h3 className="text-lg font-semibold text-primary mb-4">İletişim Bilgileri</h3>
           {renderInput("Adres", ["address"], "textarea")}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {renderInput("Telefon", ["phone"])}
-            {renderInput("Mobil", ["mobile"])}
-            {renderInput("WhatsApp (Ör: 905334798387)", ["whatsapp"])}
-            {renderInput("Faks", ["fax"])}
-            {renderInput("E-posta", ["email"])}
-            {renderInput("Çalışma Saatleri", ["hours"])}
-          </div>
+          {renderInput("Telefon", ["phone"])}
+          {renderInput("Mobil", ["mobile"])}
+          {renderInput("E-posta", ["email"])}
+          {renderInput("Faks", ["fax"])}
+          {renderInput("Yetkili Kişi", ["authorized"])}
+          {renderInput("Çalışma Saatleri", ["hours"])}
         </div>
+      </div>
+    )
+  }
 
-        <div className="bg-card rounded-xl p-6 border">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-primary">Yetkili Kişiler</h3>
-            <button
-              onClick={addAuthorizedPerson}
-              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Yeni Ekle
-            </button>
-          </div>
+  const renderProjectsEditor = () => {
+    const projects = content.projects || []
 
-          <div className="space-y-4">
-            {(contactData.authorizedPersons || []).map((person: any, index: number) => (
-              <div key={index} className="p-4 bg-muted rounded-lg relative">
-                <button
-                  onClick={() => removeAuthorizedPerson(index)}
-                  className="absolute top-2 right-2 p-1 bg-destructive hover:bg-destructive/90 text-white rounded"
-                >
-                  <Trash2 size={16} />
-                </button>
+    const addProject = () => {
+      const newProject: Project = {
+        id: Date.now().toString(),
+        title: "",
+        location: "",
+        year: new Date().getFullYear(),
+        area: 0,
+        units: 0,
+        floors: 0,
+        status: "completed",
+        description: "",
+        features: [],
+        image: "",
+        gallery: [],
+        progress: 0,
+        updates: [],
+      }
+      setContent((prev) => ({
+        ...prev,
+        projects: [...projects, newProject],
+      }))
+    }
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <input
-                    type="text"
-                    placeholder="İsim Soyisim"
-                    value={person.name || ""}
-                    onChange={(e) => updatePerson(index, "name", e.target.value)}
-                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Ünvan"
-                    value={person.title || ""}
-                    onChange={(e) => updatePerson(index, "title", e.target.value)}
-                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Telefon"
-                    value={person.phone || ""}
-                    onChange={(e) => updatePerson(index, "phone", e.target.value)}
-                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <input
-                    type="email"
-                    placeholder="E-posta"
-                    value={person.email || ""}
-                    onChange={(e) => updatePerson(index, "email", e.target.value)}
-                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
+    const deleteProject = (index: number) => {
+      setContent((prev) => ({
+        ...prev,
+        projects: projects.filter((_: any, i: number) => i !== index),
+      }))
+    }
+
+    const updateProject = (index: number, field: string, value: any) => {
+      setContent((prev) => {
+        const updated = [...projects]
+        updated[index] = { ...updated[index], [field]: value }
+        return { ...prev, projects: updated }
+      })
+    }
+
+    return (
+      <div className="space-y-6">
+        <button
+          onClick={addProject}
+          className="flex items-center gap-2 px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-all shadow-lg hover:shadow-xl"
+        >
+          <Plus className="h-4 w-4" />
+          Yeni Proje Ekle
+        </button>
+
+        {projects.map((project: Project, index: number) => (
+          <div key={project.id} className="bg-card rounded-xl p-6 border space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-primary">
+                Proje {index + 1}: {project.title || "Başlıksız"}
+              </h3>
+              <button
+                onClick={() => deleteProject(index)}
+                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Proje Adı</label>
+                <input
+                  type="text"
+                  value={project.title}
+                  onChange={(e) => updateProject(index, "title", e.target.value)}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
               </div>
-            ))}
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Konum</label>
+                <input
+                  type="text"
+                  value={project.location}
+                  onChange={(e) => updateProject(index, "location", e.target.value)}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Yıl</label>
+                <input
+                  type="number"
+                  value={project.year}
+                  onChange={(e) => updateProject(index, "year", Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Alan (m²)</label>
+                <input
+                  type="number"
+                  value={project.area}
+                  onChange={(e) => updateProject(index, "area", Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Birim Sayısı</label>
+                <input
+                  type="number"
+                  value={project.units}
+                  onChange={(e) => updateProject(index, "units", Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Kat Sayısı</label>
+                <input
+                  type="number"
+                  value={project.floors}
+                  onChange={(e) => updateProject(index, "floors", Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Durum</label>
+                <select
+                  value={project.status}
+                  onChange={(e) => updateProject(index, "status", e.target.value)}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="completed">Tamamlandı</option>
+                  <option value="ongoing">Devam Ediyor</option>
+                  <option value="planned">Planlanıyor</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">İlerleme (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={project.progress || 0}
+                  onChange={(e) => updateProject(index, "progress", Number(e.target.value))}
+                  className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Açıklama</label>
+              <textarea
+                value={project.description}
+                onChange={(e) => updateProject(index, "description", e.target.value)}
+                rows={4}
+                className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Özellikler (virgülle ayırın)</label>
+              <input
+                type="text"
+                value={project.features?.join(", ") || ""}
+                onChange={(e) =>
+                  updateProject(
+                    index,
+                    "features",
+                    e.target.value.split(",").map((f) => f.trim()),
+                  )
+                }
+                placeholder="Özellik 1, Özellik 2, Özellik 3"
+                className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Ana Görsel URL</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={project.image}
+                  onChange={(e) => updateProject(index, "image", e.target.value)}
+                  placeholder="Görsel URL'si"
+                  className="flex-1 px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const input = document.createElement("input")
+                    input.type = "file"
+                    input.accept = "image/*"
+                    input.onchange = async (e: any) => {
+                      const file = e.target?.files?.[0]
+                      if (!file) return
+                      try {
+                        const blob = await put(file.name, file, { access: "public" })
+                        updateProject(index, "image", blob.url)
+                        setMessage("✅ Görsel yüklendi!")
+                        setTimeout(() => setMessage(""), 2000)
+                      } catch (err: any) {
+                        setMessage(`❌ Yükleme hatası: ${err.message}`)
+                      }
+                    }
+                    input.click()
+                  }}
+                  className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  Yükle
+                </button>
+              </div>
+              {project.image && (
+                <div className="relative w-full h-40 rounded-lg overflow-hidden border">
+                  <Image src={project.image || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     )
   }
@@ -1217,71 +637,123 @@ export default function AdminPanel() {
     }
   }
 
-  const tabs = [
-    { id: "home", label: "Anasayfa" },
-    { id: "about", label: "Hakkımızda" },
-    { id: "services", label: "Hizmetler" },
-    { id: "projects", label: "Projeler" },
-    { id: "contact", label: "İletişim" },
-  ]
-
-  return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 bg-card border-b shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold">Yönetim Paneli</h1>
-              {message && (
-                <span className={`text-sm ${message.includes("✓") ? "text-green-600" : "text-destructive"}`}>
-                  {message}
-                </span>
-              )}
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-2xl shadow-2xl p-8 border border-primary/20">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+                <Building2 className="h-8 w-8 text-primary" />
+              </div>
+              <h1 className="text-3xl font-bold text-foreground mb-2">Yönetim Paneli</h1>
+              <p className="text-muted-foreground">VIERA Construction</p>
             </div>
-            <button
-              onClick={() => handleSave()}
-              disabled={saving}
-              className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
-            >
-              <Save className="h-4 w-4" />
-              {saving ? "Kaydediliyor..." : "Kaydet"}
-            </button>
-          </div>
-        </div>
-      </header>
 
-      <div className="sticky top-16 z-30 bg-card border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex gap-2 py-2 overflow-x-auto">
-            {tabs.map((tab) => (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Şifre</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+                  placeholder="Şifrenizi girin"
+                  className="w-full px-4 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                />
+              </div>
+
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as ContentType)}
-                className={`px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
-                  activeTab === tab.id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                }`}
+                onClick={handleLogin}
+                className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-all shadow-lg hover:shadow-xl"
               >
-                {tab.label}
+                Giriş Yap
               </button>
-            ))}
+            </div>
           </div>
         </div>
       </div>
+    )
+  }
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-                <p className="text-muted-foreground">Yükleniyor...</p>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-primary/10">
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="bg-card rounded-2xl shadow-2xl border border-primary/20 overflow-hidden">
+          <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Yönetim Paneli</h1>
+                <p className="text-primary-foreground/80">İçerik Yönetim Sistemi</p>
               </div>
+              <button
+                onClick={() => router.push("/")}
+                className="px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg transition-all border border-white/20"
+              >
+                Kaydet
+              </button>
             </div>
-          ) : (
-            <div className="bg-card rounded-xl p-6 md:p-8 shadow-sm border space-y-6">{renderEditor()}</div>
-          )}
+          </div>
+
+          <div className="flex border-b bg-muted/30">
+            {[
+              { id: "home", label: "Anasayfa", icon: Home },
+              { id: "about", label: "Hakkımızda", icon: Users },
+              { id: "services", label: "Hizmetler", icon: Briefcase },
+              { id: "projects", label: "Projeler", icon: Building2 },
+              { id: "contact", label: "İletişim", icon: Mail },
+            ].map((tab) => {
+              const Icon = tab.icon
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id as ContentType)
+                    loadContent(tab.id as ContentType)
+                  }}
+                  className={`flex-1 px-6 py-4 font-medium transition-all flex items-center justify-center gap-2 ${
+                    activeTab === tab.id
+                      ? "bg-card text-primary border-b-2 border-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+
+          <div className="p-8">
+            {message && (
+              <div
+                className={`mb-6 p-4 rounded-lg border ${
+                  message.includes("✅")
+                    ? "bg-green-50 border-green-200 text-green-800"
+                    : "bg-red-50 border-red-200 text-red-800"
+                }`}
+              >
+                {message}
+              </div>
+            )}
+
+            {renderEditor()}
+
+            <div className="mt-8 flex gap-4">
+              <button
+                onClick={() => handleSave()}
+                disabled={saving}
+                className="flex items-center gap-2 px-8 py-3 bg-primary hover:bg-primary/90 disabled:bg-primary/50 text-primary-foreground font-medium rounded-lg transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+              >
+                <Save className="h-5 w-5" />
+                {saving ? "Kaydediliyor..." : "Kaydet"}
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
+
+export default AdminPanel
