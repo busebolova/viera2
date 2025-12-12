@@ -16,15 +16,12 @@
       "details": "56 Daire",
       "year": "2024",
       "location": "Altunizade, Üsküdar - İstanbul",
-      "area": "8.500 m²",
-      "units": "56 Daire",
-      "floors": "8 Kat",
-      "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "/modern-apartment-building.png",
       "gallery": [
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
+        "/placeholder.svg?height=400&width=600",
+        "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/story.jpg"
       ],
       "features": [
         "Modern mimari tasarım",
@@ -33,7 +30,11 @@
         "Güvenlik sistemi",
         "Jeneratör",
         "Asansör"
-      ]
+      ],
+      "area": "8.500 m²",
+      "units": "56 Daire",
+      "floors": "8 Kat",
+      "status": "completed"
     },
     {
       "id": "azade-86",
@@ -44,13 +45,22 @@
       "details": "36 Daire",
       "year": "2021",
       "location": "Barbaros, Üsküdar - İstanbul",
+      "mainImage": "/residential-building-exterior.jpg",
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
+      "features": [
+        "Merkezi konum",
+        "Kaliteli malzeme",
+        "Kapalı otopark",
+        "Peyzaj düzenlemesi",
+        "Çocuk oyun alanı"
+      ],
       "area": "5.200 m²",
       "units": "36 Daire",
       "floors": "6 Kat",
-      "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
+      "status": "completed"
     },
     {
       "id": "eski-anadolu-b",
@@ -67,7 +77,12 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
+      "features": [
+        "Kentsel dönüşüm projesi",
+        "Depreme dayanıklı yapı",
+        "Modern altyapı",
+        "Yalıtım sistemi"
+      ]
     }
   ],
   "ongoing": [
@@ -79,15 +94,13 @@
       "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
       "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
       "year": "2025",
-      "expectedCompletion": "2025 Q3",
       "location": "Altunizade, Üsküdar - İstanbul",
-      "area": "6.200 m²",
-      "units": "38 Daire",
-      "floors": "8 Kat",
       "progress": 65,
-      "status": "ongoing",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "mainImage": "/construction-site-building.png",
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
@@ -106,7 +119,12 @@
           "title": "Çatı Katı Tamamlandı",
           "description": "Çatı katı betonarme işleri tamamlanmıştır."
         }
-      ]
+      ],
+      "expectedCompletion": "2025 Q3",
+      "area": "6.200 m²",
+      "units": "38 Daire",
+      "floors": "8 Kat",
+      "status": "ongoing"
     }
   ],
   "upcoming": [
@@ -118,12 +136,12 @@
       "fullDescription": "2025 yılında başlayacak yeni projemiz hakkında detaylar yakında paylaşılacaktır.",
       "details": "Detaylar yakında açıklanacak",
       "year": "2025",
-      "expectedStart": "2025 Q2",
       "location": "İstanbul",
-      "status": "upcoming",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "/architectural-rendering-building.jpg",
       "gallery": [],
-      "features": []
+      "features": [],
+      "expectedStart": "2025 Q2",
+      "status": "upcoming"
     }
   ]
 }
