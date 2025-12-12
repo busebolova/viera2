@@ -70,6 +70,28 @@ export const defaultHome = {
       description: "60 yılı aşkın sürede 100'den fazla proje başarıyla tamamlanmıştır.",
     },
   },
+  process: {
+    title: "Çalışma Sürecimiz",
+    subtitle: "Projelerinizi nasıl hayata geçiriyoruz",
+    steps: [
+      {
+        title: "Planlama",
+        description: "Projenizi detaylı analiz ediyor ve en uygun çözümleri sunuyoruz",
+      },
+      {
+        title: "Tasarım",
+        description: "Mimarlar ve mühendislerimiz projenizi tasarlıyor",
+      },
+      {
+        title: "İnşaat",
+        description: "Uzman ekibimizle projenizi kaliteli bir şekilde inşa ediyoruz",
+      },
+      {
+        title: "Teslim",
+        description: "Projenizi zamanında ve eksiksiz olarak teslim ediyoruz",
+      },
+    ],
+  },
   whyUs: {
     title: "Neden VIERA Construction?",
     items: [
@@ -78,6 +100,10 @@ export const defaultHome = {
       { title: "Yenilikçilik", description: "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz." },
       { title: "Sürdürülebilirlik", description: "Çevreye duyarlı projeler geliştiriyoruz." },
     ],
+  },
+  cta: {
+    title: "Projeniz İçin Bizimle İletişime Geçin",
+    description: "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim.",
   },
 }
 
@@ -137,32 +163,52 @@ export const defaultAbout = {
 }
 
 export const defaultServices = {
-  hero: {
-    title: "Hizmetlerimiz",
-    subtitle: "60 yılı aşkın tecrübemizle modern yaşam alanları inşa ediyoruz.",
-    image: "/services-hero.jpg",
-  },
   intro: {
     badge: "Uzmanlık Alanlarımız",
     title: "Sunduğumuz Hizmetler",
-    description: "60 yılı aşkın süredir inşaat sektöründe edindiğimiz tecrübeyle modern projeler üretiyoruz.",
+    description: "1961 yılından bu yana inşaat sektöründe edindiğimiz tecrübeyle modern projeler üretiyoruz.",
   },
   services: [
     {
       id: "konut",
       icon: "Home",
       title: "Konut Projeleri",
-      description: "Modern yaşam standartlarına uygun konut projeleri geliştiriyoruz.",
-      image: "/service-residential.jpg",
+      description:
+        "Modern yaşam standartlarına uygun, konforu ve estetiği bir araya getiren konut projeleri geliştiriyoruz.",
       items: [
         { title: "Lüks Apartman Kompleksleri", description: "Modern mimarisi ve sosyal olanaklarıyla" },
-        { title: "Rezidans Projeleri", description: "Premium hizmet anlayışıyla" },
+        { title: "Rezidans Projeleri", description: "Premium hizmet anlayışıyla donatılmış" },
+        { title: "Villa ve Müstakil Konutlar", description: "Özel yaşam alanları için özel tasarımlar" },
+      ],
+    },
+    {
+      id: "ticari",
+      icon: "Building",
+      title: "Ticari Projeler",
+      description:
+        "İş dünyasının dinamik ihtiyaçlarına yönelik, fonksiyonel ve prestijli ticari binalar inşa ediyoruz.",
+      items: [
+        { title: "İş Merkezleri ve Plazalar", description: "Kurumsal kimliğe uygun prestijli ofis alanları" },
+        { title: "Alışveriş Kompleksleri", description: "Modern perakende ve eğlence merkezleri" },
+        { title: "Otel ve Turizm Tesisleri", description: "Konuk memnuniyeti odaklı konaklama projeleri" },
+      ],
+    },
+    {
+      id: "karma",
+      icon: "Landmark",
+      title: "Karma Kullanımlı Projeler",
+      description: "Yaşam, iş ve alışveriş alanlarını bir araya getiren entegre yaşam merkezleri tasarlıyoruz.",
+      items: [
+        { title: "Rezidans-Ofis Kompleksleri", description: "Yaşam ve iş alanlarını entegre eden projeler" },
+        { title: "Karma Kullanım Alışveriş Merkezleri", description: "Ticaret, eğlence ve konut konseptleri" },
+        { title: "Yerleşke Projeleri", description: "Bütünleşik şehir içinde şehir konseptleri" },
       ],
     },
   ],
   cta: {
     title: "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim",
-    description: "60 yılı aşkın tecrübemiz ve uzman ekibimizle projelerinizi hayata geçirmek için hazırız.",
+    description:
+      "60 yılı aşkın tecrübemiz ve uzman ekibimizle projelerinizi hayata geçirmek için hazırız. Detaylı bilgi ve teklif almak için bizimle iletişime geçin.",
   },
 }
 
@@ -195,7 +241,109 @@ export const defaultProjects = {
     ongoing: "Devam Eden Projeler",
     upcoming: "Başlayacak Projeler",
   },
-  completed: [],
-  ongoing: [],
-  upcoming: [],
+  completed: [
+    {
+      id: "validebag-27-28",
+      slug: "validebag-27-28-blok",
+      title: "Validebağ 27-28 Blok",
+      shortDescription: "Altunizade Mah. Kalfa Çeşme Sok.",
+      fullDescription:
+        "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır.",
+      details: "56 Daire",
+      year: "2024",
+      location: "Altunizade, Üsküdar - İstanbul",
+      area: "8.500 m²",
+      units: "56 Daire",
+      floors: "8 Kat",
+      status: "completed",
+      mainImage: "/modern-apartment-building.png",
+      image: "/modern-apartment-building.png",
+      gallery: ["/modern-apartment-building.png"],
+      features: ["Modern mimari tasarım", "Depreme dayanıklı yapı", "Kapalı otopark", "Güvenlik sistemi"],
+    },
+    {
+      id: "azade-86",
+      slug: "azade-evleri-86-parsel",
+      title: "AZADE Evleri 86 Parsel",
+      shortDescription: "Barbaros Mah. Mütevelliçeşme Cad.",
+      fullDescription: "Barbaros Mahallesi Mütevelliçeşme Caddesi'nde yer alan AZADE Evleri 86 Parsel projemiz.",
+      details: "36 Daire",
+      year: "2021",
+      location: "Barbaros, Üsküdar - İstanbul",
+      area: "5.200 m²",
+      units: "36 Daire",
+      floors: "6 Kat",
+      status: "completed",
+      mainImage: "/residential-building-exterior.jpg",
+      image: "/residential-building-exterior.jpg",
+      gallery: ["/residential-building-exterior.jpg"],
+      features: ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark"],
+    },
+    {
+      id: "eski-anadolu-b",
+      slug: "eski-anadolu-sitesi-b-blok",
+      title: "Eski Anadolu Sitesi B Blok",
+      shortDescription: "Eski Anadolu Sitesi B Blok Apartmanı",
+      fullDescription:
+        "Eski Anadolu Sitesi B Blok projemiz, kentsel dönüşüm kapsamında yenilenerek modern bir yapıya kavuşturulmuştur.",
+      details: "Kentsel Dönüşüm",
+      year: "2021",
+      location: "Üsküdar - İstanbul",
+      area: "4.800 m²",
+      units: "32 Daire",
+      floors: "7 Kat",
+      status: "completed",
+      mainImage: "/construction-site-building.png",
+      image: "/construction-site-building.png",
+      gallery: [],
+      features: ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı"],
+    },
+  ],
+  ongoing: [
+    {
+      id: "validebag-29",
+      slug: "validebag-29-kentsel-donusum",
+      title: "Validebağ 29 Kentsel Dönüşüm",
+      shortDescription: "38 Daire - Kaba inşaat tamamlandı",
+      fullDescription: "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir.",
+      details: "2. Etap 2025 3. Çeyrek tamamlanacak",
+      year: "2025",
+      expectedCompletion: "2025 Q3",
+      location: "Altunizade, Üsküdar - İstanbul",
+      area: "6.200 m²",
+      units: "38 Daire",
+      floors: "8 Kat",
+      progress: 65,
+      status: "ongoing",
+      mainImage: "/architectural-rendering-building.jpg",
+      image: "/architectural-rendering-building.jpg",
+      gallery: ["/architectural-rendering-building.jpg"],
+      features: ["Kentsel dönüşüm projesi", "Modern mimari", "Kapalı otopark"],
+      updates: [
+        {
+          date: "2024-12",
+          title: "Kaba İnşaat Tamamlandı",
+          description: "Projenin kaba inşaat aşaması başarıyla tamamlanmıştır.",
+        },
+      ],
+    },
+  ],
+  upcoming: [
+    {
+      id: "yeni-proje-2025",
+      slug: "yeni-proje-2025",
+      title: "Yeni Proje 2025",
+      shortDescription: "Yakında başlayacak yeni projemiz",
+      fullDescription: "2025 yılında başlayacak yeni projemiz hakkında detaylar yakında paylaşılacaktır.",
+      details: "Detaylar yakında açıklanacak",
+      year: "2025",
+      expectedStart: "2025 Q2",
+      location: "İstanbul",
+      status: "upcoming",
+      mainImage: "/modern-construction-site.png",
+      image: "/modern-construction-site.png",
+      gallery: [],
+      features: [],
+    },
+  ],
 }

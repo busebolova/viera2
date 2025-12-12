@@ -1,9 +1,9 @@
-import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Clock, CheckCircle, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectCard } from "@/components/project-card"
 import { getContent, defaultProjects } from "@/lib/github-content"
+import { getProjectImage } from "@/lib/image-helper"
 
 export const metadata = {
   title: "Projelerimiz - Tamamlanan ve Devam Eden Projeler | VIERA",
@@ -14,30 +14,18 @@ export const dynamic = "force-dynamic"
 
 export default async function ProjectsPage() {
   const data = await getContent<typeof defaultProjects>("projects")
-  const projectsData = data || defaultProjects
+  const projectsData = {
+    ...defaultProjects,
+    ...data,
+    completed: data?.completed || defaultProjects.completed,
+    ongoing: data?.ongoing || defaultProjects.ongoing,
+    upcoming: data?.upcoming || defaultProjects.upcoming,
+  }
+
+  console.log("[v0] Projects data:", JSON.stringify(projectsData, null, 2))
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
-      {/* Hero Section */}
-      <div className="relative w-full h-[40vh] overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src={projectsData.heroImage || "/commercial-building-construction.png"}
-          alt="VIERA Projeler"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 z-20 flex items-center">
-          <div className="container px-4 md:px-6">
-            <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">{projectsData.pageTitle}</h1>
-              <p className="text-xl text-white/80">{projectsData.pageDescription}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Projects Sections */}
       <section className="w-full py-16 md:py-24 bg-background">
         <div className="container px-4 md:px-6">
@@ -56,18 +44,22 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.ongoing.map((project: any) => (
-                  <ProjectCard
-                    key={project.id}
-                    image={project.mainImage || "/placeholder.svg?height=400&width=600"}
-                    title={project.title}
-                    description={project.shortDescription}
-                    year={project.year}
-                    detailUrl={`/projeler/${project.slug}`}
-                    badge="Devam Ediyor"
-                    badgeColor="amber"
-                  />
-                ))}
+                {projectsData.ongoing.map((project: any) => {
+                  const projectImage = getProjectImage(project)
+                  console.log("[v0] Ongoing project image:", project.title, projectImage)
+                  return (
+                    <ProjectCard
+                      key={project.id}
+                      image={projectImage}
+                      title={project.title}
+                      description={project.shortDescription}
+                      year={project.year}
+                      detailUrl={`/projeler/${project.slug}`}
+                      badge="Devam Ediyor"
+                      badgeColor="amber"
+                    />
+                  )
+                })}
               </div>
             </div>
           )}
@@ -87,18 +79,22 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.upcoming.map((project: any) => (
-                  <ProjectCard
-                    key={project.id}
-                    image={project.mainImage || "/placeholder.svg?height=400&width=600"}
-                    title={project.title}
-                    description={project.shortDescription}
-                    year={project.year}
-                    detailUrl={`/projeler/${project.slug}`}
-                    badge="Yakında"
-                    badgeColor="blue"
-                  />
-                ))}
+                {projectsData.upcoming.map((project: any) => {
+                  const projectImage = getProjectImage(project)
+                  console.log("[v0] Upcoming project image:", project.title, projectImage)
+                  return (
+                    <ProjectCard
+                      key={project.id}
+                      image={projectImage}
+                      title={project.title}
+                      description={project.shortDescription}
+                      year={project.year}
+                      detailUrl={`/projeler/${project.slug}`}
+                      badge="Yakında"
+                      badgeColor="blue"
+                    />
+                  )
+                })}
               </div>
             </div>
           )}
@@ -118,18 +114,22 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.completed.map((project: any) => (
-                  <ProjectCard
-                    key={project.id}
-                    image={project.mainImage || "/placeholder.svg?height=400&width=600"}
-                    title={project.title}
-                    description={project.shortDescription}
-                    year={project.year}
-                    detailUrl={`/projeler/${project.slug}`}
-                    badge="Tamamlandı"
-                    badgeColor="green"
-                  />
-                ))}
+                {projectsData.completed.map((project: any) => {
+                  const projectImage = getProjectImage(project)
+                  console.log("[v0] Completed project image:", project.title, projectImage)
+                  return (
+                    <ProjectCard
+                      key={project.id}
+                      image={projectImage}
+                      title={project.title}
+                      description={project.shortDescription}
+                      year={project.year}
+                      detailUrl={`/projeler/${project.slug}`}
+                      badge="Tamamlandı"
+                      badgeColor="green"
+                    />
+                  )
+                })}
               </div>
             </div>
           )}

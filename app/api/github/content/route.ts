@@ -5,6 +5,48 @@ const GITHUB_OWNER = process.env.GITHUB_OWNER
 const GITHUB_REPO = process.env.GITHUB_REPO
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || "main"
 
+// Helper function to detect placeholder images
+function isPlaceholder(value: any): boolean {
+  if (typeof value !== "string") return false
+  return value.includes("/placeholder.svg") || (value.startsWith("http") === false && value.includes("placeholder"))
+}
+
+// Deep merge function that automatically replaces placeholder images
+function deepMerge(defaults: any, github: any): any {
+  if (!github || typeof github !== "object") return defaults
+  if (!defaults || typeof defaults !== "object") return github
+
+  const result = Array.isArray(defaults) ? [...defaults] : { ...defaults }
+
+  for (const key in github) {
+    const githubValue = github[key]
+    const defaultValue = defaults[key]
+
+    // Special handling for image fields to replace placeholders
+    if ((key === "mainImage" || key === "image" || key.includes("Image")) && isPlaceholder(githubValue)) {
+      console.log(`[v0] Replacing placeholder ${key}:`, githubValue, "with default:", defaultValue)
+      result[key] = defaultValue || githubValue
+      continue
+    }
+
+    if (githubValue && typeof githubValue === "object" && !Array.isArray(githubValue)) {
+      result[key] = deepMerge(defaultValue || {}, githubValue)
+    } else if (Array.isArray(githubValue) && Array.isArray(defaultValue)) {
+      // Merge arrays element by element
+      result[key] = githubValue.map((item: any, index: number) => {
+        if (typeof item === "object" && typeof defaultValue[index] === "object") {
+          return deepMerge(defaultValue[index], item)
+        }
+        return item
+      })
+    } else {
+      result[key] = githubValue
+    }
+  }
+
+  return result
+}
+
 const DEFAULT_CONTENT: Record<string, any> = {
   home: {
     video: {
@@ -256,9 +298,15 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Missing file parameter" }, { status: 400 })
   }
 
+  const headers = {
+    "Cache-Control": "no-store, no-cache, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+  }
+
   if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
     console.log("[v0] GitHub config missing, returning default content for:", file)
-    return NextResponse.json({ data: DEFAULT_CONTENT[file] || {} })
+    return NextResponse.json({ content: DEFAULT_CONTENT[file] || {} }, { headers })
   }
 
   try {
@@ -268,20 +316,25 @@ export async function GET(request: Request) {
         Authorization: `Bearer ${GITHUB_TOKEN}`,
         Accept: "application/vnd.github.v3+json",
       },
-      cache: "no-store",
+      next: { revalidate: 0 },
     })
 
     if (!res.ok) {
       console.log("[v0] File not found in GitHub, returning default content for:", file)
-      return NextResponse.json({ data: DEFAULT_CONTENT[file] || {} })
+      return NextResponse.json({ content: DEFAULT_CONTENT[file] || {} }, { headers })
     }
 
     const data = await res.json()
-    const content = JSON.parse(Buffer.from(data.content, "base64").toString("utf-8"))
-    return NextResponse.json({ data: content, sha: data.sha })
+    const githubContent = JSON.parse(Buffer.from(data.content, "base64").toString("utf-8"))
+
+    // Merge default content with GitHub content, replacing placeholder images
+    const mergedContent = deepMerge(DEFAULT_CONTENT[file] || {}, githubContent)
+
+    console.log("[v0] Successfully loaded", file, "from GitHub and merged with defaults")
+    return NextResponse.json({ content: mergedContent, sha: data.sha }, { headers })
   } catch (err) {
     console.log("[v0] Error fetching from GitHub:", err)
-    return NextResponse.json({ data: DEFAULT_CONTENT[file] || {} })
+    return NextResponse.json({ content: DEFAULT_CONTENT[file] || {} }, { headers })
   }
 }
 
@@ -296,6 +349,7 @@ export async function PUT(request: Request) {
 
   try {
     const { file, content, sha } = await request.json()
+    console.log("[v0] Saving to GitHub:", file)
     const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/content/${file}.json`
 
     let fileSha = sha
@@ -310,9 +364,10 @@ export async function PUT(request: Request) {
         if (checkRes.ok) {
           const checkData = await checkRes.json()
           fileSha = checkData.sha
+          console.log("[v0] Found existing SHA:", fileSha)
         }
       } catch {
-        // File doesn't exist, will be created
+        console.log("[v0] No existing file, will create new")
       }
     }
 
@@ -338,6 +393,7 @@ export async function PUT(request: Request) {
     }
 
     const result = await res.json()
+    console.log("[v0] Successfully saved", file, "to GitHub")
     return NextResponse.json({ success: true, sha: result.content?.sha })
   } catch (err: any) {
     console.log("[v0] PUT error:", err)

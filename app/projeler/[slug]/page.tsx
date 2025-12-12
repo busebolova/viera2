@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, Calendar, MapPin, Building2, Layers, ArrowRight, CheckCircle2 } from "lucide-react"
 import { getContent } from "@/lib/github-content"
+import { getProjectImage } from "@/lib/image-helper"
 
 async function getProjectsData() {
   const data = await getContent<any>("projects")
@@ -67,19 +68,14 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
   }
 
   const statusInfo = statusColors[project.status] || statusColors.completed
+  const projectImage = getProjectImage(project)
 
   return (
     <div className="min-h-screen pb-16">
       {/* Hero Section */}
       <div className="relative w-full h-[50vh] min-h-[400px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70 z-10" />
-        <Image
-          src={project.mainImage || "/placeholder.svg?height=600&width=1200&query=construction project"}
-          alt={project.title}
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src={projectImage || "/placeholder.svg"} alt={project.title} fill className="object-cover" priority />
         <div className="absolute inset-0 z-20 flex items-end p-8 md:p-12">
           <div className="max-w-3xl">
             <span
@@ -128,16 +124,19 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               <div>
                 <h3 className="text-xl font-semibold mb-4">Proje Galerisi</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {project.gallery.map((image: string, index: number) => (
-                    <div key={index} className="relative aspect-[4/3] rounded-xl overflow-hidden">
-                      <Image
-                        src={image || "/placeholder.svg?height=300&width=400"}
-                        alt={`${project.title} - Görsel ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+                  {project.gallery.map((image: string, index: number) => {
+                    const galleryImage = image?.includes("placeholder") ? projectImage : image
+                    return (
+                      <div key={index} className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                        <Image
+                          src={galleryImage || "/placeholder.svg"}
+                          alt={`${project.title} - Görsel ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )}

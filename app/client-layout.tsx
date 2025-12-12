@@ -33,21 +33,32 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     checkScreenSize()
     window.addEventListener("resize", checkScreenSize)
 
-    fetch("/api/github/content?file=contact")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.data) {
+    const loadContactInfo = async () => {
+      try {
+        const timestamp = Date.now()
+        const response = await fetch(`/api/github/content?file=contact&t=${timestamp}`, {
+          cache: "no-store",
+        })
+        const data = await response.json()
+
+        console.log("[v0] Header/Footer contact data loaded:", data)
+
+        if (data.content) {
           setContactInfo({
-            phone: data.data.phone || "0216 391 49 40",
-            mobile: data.data.mobile || "0533 479 83 87",
-            whatsapp: data.data.whatsapp || "905334798387",
-            email: data.data.email || "info@alkanyapi.com.tr",
+            phone: data.content.phone || "0216 391 49 40",
+            mobile: data.content.mobile || "0533 479 83 87",
+            whatsapp: data.content.whatsapp || "905334798387",
+            email: data.content.email || "info@alkanyapi.com.tr",
             address:
-              data.data.address || "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
+              data.content.address || "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
           })
         }
-      })
-      .catch(() => {})
+      } catch (error) {
+        console.log("[v0] Failed to load contact info:", error)
+      }
+    }
+
+    loadContactInfo()
 
     return () => window.removeEventListener("resize", checkScreenSize)
   }, [])
@@ -365,7 +376,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       )}
 
       {/* WhatsApp Floating Button */}
-      <WhatsAppButton />
+      <WhatsAppButton whatsappNumber={contactInfo.whatsapp} />
     </>
   )
 }

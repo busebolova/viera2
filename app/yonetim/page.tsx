@@ -3,21 +3,124 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { Upload, Save, Menu, X, Plus, Trash2 } from "lucide-react"
+import Image from "next/image" // Import Image component
+
+type ContentType = "home" | "about" | "services" | "projects" | "contact"
+
+type ContentState = {
+  home: {
+    video: { url: string; title: string; subtitle: string }
+    experience: { title: string; description: string }
+    stats: Record<string, string>
+    about: Record<string, string>
+    whyUs: Record<string, string>
+    process: { title: string; subtitle: string; steps: Array<{ title: string; description: string }> }
+    clients: { title: string; subtitle: string; logos: Array<{ name: string; logo: string }> }
+    cta: { title: string; description: string }
+  }
+  about: {
+    title: string
+    pageTitle: string
+    description: string
+    stats: Record<string, string>
+    company: Record<string, string>
+    contact: Record<string, string>
+    vision: Record<string, string>
+    mission: Record<string, string>
+    values: Record<string, string>
+    whyUs: Record<string, string>
+  }
+  services: {
+    hero: Record<string, string>
+    intro: Record<string, string>
+    services: Array<{ id: string; icon: string; title: string; description: string; image: string; items: Array<any> }>
+    cta: Record<string, string>
+  }
+  projects: {
+    pageTitle: string
+    pageDescription: string
+    categories: Record<string, string>
+    completed: Array<{
+      id: string
+      slug: string
+      title: string
+      shortDescription: string
+      fullDescription: string
+      details: string
+      year: string
+      location: string
+      area: string
+      units: string
+      floors: string
+      status: string
+      mainImage: string
+      gallery: Array<string>
+      features: Array<string>
+    }>
+    ongoing: Array<{
+      id: string
+      slug: string
+      title: string
+      shortDescription: string
+      fullDescription: string
+      details: string
+      year: string
+      location: string
+      area: string
+      units: string
+      floors: string
+      progress: number
+      status: string
+      mainImage: string
+      gallery: Array<string>
+      features: Array<string>
+      updates: Array<{ date: string; title: string; description: string }>
+    }>
+    upcoming: Array<{
+      id: string
+      slug: string
+      title: string
+      shortDescription: string
+      fullDescription: string
+      details: string
+      year: string
+      location: string
+      status: string
+      mainImage: string
+      gallery: Array<string>
+      features: Array<string>
+    }>
+  }
+  contact: {
+    address: string
+    phone: string
+    mobile: string
+    email: string
+    fax: string
+    authorized: string
+    hours: string
+    whatsapp: string
+    authorizedPersons: Array<{
+      name: string
+      title: string
+      phone: string
+      email: string
+    }>
+  }
+}
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "viera2025"
 
-// Varsayılan değerler - tüm alanlar dolu
 const defaultHome = {
-  hero: {
-    title: "Viera & Alkan Yapı",
-    subtitle: "Güven, Kalite, Profesyonellik",
-    description: "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
-    image: "/hero-bg.jpg",
-  },
   video: {
     url: "https://cdn.pixabay.com/video/2020/06/23/42926-434300944_large.mp4",
     title: "Viera & Alkan Yapı",
     subtitle: "Güven, Kalite, Profesyonellik",
+  },
+  experience: {
+    title: "60 Yılı Aşkın Tecrübe",
+    description:
+      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
   },
   stats: {
     founded: "1965",
@@ -28,11 +131,6 @@ const defaultHome = {
     completedProjectsLabel: "TAMAMLANAN PROJE",
     experience: "60+",
     experienceLabel: "YIL DENEYİM",
-  },
-  experience: {
-    title: "60 Yılı Aşkın Tecrübe",
-    description:
-      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
   },
   about: {
     badge: "Hakkımızda",
@@ -49,6 +147,29 @@ const defaultHome = {
       { title: "Yenilikçilik", description: "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz." },
       { title: "Sürdürülebilirlik", description: "Çevreye duyarlı projeler geliştiriyoruz." },
     ],
+  },
+  process: {
+    title: "Çalışma Sürecimiz",
+    subtitle: "Proje aşamalarını adım adım takip ediyoruz.",
+    steps: [
+      { title: "Planlama", description: "İhtiyaçlarınızı analiz edip detaylı planlama yapıyoruz." },
+      { title: "Tasarım", description: "Modern ve fonksiyonel tasarımlar geliştiriyoruz." },
+      { title: "İnşaat", description: "Kaliteli malzemeler ve uzman ekibimizle inşa ediyoruz." },
+      { title: "Teslimat", description: "Projelerinizi zamanında ve eksiksiz teslim ediyoruz." },
+    ],
+  },
+  clients: {
+    title: "Referanslarımız",
+    subtitle: "Güvenilir iş ortaklarımızla başarıya ulaşıyoruz.",
+    logos: [
+      { name: "Örnek Firma 1", logo: "/client-logo-1.png" },
+      { name: "Örnek Firma 2", logo: "/client-logo-2.png" },
+      { name: "Örnek Firma 3", logo: "/client-logo-3.png" },
+    ],
+  },
+  cta: {
+    title: "Hayalinizdeki Yapıyı Birlikte İnşa Edelim",
+    description: "Detaylı bilgi ve teklif için bizimle iletişime geçin.",
   },
 }
 
@@ -133,6 +254,7 @@ const defaultProjects = {
   pageTitle: "Projelerimiz",
   pageDescription: "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
   heroImage: "/projects-hero.jpg",
+  categories: {},
   completed: [
     {
       id: "validebag-27-28",
@@ -198,7 +320,7 @@ const defaultContact = {
   whatsapp: "905334798387",
   email: "info@alkanyapi.com.tr",
   fax: "0216 310 90 74",
-  team: [
+  authorizedPersons: [
     {
       name: "Erdem Alkan",
       title: "Genel Müdür",
@@ -210,24 +332,52 @@ const defaultContact = {
   heroImage: "/contact-hero.jpg",
 }
 
-export default function AdminPage() {
+export default function AdminPanel() {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
-  const [activeTab, setActiveTab] = useState("home")
-  const [loading, setLoading] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState("")
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [projectTab, setProjectTab] = useState<"completed" | "ongoing" | "upcoming">("completed")
-
-  const [content, setContent] = useState<Record<string, any>>({
-    home: JSON.parse(JSON.stringify(defaultHome)),
-    about: JSON.parse(JSON.stringify(defaultAbout)),
-    services: JSON.parse(JSON.stringify(defaultServices)),
-    projects: JSON.parse(JSON.stringify(defaultProjects)),
-    contact: JSON.parse(JSON.stringify(defaultContact)),
+  const [activeTab, setActiveTab] = useState<ContentType>("home")
+  const [content, setContent] = useState<ContentState>({
+    home: {
+      video: { url: "", title: "", subtitle: "" },
+      experience: { title: "", description: "" },
+      stats: {},
+      about: {},
+      whyUs: {},
+      process: { title: "", subtitle: "", steps: [] },
+      clients: { title: "", subtitle: "", logos: [] },
+      cta: { title: "", description: "" },
+    },
+    about: {
+      title: "",
+      pageTitle: "",
+      description: "",
+      stats: {},
+      company: {},
+      contact: {},
+      vision: {},
+      mission: {},
+      values: {},
+      whyUs: {},
+    },
+    services: { hero: {}, intro: {}, services: [], cta: {} },
+    projects: { pageTitle: "", pageDescription: "", categories: {}, completed: [], ongoing: [], upcoming: [] },
+    contact: {
+      address: "",
+      phone: "",
+      mobile: "",
+      email: "",
+      fax: "",
+      authorized: "",
+      hours: "",
+      whatsapp: "",
+      authorizedPersons: [],
+    },
   })
   const [shas, setShas] = useState<Record<string, string>>({})
+  const [saving, setSaving] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // State for mobile menu
 
   useEffect(() => {
     if (authenticated) loadAllContent()
@@ -235,59 +385,93 @@ export default function AdminPage() {
 
   const loadAllContent = async () => {
     setLoading(true)
-    const files = ["home", "about", "services", "projects", "contact"]
-    const defaults: Record<string, any> = {
-      home: defaultHome,
-      about: defaultAbout,
-      services: defaultServices,
-      projects: defaultProjects,
-      contact: defaultContact,
-    }
+    const files: ContentType[] = ["home", "about", "services", "projects", "contact"]
+
+    const timestamp = Date.now()
 
     for (const file of files) {
       try {
-        const res = await fetch(`/api/github/content?file=${file}`)
+        console.log(`[v0] Loading ${file}...`)
+        const res = await fetch(`/api/github/content?file=${file}&t=${timestamp}`, {
+          cache: "no-store",
+        })
+
         if (!res.ok) {
-          console.log(`[v0] Using defaults for ${file} (fetch failed)`)
+          console.log(`[v0] Failed to load ${file}, status:`, res.status)
           continue
         }
-        const data = await res.json()
 
-        if (data.content && Object.keys(data.content).length > 0) {
+        const data = await res.json()
+        console.log(`[v0] Received data for ${file}:`, data)
+
+        if (data.content) {
+          let mergedContent = data.content
+
+          if (file === "home") {
+            mergedContent = {
+              video: { ...defaultHome.video, ...(data.content.video || {}) },
+              experience: { ...defaultHome.experience, ...(data.content.experience || {}) },
+              stats: { ...defaultHome.stats, ...(data.content.stats || {}) },
+              about: { ...defaultHome.about, ...(data.content.about || {}) },
+              whyUs: { ...defaultHome.whyUs, ...(data.content.whyUs || {}) },
+              process: { ...defaultHome.process, ...(data.content.process || {}) },
+              clients: { ...defaultHome.clients, ...(data.content.clients || {}) },
+              cta: { ...defaultHome.cta, ...(data.content.cta || {}) },
+            }
+          } else if (file === "contact") {
+            // Merging with defaultContact ensures all fields from defaultContact are present
+            // and fields from data.content overwrite them if they exist.
+            mergedContent = { ...defaultContact, ...data.content }
+          } else if (file === "about") {
+            mergedContent = {
+              ...defaultAbout,
+              ...data.content,
+              stats: { ...defaultAbout.stats, ...(data.content.stats || {}) },
+              company: { ...defaultAbout.company, ...(data.content.company || {}) },
+              contact: { ...defaultAbout.contact, ...(data.content.contact || {}) },
+              vision: { ...defaultAbout.vision, ...(data.content.vision || {}) },
+              mission: { ...defaultAbout.mission, ...(data.content.mission || {}) },
+              values: { ...defaultAbout.values, ...(data.content.values || {}) },
+              whyUs: { ...defaultAbout.whyUs, ...(data.content.whyUs || {}) },
+            }
+          } else if (file === "services") {
+            mergedContent = {
+              ...defaultServices,
+              ...data.content,
+              hero: { ...defaultServices.hero, ...(data.content.hero || {}) },
+              intro: { ...defaultServices.intro, ...(data.content.intro || {}) },
+              cta: { ...defaultServices.cta, ...(data.content.cta || {}) },
+            }
+          } else if (file === "projects") {
+            // Specific handling for projects to ensure all sub-arrays are present
+            mergedContent = {
+              pageTitle: data.content.pageTitle || defaultProjects.pageTitle,
+              pageDescription: data.content.pageDescription || defaultProjects.pageDescription,
+              categories: data.content.categories || defaultProjects.categories,
+              completed: data.content.completed || defaultProjects.completed,
+              ongoing: data.content.ongoing || defaultProjects.ongoing,
+              upcoming: data.content.upcoming || defaultProjects.upcoming,
+            }
+          }
+
           setContent((prev) => ({
             ...prev,
-            [file]: deepMerge(defaults[file], data.content),
+            [file]: mergedContent,
           }))
+
           if (data.sha) {
             setShas((prev) => ({ ...prev, [file]: data.sha }))
           }
+
+          console.log(`[v0] Successfully loaded and merged ${file}`)
         }
       } catch (err) {
-        console.error(`[v0] Error loading ${file}:`, err)
+        console.log(`[v0] Error loading ${file}:`, err)
       }
     }
+
     setLoading(false)
   }
-
-  const deepMerge = (target: any, source: any): any => {
-    const output = { ...target }
-    if (isObject(target) && isObject(source)) {
-      Object.keys(source).forEach((key) => {
-        if (isObject(source[key])) {
-          if (!(key in target)) {
-            Object.assign(output, { [key]: source[key] })
-          } else {
-            output[key] = deepMerge(target[key], source[key])
-          }
-        } else {
-          Object.assign(output, { [key]: source[key] })
-        }
-      })
-    }
-    return output
-  }
-
-  const isObject = (item: any) => item && typeof item === "object" && !Array.isArray(item)
 
   const handleSave = async (file?: string) => {
     const fileToSave = file || activeTab
@@ -295,6 +479,7 @@ export default function AdminPage() {
     setMessage("")
 
     try {
+      console.log(`[v0] Saving ${fileToSave}...`)
       const res = await fetch("/api/github/content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -310,19 +495,23 @@ export default function AdminPage() {
       try {
         data = JSON.parse(text)
       } catch {
+        console.log("[v0] Save error: Invalid JSON response")
         setMessage("Sunucu hatası")
         return
       }
 
       if (res.ok && data.success) {
         if (data.sha) setShas((prev) => ({ ...prev, [fileToSave]: data.sha }))
-        setMessage("Kaydedildi!")
-        setTimeout(() => setMessage(""), 3000)
+        setMessage("✓ Kaydedildi! Değişiklikler sitede görünecek.")
+        console.log(`[v0] Successfully saved ${fileToSave}`)
+        setTimeout(() => setMessage(""), 5000)
       } else {
-        setMessage(`Hata: ${data.error || "Kayit basarisiz"}`)
+        console.log("[v0] Save failed:", data)
+        setMessage(`Hata: ${data.error || "Kayıt başarısız"}`)
       }
     } catch (err: any) {
-      setMessage(`Kayit hatasi: ${err.message}`)
+      console.log("[v0] Save error:", err)
+      setMessage(`Kayıt hatası: ${err.message}`)
     } finally {
       setSaving(false)
     }
@@ -393,24 +582,24 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-zinc-900 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-zinc-800 rounded-xl p-8 shadow-2xl border border-zinc-700">
-          <h1 className="text-2xl font-bold text-white text-center mb-6">Yönetim Paneli</h1>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-card rounded-xl p-8 shadow-lg border">
+          <h1 className="text-3xl font-bold text-center mb-6">Yönetim Paneli</h1>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-zinc-300 text-sm mb-2">Şifre</label>
+              <label className="block text-sm font-medium mb-2">Şifre</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-700 border border-zinc-600 rounded-lg text-white"
+                className="w-full px-4 py-3 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Şifrenizi girin"
               />
             </div>
-            {message && <p className="text-red-400 text-sm">{message}</p>}
+            {message && <p className="text-destructive text-sm">{message}</p>}
             <button
               type="submit"
-              className="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg"
+              className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-colors"
             >
               Giriş Yap
             </button>
@@ -419,14 +608,6 @@ export default function AdminPage() {
       </div>
     )
   }
-
-  const tabs = [
-    { id: "home", label: "Anasayfa" },
-    { id: "about", label: "Hakkımızda" },
-    { id: "services", label: "Hizmetler" },
-    { id: "projects", label: "Projeler" },
-    { id: "contact", label: "İletişim" },
-  ]
 
   const renderInput = (
     label: string,
@@ -439,30 +620,28 @@ export default function AdminPage() {
     if (type === "image") {
       return (
         <div className="space-y-2">
-          <label className="block text-zinc-300 text-sm">{label}</label>
+          <label className="block text-sm font-medium">{label}</label>
           <div className="flex gap-2">
             <input
               type="text"
               value={value}
               onChange={(e) => updateNestedValue(path, e.target.value)}
-              placeholder={placeholder || "Görsel URL"}
-              className="flex-1 px-4 py-3 bg-zinc-700 border border-zinc-600 rounded-lg text-white text-sm"
+              placeholder={placeholder || "URL girin veya görsel yükleyin"}
+              className="flex-1 px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <button
               type="button"
               onClick={() => handleImageUpload(path)}
-              className="px-4 py-2 bg-zinc-600 hover:bg-zinc-500 text-white rounded-lg flex items-center gap-2"
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2"
             >
               <Upload className="h-4 w-4" />
               Yükle
             </button>
           </div>
           {value && (
-            <img
-              src={value || "/placeholder.svg"}
-              alt={label}
-              className="mt-2 h-32 w-auto object-cover rounded-lg border border-zinc-600"
-            />
+            <div className="relative w-full h-40 rounded-lg overflow-hidden border">
+              <Image src={value || "/placeholder.svg"} alt={label} fill className="object-cover" />
+            </div>
           )}
         </div>
       )
@@ -471,13 +650,13 @@ export default function AdminPage() {
     if (type === "textarea") {
       return (
         <div className="space-y-2">
-          <label className="block text-zinc-300 text-sm">{label}</label>
+          <label className="block text-sm font-medium">{label}</label>
           <textarea
             value={value}
             onChange={(e) => updateNestedValue(path, e.target.value)}
             placeholder={placeholder}
             rows={4}
-            className="w-full px-4 py-2 bg-zinc-700 border border-zinc-600 rounded-lg text-white text-sm resize-none"
+            className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           />
         </div>
       )
@@ -485,13 +664,13 @@ export default function AdminPage() {
 
     return (
       <div className="space-y-2">
-        <label className="block text-zinc-300 text-sm">{label}</label>
+        <label className="block text-sm font-medium">{label}</label>
         <input
           type="text"
           value={value}
           onChange={(e) => updateNestedValue(path, e.target.value)}
           placeholder={placeholder}
-          className="w-full px-4 py-2 bg-zinc-700 border border-zinc-600 rounded-lg text-white text-sm"
+          className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
     )
@@ -499,23 +678,21 @@ export default function AdminPage() {
 
   const renderHomeEditor = () => (
     <div className="space-y-6">
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Hero / Video Bölümü</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Hero / Video Bölümü</h3>
         {renderInput("Video URL", ["video", "url"])}
         {renderInput("Hero Başlık", ["video", "title"])}
         {renderInput("Hero Alt Başlık", ["video", "subtitle"])}
-        {renderInput("Hero Açıklama", ["hero", "description"], "textarea")}
-        {renderInput("Hero Görsel", ["hero", "image"], "image")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Deneyim Bölümü</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Deneyim Bölümü</h3>
         {renderInput("Başlık", ["experience", "title"])}
         {renderInput("Açıklama", ["experience", "description"], "textarea")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">İstatistikler</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">İstatistikler</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {renderInput("Kuruluş Yılı", ["stats", "founded"])}
           {renderInput("Kuruluş Etiketi", ["stats", "foundedLabel"])}
@@ -528,43 +705,76 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Hakkımızda Bölümü</h3>
-        {renderInput("Badge", ["about", "badge"])}
-        {renderInput("Başlık", ["about", "title"])}
-        {renderInput("Açıklama", ["about", "description"], "textarea")}
-        {renderInput("Görsel", ["about", "image"], "image")}
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Çalışma Süreci Bölümü</h3>
+        {renderInput("Başlık", ["process", "title"])}
+        {renderInput("Alt Başlık", ["process", "subtitle"])}
+        <div className="mt-4">
+          <label className="text-sm font-medium mb-2 block">Adımlar</label>
+          {(getNestedValue(["process", "steps"], []) as Array<{ title: string; description: string }>).map(
+            (step, index) => (
+              <div key={index} className="space-y-2 mb-4 p-4 border border-muted rounded-lg bg-muted/30">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-semibold text-primary">Adım {index + 1}</span>
+                </div>
+                {renderInput("Başlık", ["process", "steps", index.toString(), "title"])}
+                {renderInput("Açıklama", ["process", "steps", index.toString(), "description"], "textarea")}
+              </div>
+            ),
+          )}
+        </div>
+      </div>
+
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Neden Biz Bölümü</h3>
+        {renderInput("Başlık", ["whyUs", "title"])}
+        {(getNestedValue(["whyUs", "items"], []) as Array<{ title: string; description: string }>).map(
+          (item, index) => (
+            <div key={index} className="space-y-2 mb-4 p-4 border border-muted rounded-lg">
+              {renderInput(`Öğe ${index + 1} Başlık`, ["whyUs", "items", index.toString(), "title"])}
+              {renderInput(
+                `Öğe ${index + 1} Açıklama`,
+                ["whyUs", "items", index.toString(), "description"],
+                "textarea",
+              )}
+            </div>
+          ),
+        )}
+      </div>
+
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">İletişim Çağrısı (CTA)</h3>
+        {renderInput("Başlık", ["cta", "title"])}
+        {renderInput("Açıklama", ["cta", "description"], "textarea")}
       </div>
     </div>
   )
 
   const renderAboutEditor = () => (
     <div className="space-y-6">
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Sayfa Bilgileri</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Sayfa Bilgileri</h3>
         {renderInput("Sayfa Başlığı", ["title"])}
         {renderInput("Alt Başlık", ["pageTitle"])}
-        {renderInput("Hero Görseli", ["heroImage"], "image")}
-        {renderInput("Ofis Görseli", ["officeImage"], "image")}
         {renderInput("Açıklama", ["description"], "textarea")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Firma Bilgileri</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Firma Bilgileri</h3>
         {renderInput("Firma Adı", ["company", "name"])}
         {renderInput("Alt Başlık (Badge)", ["company", "subtitle"])}
         {renderInput("Kurucu", ["company", "founder"])}
         {renderInput("Kurucu Ünvanı", ["company", "founderTitle"])}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Sertifika</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Sertifika</h3>
         {renderInput("Sertifika Başlığı", ["certificate"])}
         {renderInput("Sertifika Açıklaması", ["certificateDescription"], "textarea")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Vizyon / Misyon / Değerler</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Vizyon / Misyon / Değerler</h3>
         {renderInput("Vizyon Başlığı", ["vision", "title"])}
         {renderInput("Vizyon Açıklaması", ["vision", "description"], "textarea")}
         {renderInput("Misyon Başlığı", ["mission", "title"])}
@@ -573,8 +783,8 @@ export default function AdminPage() {
         {renderInput("Değerler Açıklaması", ["values", "description"], "textarea")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">İstatistikler</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">İstatistikler</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {renderInput("Kuruluş Yılı", ["stats", "founded"])}
           {renderInput("Kuruluş Etiketi", ["stats", "foundedLabel"])}
@@ -591,31 +801,52 @@ export default function AdminPage() {
 
   const renderServicesEditor = () => (
     <div className="space-y-6">
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Hero Bölümü</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Hero Bölümü</h3>
         {renderInput("Başlık", ["hero", "title"])}
         {renderInput("Alt Başlık", ["hero", "subtitle"], "textarea")}
         {renderInput("Hero Görseli", ["hero", "image"], "image")}
       </div>
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">Giriş Bölümü</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">Giriş Bölümü</h3>
         {renderInput("Badge", ["intro", "badge"])}
         {renderInput("Başlık", ["intro", "title"])}
         {renderInput("Açıklama", ["intro", "description"], "textarea")}
       </div>
 
       {(getNestedValue(["services"], []) as any[]).map((service: any, index: number) => (
-        <div key={service.id || index} className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-          <h3 className="text-lg font-semibold text-amber-500 mb-4">Hizmet: {service.title}</h3>
+        <div key={service.id || index} className="bg-card rounded-xl p-6 border">
+          <h3 className="text-lg font-semibold text-primary mb-4">Hizmet: {service.title}</h3>
           {renderInput("Başlık", ["services", index.toString(), "title"])}
           {renderInput("Açıklama", ["services", index.toString(), "description"], "textarea")}
-          {renderInput("Görsel", ["services", index.toString(), "image"], "image")}
+
+          <div className="mt-4">
+            <h4 className="text-md font-medium mb-2">Alt Hizmetler</h4>
+            {(service.items || []).map((item: any, itemIndex: number) => (
+              <div key={itemIndex} className="mb-3 p-3 bg-muted/50 rounded-lg">
+                {renderInput(`${itemIndex + 1}. Alt Hizmet Başlık`, [
+                  "services",
+                  index.toString(),
+                  "items",
+                  itemIndex.toString(),
+                  "title",
+                ])}
+                {renderInput(`${itemIndex + 1}. Alt Hizmet Açıklama`, [
+                  "services",
+                  index.toString(),
+                  "items",
+                  itemIndex.toString(),
+                  "description",
+                ])}
+              </div>
+            ))}
+          </div>
         </div>
       ))}
 
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">CTA Bölümü</h3>
+      <div className="bg-card rounded-xl p-6 border">
+        <h3 className="text-lg font-semibold text-primary mb-4">CTA Bölümü</h3>
         {renderInput("Başlık", ["cta", "title"])}
         {renderInput("Açıklama", ["cta", "description"], "textarea")}
       </div>
@@ -629,7 +860,7 @@ export default function AdminPage() {
       { key: "upcoming", label: "Başlayacak", color: "bg-amber-600" },
     ]
 
-    const currentProjects = getNestedValue([projectTab], []) as any[]
+    const currentProjects = (getNestedValue([activeTab], []) as any[]) || []
 
     const addProject = () => {
       const newProject = {
@@ -644,161 +875,166 @@ export default function AdminPage() {
         area: "",
         units: "",
         floors: "",
-        status: projectTab,
+        status: activeTab,
         mainImage: "",
         gallery: [],
         features: [],
-        ...(projectTab === "ongoing" ? { progress: 50, updates: [] } : {}),
+        ...(activeTab === "ongoing" ? { progress: 50, updates: [] } : {}),
       }
 
       const updated = [...currentProjects, newProject]
-      updateNestedValue([projectTab], updated)
+      updateNestedValue([activeTab], updated)
     }
 
     const removeProject = (index: number) => {
-      const updated = currentProjects.filter((_, i) => i !== index)
-      updateNestedValue([projectTab], updated)
+      const updated = currentProjects.filter((_: any, i: number) => i !== index)
+      updateNestedValue([activeTab], updated)
     }
 
     const addFeature = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = project.features || []
       features.push("Yeni özellik")
-      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
+      updateNestedValue([activeTab, projectIndex.toString(), "features"], features)
     }
 
     const removeFeature = (projectIndex: number, featureIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = (project.features || []).filter((_: any, i: number) => i !== featureIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
+      updateNestedValue([activeTab, projectIndex.toString(), "features"], features)
     }
 
     const addGalleryImage = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const gallery = project.gallery || []
       gallery.push("")
-      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
+      updateNestedValue([activeTab, projectIndex.toString(), "gallery"], gallery)
     }
 
     const removeGalleryImage = (projectIndex: number, imageIndex: number) => {
       const project = currentProjects[projectIndex]
       const gallery = (project.gallery || []).filter((_: any, i: number) => i !== imageIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
+      updateNestedValue([activeTab, projectIndex.toString(), "gallery"], gallery)
     }
 
     const addUpdate = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const updates = project.updates || []
       updates.push({ date: new Date().toISOString().slice(0, 7), title: "Yeni Güncelleme", description: "" })
-      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
+      updateNestedValue([activeTab, projectIndex.toString(), "updates"], updates)
     }
 
     const removeUpdate = (projectIndex: number, updateIndex: number) => {
       const project = currentProjects[projectIndex]
       const updates = (project.updates || []).filter((_: any, i: number) => i !== updateIndex)
-      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
+      updateNestedValue([activeTab, projectIndex.toString(), "updates"], updates)
     }
 
     return (
       <div className="space-y-6">
-        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-          <h3 className="text-lg font-semibold text-amber-500 mb-4">Sayfa Bilgileri</h3>
+        <div className="bg-card rounded-xl p-6 border">
+          <h3 className="text-lg font-semibold text-primary mb-4">Sayfa Bilgileri</h3>
           {renderInput("Sayfa Başlığı", ["pageTitle"])}
           {renderInput("Sayfa Açıklaması", ["pageDescription"], "textarea")}
           {renderInput("Hero Görseli", ["heroImage"], "image")}
         </div>
 
-        {/* Proje Kategorisi Sekmeleri */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 mb-6">
           {projectCategories.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => setProjectTab(cat.key as any)}
-              className={`px-4 py-2 rounded-lg text-left ${activeTab === cat.key ? "bg-amber-600 text-white" : "bg-zinc-700 text-zinc-300"}`}
+              onClick={() => setActiveTab(cat.key as any)}
+              className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                activeTab === cat.key ? `${cat.color} text-white shadow-lg` : "bg-muted hover:bg-muted/80"
+              }`}
             >
-              {cat.label} ({(getNestedValue([cat.key], []) as any[]).length})
+              {cat.label}
             </button>
           ))}
         </div>
 
+        <div className="bg-muted/50 rounded-lg p-4 mb-6">
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-foreground">{currentProjects.length}</strong> adet{" "}
+            <strong className="text-foreground">{projectCategories.find((c) => c.key === activeTab)?.label}</strong>{" "}
+            proje
+          </p>
+        </div>
+
         <button
           onClick={addProject}
-          className="w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center gap-2"
+          className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <Plus className="h-5 w-5" />
-          Yeni Proje Ekle ({projectCategories.find((c) => c.key === projectTab)?.label})
+          Yeni Proje Ekle ({projectCategories.find((c) => c.key === activeTab)?.label})
         </button>
 
         {currentProjects.map((project: any, index: number) => (
-          <div key={project.id || index} className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-amber-500">{project.title || "Proje"}</h3>
+          <div key={project.id || index} className="bg-card rounded-xl p-6 border space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-primary">{project.title || "Proje"}</h3>
               <button
                 onClick={() => removeProject(index)}
-                className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                className="p-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
               >
                 <Trash2 className="h-4 w-4" />
               </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {renderInput("Proje Adı", [projectTab, index.toString(), "title"])}
-              {renderInput("Slug (URL)", [projectTab, index.toString(), "slug"])}
-              {renderInput("Kısa Açıklama", [projectTab, index.toString(), "shortDescription"])}
-              {renderInput("Yıl", [projectTab, index.toString(), "year"])}
-              {renderInput("Konum", [projectTab, index.toString(), "location"])}
-              {renderInput("Alan (m²)", [projectTab, index.toString(), "area"])}
-              {renderInput("Birim Sayısı", [projectTab, index.toString(), "units"])}
-              {renderInput("Kat Sayısı", [projectTab, index.toString(), "floors"])}
-              {renderInput("Detaylar", [projectTab, index.toString(), "details"])}
+              {renderInput("Proje Adı", [activeTab, index.toString(), "title"])}
+              {renderInput("Slug (URL)", [activeTab, index.toString(), "slug"])}
+              {renderInput("Kısa Açıklama", [activeTab, index.toString(), "shortDescription"])}
+              {renderInput("Yıl", [activeTab, index.toString(), "year"])}
+              {renderInput("Konum", [activeTab, index.toString(), "location"])}
+              {renderInput("Alan (m²)", [activeTab, index.toString(), "area"])}
+              {renderInput("Birim Sayısı", [activeTab, index.toString(), "units"])}
+              {renderInput("Kat Sayısı", [activeTab, index.toString(), "floors"])}
+              {renderInput("Detaylar", [activeTab, index.toString(), "details"])}
             </div>
 
-            {renderInput("Detaylı Açıklama", [projectTab, index.toString(), "fullDescription"], "textarea")}
-            {renderInput("Ana Görsel", [projectTab, index.toString(), "mainImage"], "image")}
+            {renderInput("Detaylı Açıklama", [activeTab, index.toString(), "fullDescription"], "textarea")}
+            {renderInput("Ana Görsel", [activeTab, index.toString(), "mainImage"], "image")}
 
-            {/* İlerleme (sadece devam eden projeler için) */}
-            {projectTab === "ongoing" && (
-              <div className="space-y-2 mt-4">
-                <label className="block text-zinc-300 text-sm">İlerleme (%{project.progress || 0})</label>
+            {activeTab === "ongoing" && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">İlerleme (%{project.progress || 0})</label>
                 <input
                   type="range"
                   min="0"
                   max="100"
                   value={project.progress || 0}
-                  onChange={(e) =>
-                    updateNestedValue([projectTab, index.toString(), "progress"], Number(e.target.value))
-                  }
-                  className="w-full"
+                  onChange={(e) => updateNestedValue([activeTab, index.toString(), "progress"], Number(e.target.value))}
+                  className="w-full accent-primary"
                 />
               </div>
             )}
 
-            {/* Özellikler */}
-            <div className="mt-4 p-4 bg-zinc-700/50 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="text-sm font-medium text-zinc-300">Özellikler</h4>
+            <div className="p-4 bg-muted rounded-lg space-y-2">
+              <div className="flex justify-between items-center">
+                <h4 className="text-sm font-medium">Özellikler</h4>
                 <button
                   onClick={() => addFeature(index)}
-                  className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded"
+                  className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
                 >
                   + Ekle
                 </button>
               </div>
               {(project.features || []).map((feature: string, fIndex: number) => (
-                <div key={fIndex} className="flex gap-2 mb-2">
+                <div key={fIndex} className="flex gap-2">
                   <input
                     type="text"
                     value={feature}
                     onChange={(e) => {
                       const features = [...(project.features || [])]
                       features[fIndex] = e.target.value
-                      updateNestedValue([projectTab, index.toString(), "features"], features)
+                      updateNestedValue([activeTab, index.toString(), "features"], features)
                     }}
-                    className="flex-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
+                    className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <button
                     onClick={() => removeFeature(index, fIndex)}
-                    className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                    className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -806,29 +1042,28 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* Galeri */}
-            <div className="mt-4 p-4 bg-zinc-700/50 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <h4 className="text-sm font-medium text-zinc-300">Galeri Görselleri</h4>
+            <div className="p-4 bg-muted rounded-lg space-y-2">
+              <div className="flex justify-between items-center">
+                <h4 className="text-sm font-medium">Galeri Görselleri</h4>
                 <button
                   onClick={() => addGalleryImage(index)}
-                  className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded"
+                  className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
                 >
                   + Görsel Ekle
                 </button>
               </div>
               {(project.gallery || []).map((image: string, gIndex: number) => (
-                <div key={gIndex} className="flex gap-2 mb-2">
+                <div key={gIndex} className="flex gap-2">
                   <input
                     type="text"
                     value={image}
                     onChange={(e) => {
                       const gallery = [...(project.gallery || [])]
                       gallery[gIndex] = e.target.value
-                      updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
+                      updateNestedValue([activeTab, index.toString(), "gallery"], gallery)
                     }}
                     placeholder="Görsel URL"
-                    className="flex-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
+                    className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <button
                     onClick={() => {
@@ -845,18 +1080,18 @@ export default function AdminPage() {
                         if (data.url) {
                           const gallery = [...(project.gallery || [])]
                           gallery[gIndex] = data.url
-                          updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
+                          updateNestedValue([activeTab, index.toString(), "gallery"], gallery)
                         }
                       }
                       input.click()
                     }}
-                    className="px-3 py-2 bg-zinc-600 hover:bg-zinc-500 text-white rounded"
+                    className="px-3 py-2 bg-muted hover:bg-muted/80 text-foreground rounded-lg"
                   >
                     <Upload className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => removeGalleryImage(index, gIndex)}
-                    className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                    className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -864,30 +1099,29 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* Güncellemeler (sadece devam eden projeler için) */}
-            {projectTab === "ongoing" && (
-              <div className="mt-4 p-4 bg-zinc-700/50 rounded-lg">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="text-sm font-medium text-zinc-300">Proje Güncellemeleri</h4>
+            {activeTab === "ongoing" && (
+              <div className="p-4 bg-muted rounded-lg space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">Proje Güncellemeleri</h4>
                   <button
                     onClick={() => addUpdate(index)}
-                    className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded"
+                    className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
                   >
                     + Güncelleme Ekle
                   </button>
                 </div>
                 {(project.updates || []).map((update: any, uIndex: number) => (
-                  <div key={uIndex} className="p-3 bg-zinc-800 rounded mb-2">
-                    <div className="flex gap-2 mb-2">
+                  <div key={uIndex} className="p-3 bg-background rounded-lg space-y-2">
+                    <div className="flex gap-2">
                       <input
                         type="month"
                         value={update.date}
                         onChange={(e) => {
                           const updates = [...(project.updates || [])]
                           updates[uIndex].date = e.target.value
-                          updateNestedValue([projectTab, index.toString(), "updates"], updates)
+                          updateNestedValue([activeTab, index.toString(), "updates"], updates)
                         }}
-                        className="px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
+                        className="px-3 py-2 bg-muted border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <input
                         type="text"
@@ -895,14 +1129,14 @@ export default function AdminPage() {
                         onChange={(e) => {
                           const updates = [...(project.updates || [])]
                           updates[uIndex].title = e.target.value
-                          updateNestedValue([projectTab, index.toString(), "updates"], updates)
+                          updateNestedValue([activeTab, index.toString(), "updates"], updates)
                         }}
                         placeholder="Başlık"
-                        className="flex-1 px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm"
+                        className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <button
                         onClick={() => removeUpdate(index, uIndex)}
-                        className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                        className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -912,11 +1146,11 @@ export default function AdminPage() {
                       onChange={(e) => {
                         const updates = [...(project.updates || [])]
                         updates[uIndex].description = e.target.value
-                        updateNestedValue([projectTab, index.toString(), "updates"], updates)
+                        updateNestedValue([activeTab, index.toString(), "updates"], updates)
                       }}
                       placeholder="Açıklama"
                       rows={2}
-                      className="w-full px-3 py-2 bg-zinc-700 border border-zinc-600 rounded text-white text-sm resize-none"
+                      className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                     />
                   </div>
                 ))}
@@ -928,66 +1162,97 @@ export default function AdminPage() {
     )
   }
 
-  const renderContactEditor = () => {
-    const team = getNestedValue(["contact", "team"], [])
+  const ContactEditor = () => {
+    const contactData = content.contact
 
-    const addTeamMember = () => {
-      const currentTeam = getNestedValue(["contact", "team"], [])
-      const updatedTeam = [...currentTeam, { name: "", title: "", phone: "", email: "" }]
-      updateNestedValue(["contact", "team"], updatedTeam)
+    const addAuthorizedPerson = () => {
+      const newPerson = { name: "", title: "", phone: "", email: "" }
+      const updatedPersons = [...(contactData.authorizedPersons || []), newPerson]
+      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
     }
 
-    const removeTeamMember = (index: number) => {
-      const currentTeam = getNestedValue(["contact", "team"], [])
-      const updatedTeam = currentTeam.filter((_: any, i: number) => i !== index)
-      updateNestedValue(["contact", "team"], updatedTeam)
+    const removeAuthorizedPerson = (index: number) => {
+      const updatedPersons = (contactData.authorizedPersons || []).filter((_, i) => i !== index)
+      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
+    }
+
+    const updatePerson = (index: number, field: string, value: string) => {
+      const updatedPersons = [...(contactData.authorizedPersons || [])]
+      updatedPersons[index] = { ...updatedPersons[index], [field]: value }
+      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
     }
 
     return (
       <div className="space-y-6">
-        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-          <h3 className="text-lg font-semibold text-amber-500 mb-4">İletişim Bilgileri</h3>
-          {renderInput("Adres", ["contact", "address"], "textarea")}
-          {renderInput("Telefon", ["contact", "phone"])}
-          {renderInput("Mobil", ["contact", "mobile"])}
-          {renderInput("WhatsApp Numarası", ["contact", "whatsapp"], "text", "905334798387 formatında")}
-          {renderInput("E-posta", ["contact", "email"])}
-          {renderInput("Fax", ["contact", "fax"])}
-          {renderInput("Çalışma Saatleri", ["contact", "hours"])}
-          {renderInput("Hero Görseli", ["contact", "heroImage"], "image")}
+        <div className="bg-card rounded-xl p-6 border">
+          <h3 className="text-lg font-semibold text-primary mb-4">İletişim Bilgileri</h3>
+          {renderInput("Adres", ["address"], "textarea")}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {renderInput("Telefon", ["phone"])}
+            {renderInput("Mobil", ["mobile"])}
+            {renderInput("WhatsApp (Ör: 905334798387)", ["whatsapp"])}
+            {renderInput("Faks", ["fax"])}
+            {renderInput("E-posta", ["email"])}
+            {renderInput("Çalışma Saatleri", ["hours"])}
+          </div>
         </div>
 
-        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-amber-500">Yetkili Kişiler</h3>
+        <div className="bg-card rounded-xl p-6 border">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-primary">Yetkili Kişiler</h3>
             <button
-              onClick={addTeamMember}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center gap-2"
+              onClick={addAuthorizedPerson}
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-4 w-4" />
               Yeni Ekle
             </button>
           </div>
 
-          {(team as any[]).map((member: any, index: number) => (
-            <div key={index} className="mb-6 p-4 bg-zinc-900 rounded-lg border border-zinc-700">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-amber-400 font-medium">Yetkili #{index + 1}</h4>
+          <div className="space-y-4">
+            {(contactData.authorizedPersons || []).map((person: any, index: number) => (
+              <div key={index} className="p-4 bg-muted rounded-lg relative">
                 <button
-                  onClick={() => removeTeamMember(index)}
-                  className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                  onClick={() => removeAuthorizedPerson(index)}
+                  className="absolute top-2 right-2 p-1 bg-destructive hover:bg-destructive/90 text-white rounded"
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 size={16} />
                 </button>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="İsim Soyisim"
+                    value={person.name || ""}
+                    onChange={(e) => updatePerson(index, "name", e.target.value)}
+                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Ünvan"
+                    value={person.title || ""}
+                    onChange={(e) => updatePerson(index, "title", e.target.value)}
+                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Telefon"
+                    value={person.phone || ""}
+                    onChange={(e) => updatePerson(index, "phone", e.target.value)}
+                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                  <input
+                    type="email"
+                    placeholder="E-posta"
+                    value={person.email || ""}
+                    onChange={(e) => updatePerson(index, "email", e.target.value)}
+                    className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {renderInput("Ad Soyad", ["contact", "team", index.toString(), "name"])}
-                {renderInput("Ünvan", ["contact", "team", index.toString(), "title"])}
-                {renderInput("Telefon", ["contact", "team", index.toString(), "phone"])}
-                {renderInput("E-posta", ["contact", "team", index.toString(), "email"])}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     )
@@ -1004,35 +1269,37 @@ export default function AdminPage() {
       case "projects":
         return renderProjectsEditor()
       case "contact":
-        return renderContactEditor()
+        return <ContactEditor />
       default:
         return null
     }
   }
 
+  const tabs = [
+    { id: "home", label: "Anasayfa" },
+    { id: "about", label: "Hakkımızda" },
+    { id: "services", label: "Hizmetler" },
+    { id: "projects", label: "Projeler" },
+    { id: "contact", label: "İletişim" },
+  ]
+
   return (
-    <div className="min-h-screen bg-zinc-900">
-      <header className="sticky top-0 z-50 bg-zinc-800 border-b border-zinc-700 px-4 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-zinc-400 hover:text-white"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-            <h1 className="text-xl font-bold text-white">Yönetim Paneli</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {message && (
-              <span className={`text-sm ${message.includes("Hata") ? "text-red-400" : "text-green-400"}`}>
-                {message}
-              </span>
-            )}
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 bg-card border-b shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold">Yönetim Paneli</h1>
+              {message && (
+                <span className={`text-sm ${message.includes("✓") ? "text-green-600" : "text-destructive"}`}>
+                  {message}
+                </span>
+              )}
+            </div>
             <button
               onClick={() => handleSave()}
               disabled={saving}
-              className="px-4 py-2 bg-amber-600 hover:bg-amber-700 disabled:bg-amber-800 text-white rounded-lg flex items-center gap-2"
+              className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
               {saving ? "Kaydediliyor..." : "Kaydet"}
@@ -1041,48 +1308,51 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-zinc-800 border-b border-zinc-700 p-4">
-          <div className="flex flex-col gap-2">
+      <div className="md:hidden sticky top-16 z-40 bg-card border-b p-4">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="w-full flex items-center justify-between px-4 py-2 bg-muted rounded-lg"
+        >
+          <span className="font-medium">{tabs.find((t) => t.id === activeTab)?.label}</span>
+          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      <div className={`${mobileMenuOpen ? "block" : "hidden"} md:block sticky top-32 md:top-16 z-30 bg-card border-b`}>
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row md:gap-2 py-2">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => {
-                  setActiveTab(tab.id)
+                  setActiveTab(tab.id as ContentType)
                   setMobileMenuOpen(false)
                 }}
-                className={`px-4 py-2 rounded-lg text-left ${activeTab === tab.id ? "bg-amber-600 text-white" : "bg-zinc-700 text-zinc-300"}`}
+                className={`px-4 py-2 rounded-lg transition-colors text-left md:text-center ${
+                  activeTab === tab.id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                }`}
               >
                 {tab.label}
               </button>
             ))}
           </div>
         </div>
-      )}
-
-      <div className="max-w-7xl mx-auto p-4 md:p-6">
-        <div className="hidden md:flex gap-2 mb-6">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                activeTab === tab.id ? "bg-amber-600 text-white" : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-zinc-400">Yükleniyor...</div>
-          </div>
-        ) : (
-          renderEditor()
-        )}
       </div>
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+                <p className="text-muted-foreground">Yükleniyor...</p>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-card rounded-xl p-6 md:p-8 shadow-sm border space-y-6">{renderEditor()}</div>
+          )}
+        </div>
+      </main>
     </div>
   )
 }

@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { MapPin, Phone, Mail } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
 import { getContent, defaultContact } from "@/lib/github-content"
@@ -17,28 +16,6 @@ export default async function ContactPage() {
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
-      {/* Hero Section */}
-      <div className="relative w-full h-[40vh] overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <Image
-          src={contactData.heroImage || "/modern-office-building-exterior-istanbul.jpg"}
-          alt="VIERA İletişim"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 z-20 flex items-center">
-          <div className="container px-4 md:px-6">
-            <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">İletişim</h1>
-              <p className="text-xl text-white/80">
-                Sorularınız veya projeleriniz için bizimle iletişime geçebilirsiniz.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Contact Section */}
       <section className="w-full py-16 md:py-24 lg:py-32 bg-background">
         <div className="container px-4 md:px-6">
@@ -46,9 +23,7 @@ export default async function ContactPage() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold">İletişim Formu</h2>
-                <p className="text-muted-foreground">
-                  Aşağıdaki formu doldurarak bize WhatsApp üzerinden mesaj gönderebilirsiniz.
-                </p>
+                <p className="text-muted-foreground">Aşağıdaki formu doldurarak bize mesaj gönderebilirsiniz.</p>
               </div>
               <ContactForm />
             </div>
