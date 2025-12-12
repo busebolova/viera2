@@ -450,7 +450,10 @@ export default function AdminPanel() {
     setMessage("")
 
     try {
-      console.log(`[v0] Saving ${fileToSave}...`)
+      console.log(`[v0] CLIENT: Starting save for ${fileToSave}`)
+      console.log(`[v0] CLIENT: Content keys:`, Object.keys(content[fileToSave] || {}))
+      console.log(`[v0] CLIENT: SHA exists:`, !!shas[fileToSave])
+
       const res = await fetch("/api/github/content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -462,34 +465,38 @@ export default function AdminPanel() {
         cache: "no-store",
       })
 
+      console.log(`[v0] CLIENT: Response status:`, res.status)
       const text = await res.text()
+      console.log(`[v0] CLIENT: Response text:`, text.substring(0, 200))
+
       let data
       try {
         data = JSON.parse(text)
-      } catch {
-        console.log("[v0] Save error: Invalid JSON response")
-        setMessage("Sunucu hatası")
+      } catch (e) {
+        console.log("[v0] CLIENT: Save error - Invalid JSON response")
+        setMessage("❌ Sunucu hatası: Geçersiz yanıt")
         return
       }
 
       if (res.ok && data.success) {
+        console.log(`[v0] CLIENT: Save successful for ${fileToSave}`)
         if (data.sha) setShas((prev) => ({ ...prev, [fileToSave]: data.sha }))
-        setMessage("✓ Kaydedildi! Değişiklikler sitede görünecek. Sayfayı yenileyin.")
-        console.log(`[v0] Successfully saved ${fileToSave}`)
+        // Mesaj güncellendi ve yenileme talimatı eklendi
+        setMessage("✅ Kaydedildi! Lütfen sayfayı yenileyin (Ctrl+Shift+R veya Cmd+Shift+R)")
 
         setTimeout(async () => {
-          console.log(`[v0] Reloading ${fileToSave} to show saved changes...`)
+          console.log(`[v0] CLIENT: Reloading content for ${fileToSave}`)
           await loadContent(fileToSave)
-          setMessage("✓ Kaydedildi ve yenilendi!")
-          setTimeout(() => setMessage(""), 3000)
+          setMessage("✅ Başarıyla kaydedildi ve yenilendi!")
+          setTimeout(() => setMessage(""), 5000)
         }, 1000)
       } else {
-        console.log("[v0] Save failed:", data)
-        setMessage(`Hata: ${data.error || "Kayıt başarısız"}`)
+        console.log("[v0] CLIENT: Save failed:", data)
+        setMessage(`❌ Hata: ${data.error || "Kayıt başarısız"}`)
       }
     } catch (err: any) {
-      console.log("[v0] Save error:", err)
-      setMessage(`Kayıt hatası: ${err.message}`)
+      console.error("[v0] CLIENT: Save error:", err)
+      setMessage(`❌ Kayıt hatası: ${err.message}`)
     } finally {
       setSaving(false)
     }
