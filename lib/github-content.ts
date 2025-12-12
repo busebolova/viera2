@@ -34,19 +34,17 @@ export async function getContent<T>(file: string): Promise<T | null> {
   }
 }
 
-// Varsayılan içerikler - GitHub'dan veri gelmezse kullanılır
-export const defaultProjects = {
-  pageTitle: "Projelerimiz",
-  pageDescription: "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
-  heroImage: "/projects-hero.jpg",
-  completed: [],
-  ongoing: [],
-  upcoming: [],
-}
-
 export const defaultHome = {
-  hero: { title: "Viera & Alkan Yapı", subtitle: "Güven, Kalite, Profesyonellik", description: "", image: "" },
-  video: { url: "", title: "Viera & Alkan Yapı", subtitle: "Güven, Kalite, Profesyonellik" },
+  video: {
+    url: "https://cdn.pixabay.com/video/2020/06/23/42926-434300944_large.mp4",
+    title: "Viera & Alkan Yapı",
+    subtitle: "Güven, Kalite, Profesyonellik",
+  },
+  experience: {
+    title: "60 Yılı Aşkın Tecrübe",
+    description:
+      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
+  },
   stats: {
     founded: "1965",
     foundedLabel: "KURULUŞ YILI",
@@ -57,18 +55,42 @@ export const defaultHome = {
     experience: "60+",
     experienceLabel: "YIL DENEYİM",
   },
-  experience: { title: "60 Yılı Aşkın Tecrübe", description: "" },
-  about: { badge: "Hakkımızda", title: "Firma Geçmişimiz", description: "", image: "" },
-  whyUs: { title: "Neden VIERA Construction?", items: [] },
+  about: {
+    badge: "Hakkımızda",
+    title: "Firma Geçmişimiz",
+    description:
+      "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, 60 yılı aşkın deneyimi ve köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir.",
+    image: "/about-office.jpg",
+    certification: {
+      title: "Müteahhitlik Belgemiz",
+      description: "Firmamız D sınıfı Müteahhitlik Belgesine sahiptir.",
+    },
+    projects: {
+      title: "Projelerimiz",
+      description: "60 yılı aşkın sürede 100'den fazla proje başarıyla tamamlanmıştır.",
+    },
+  },
+  whyUs: {
+    title: "Neden VIERA Construction?",
+    items: [
+      { title: "Kalite", description: "Her projede en yüksek kalite standartlarını uyguluyoruz." },
+      { title: "Güvenilirlik", description: "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz." },
+      { title: "Yenilikçilik", description: "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz." },
+      { title: "Sürdürülebilirlik", description: "Çevreye duyarlı projeler geliştiriyoruz." },
+    ],
+  },
 }
 
 export const defaultAbout = {
   title: "Hakkımızda",
   pageTitle: "Firmamız Hakkında",
-  heroImage: "",
-  description: "",
+  heroImage: "/modern-construction-office-building.jpg",
+  officeImage: "/modern-office-interior.jpg",
+  description:
+    "VIERA Construction - Alkan Yapı & Viera Ortaklığı olarak konut ve iş yeri üretimine aralıksız devam etmekteyiz.",
   certificate: "D Sınıfı Müteahhitlik Belgesi",
-  certificateDescription: "",
+  certificateDescription:
+    "Deneyimli kadromuz ve modern ekipmanlarımızla müşterilerimizin ihtiyaçlarına en uygun çözümleri sunmaktayız.",
   stats: {
     founded: "1965",
     foundedLabel: "KURULUŞ YILI",
@@ -85,29 +107,95 @@ export const defaultAbout = {
     founder: "Servet Alkan",
     founderTitle: "Kurucu",
   },
-  contact: { address: "", authorized: "", phone: "", fax: "", mobile: "", email: "" },
-  vision: { title: "Vizyonumuz", description: "" },
-  mission: { title: "Misyonumuz", description: "" },
-  values: { title: "Değerlerimiz", description: "" },
-  whyUs: { title: "Neden VIERA Construction?", items: [] },
-  image: "",
-  officeImage: "",
+  contact: {
+    address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
+    authorized: "Erdem Alkan",
+    phone: "0216 391 49 40",
+    fax: "0216 310 90 74",
+    mobile: "0533 479 83 87",
+    email: "info@vieraconstruction.com",
+  },
+  vision: {
+    title: "Vizyonumuz",
+    description: "Türkiye'nin en güvenilir inşaat firması olmak ve sektörde öncü konumumuzu sürdürmek.",
+  },
+  mission: {
+    title: "Misyonumuz",
+    description: "Kaliteli, güvenilir ve sürdürülebilir projeler üretmek.",
+  },
+  values: {
+    title: "Değerlerimiz",
+    description: "Dürüstlük, şeffaflık, müşteri odaklılık, çevreye saygı ve sürekli gelişim.",
+  },
+  whyUs: {
+    title: "Neden VIERA Construction?",
+    items: [
+      { title: "Kalite", description: "Her projede en yüksek kalite standartlarını uyguluyoruz." },
+      { title: "Güvenilirlik", description: "Söz verdiğimiz zamanda teslim ediyoruz." },
+    ],
+  },
 }
 
 export const defaultServices = {
-  hero: { title: "Hizmetlerimiz", subtitle: "", image: "" },
-  intro: { badge: "Uzmanlık Alanlarımız", title: "Sunduğumuz Hizmetler", description: "" },
-  services: [],
-  cta: { title: "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim", description: "" },
+  hero: {
+    title: "Hizmetlerimiz",
+    subtitle: "60 yılı aşkın tecrübemizle modern yaşam alanları inşa ediyoruz.",
+    image: "/services-hero.jpg",
+  },
+  intro: {
+    badge: "Uzmanlık Alanlarımız",
+    title: "Sunduğumuz Hizmetler",
+    description: "60 yılı aşkın süredir inşaat sektöründe edindiğimiz tecrübeyle modern projeler üretiyoruz.",
+  },
+  services: [
+    {
+      id: "konut",
+      icon: "Home",
+      title: "Konut Projeleri",
+      description: "Modern yaşam standartlarına uygun konut projeleri geliştiriyoruz.",
+      image: "/service-residential.jpg",
+      items: [
+        { title: "Lüks Apartman Kompleksleri", description: "Modern mimarisi ve sosyal olanaklarıyla" },
+        { title: "Rezidans Projeleri", description: "Premium hizmet anlayışıyla" },
+      ],
+    },
+  ],
+  cta: {
+    title: "Hayalinizdeki Projeyi Birlikte Gerçekleştirelim",
+    description: "60 yılı aşkın tecrübemiz ve uzman ekibimizle projelerinizi hayata geçirmek için hazırız.",
+  },
 }
 
 export const defaultContact = {
-  address: "",
-  phone: "",
-  mobile: "",
-  email: "",
-  fax: "",
-  authorized: "",
+  address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
+  phone: "0216 391 49 40",
+  mobile: "0533 479 83 87",
+  whatsapp: "905334798387",
+  email: "info@alkanyapi.com.tr",
+  fax: "0216 310 90 74",
+  authorized: "Erdem Alkan",
   hours: "Pazartesi - Cuma: 09:00 - 18:00",
-  heroImage: "",
+  heroImage: "/contact-hero.jpg",
+  authorizedPersons: [
+    {
+      name: "Erdem Alkan",
+      title: "Genel Müdür",
+      phone: "0533 479 83 87",
+      email: "erdemalkan72@gmail.com",
+    },
+  ],
+}
+
+export const defaultProjects = {
+  pageTitle: "Projelerimiz",
+  pageDescription: "60 yılı aşkın tecrübemizle gerçekleştirdiğimiz projeler",
+  heroImage: "/projects-hero.jpg",
+  categories: {
+    completed: "Tamamlanan Projeler",
+    ongoing: "Devam Eden Projeler",
+    upcoming: "Başlayacak Projeler",
+  },
+  completed: [],
+  ongoing: [],
+  upcoming: [],
 }

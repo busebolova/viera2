@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2, CheckCircle } from "lucide-react"
 
 // Access key will be generated for erdemalkan72@gmail.com
-const WEB3FORMS_ACCESS_KEY = "d64e7c04-46b0-4a3e-bfe7-3e1eb00cbe95"
+const WEB3FORMS_ACCESS_KEY = "488081a0-6dfc-4488-9050-160c831b5674"
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
@@ -77,9 +77,9 @@ export function ContactForm() {
     return (
       <div className="flex flex-col items-center justify-center p-8 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
         <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-400 mb-4" />
-        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Mesajiniz Gonderildi!</h3>
+        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Mesajınız Gönderildi!</h3>
         <p className="text-green-600 dark:text-green-400 text-center mt-2">
-          En kisa surede sizinle iletisime gececegiz.
+          En kısa sürede sizinle iletişime geçeceğiz.
         </p>
       </div>
     )
@@ -170,12 +170,15 @@ export function ContactForm() {
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (
           <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Gonderiliyor...
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Gönderiliyor...
           </>
         ) : (
-          "Gonder"
+          "Gönder"
         )}
       </Button>
+      <p className="text-sm text-muted-foreground text-center">
+        Form gönderilemezse otomatik olarak WhatsApp'a yönlendirileceksiniz.
+      </p>
     </form>
   )
 }

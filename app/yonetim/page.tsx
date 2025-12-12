@@ -195,9 +195,17 @@ const defaultContact = {
   address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
   phone: "0216 391 49 40",
   mobile: "0533 479 83 87",
+  whatsapp: "905334798387",
   email: "info@alkanyapi.com.tr",
   fax: "0216 310 90 74",
-  authorized: "Erdem Alkan",
+  team: [
+    {
+      name: "Erdem Alkan",
+      title: "Genel Müdür",
+      phone: "0533 479 83 87",
+      email: "erdem@alkanyapi.com.tr",
+    },
+  ],
   hours: "Pazartesi - Cuma: 09:00 - 18:00",
   heroImage: "/contact-hero.jpg",
 }
@@ -706,9 +714,7 @@ export default function AdminPage() {
             <button
               key={cat.key}
               onClick={() => setProjectTab(cat.key as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                projectTab === cat.key ? `${cat.color} text-white` : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-              }`}
+              className={`px-4 py-2 rounded-lg text-left ${activeTab === cat.key ? "bg-amber-600 text-white" : "bg-zinc-700 text-zinc-300"}`}
             >
               {cat.label} ({(getNestedValue([cat.key], []) as any[]).length})
             </button>
@@ -922,21 +928,70 @@ export default function AdminPage() {
     )
   }
 
-  const renderContactEditor = () => (
-    <div className="space-y-6">
-      <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
-        <h3 className="text-lg font-semibold text-amber-500 mb-4">İletişim Bilgileri</h3>
-        {renderInput("Adres", ["address"], "textarea")}
-        {renderInput("Telefon", ["phone"])}
-        {renderInput("Mobil", ["mobile"])}
-        {renderInput("E-posta", ["email"])}
-        {renderInput("Fax", ["fax"])}
-        {renderInput("Yetkili Kişi", ["authorized"])}
-        {renderInput("Çalışma Saatleri", ["hours"])}
-        {renderInput("Hero Görseli", ["heroImage"], "image")}
+  const renderContactEditor = () => {
+    const team = getNestedValue(["contact", "team"], [])
+
+    const addTeamMember = () => {
+      const currentTeam = getNestedValue(["contact", "team"], [])
+      const updatedTeam = [...currentTeam, { name: "", title: "", phone: "", email: "" }]
+      updateNestedValue(["contact", "team"], updatedTeam)
+    }
+
+    const removeTeamMember = (index: number) => {
+      const currentTeam = getNestedValue(["contact", "team"], [])
+      const updatedTeam = currentTeam.filter((_: any, i: number) => i !== index)
+      updateNestedValue(["contact", "team"], updatedTeam)
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <h3 className="text-lg font-semibold text-amber-500 mb-4">İletişim Bilgileri</h3>
+          {renderInput("Adres", ["contact", "address"], "textarea")}
+          {renderInput("Telefon", ["contact", "phone"])}
+          {renderInput("Mobil", ["contact", "mobile"])}
+          {renderInput("WhatsApp Numarası", ["contact", "whatsapp"], "text", "905334798387 formatında")}
+          {renderInput("E-posta", ["contact", "email"])}
+          {renderInput("Fax", ["contact", "fax"])}
+          {renderInput("Çalışma Saatleri", ["contact", "hours"])}
+          {renderInput("Hero Görseli", ["contact", "heroImage"], "image")}
+        </div>
+
+        <div className="bg-zinc-800 rounded-xl p-6 border border-zinc-700">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-amber-500">Yetkili Kişiler</h3>
+            <button
+              onClick={addTeamMember}
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Yeni Ekle
+            </button>
+          </div>
+
+          {(team as any[]).map((member: any, index: number) => (
+            <div key={index} className="mb-6 p-4 bg-zinc-900 rounded-lg border border-zinc-700">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-amber-400 font-medium">Yetkili #{index + 1}</h4>
+                <button
+                  onClick={() => removeTeamMember(index)}
+                  className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {renderInput("Ad Soyad", ["contact", "team", index.toString(), "name"])}
+                {renderInput("Ünvan", ["contact", "team", index.toString(), "title"])}
+                {renderInput("Telefon", ["contact", "team", index.toString(), "phone"])}
+                {renderInput("E-posta", ["contact", "team", index.toString(), "email"])}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const renderEditor = () => {
     switch (activeTab) {

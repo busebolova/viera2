@@ -3,16 +3,25 @@
 import { useEffect, useState } from "react"
 
 export default function WhatsAppButton() {
+  const [whatsappNumber, setWhatsappNumber] = useState("905334798387")
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+
+    fetch("/api/github/content?file=contact")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.data?.whatsapp) {
+          setWhatsappNumber(data.data.whatsapp)
+        }
+      })
+      .catch(() => {})
   }, [])
 
-  // Always render the button, CSS will handle positioning
   return (
     <a
-      href="https://wa.me/905334798387"
+      href={`https://wa.me/${whatsappNumber}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="WhatsApp ile iletişime geçin"

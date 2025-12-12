@@ -86,29 +86,38 @@ export default async function ContactPage() {
                     <p className="text-muted-foreground">{contactData.address}</p>
                   </div>
                 </div>
-                <div className="flex items-start">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 mr-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-5 w-5"
-                    >
-                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Yetkili Kişi</h3>
-                    <p className="text-muted-foreground">{contactData.authorized}</p>
-                  </div>
-                </div>
+
+                {contactData.team && contactData.team.length > 0 && (
+                  <>
+                    {contactData.team.map((person: any, index: number) => (
+                      <div key={index} className="flex items-start">
+                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 mr-4">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="h-5 w-5"
+                          >
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="font-medium">{person.title || "Yetkili Kişi"}</h3>
+                          <p className="text-muted-foreground font-semibold">{person.name}</p>
+                          {person.phone && <p className="text-muted-foreground text-sm">{person.phone}</p>}
+                          {person.email && <p className="text-muted-foreground text-sm">{person.email}</p>}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
               <div className="aspect-video overflow-hidden rounded-xl border shadow-lg">
                 <iframe

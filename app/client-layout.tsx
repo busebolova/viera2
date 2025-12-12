@@ -18,6 +18,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     phone: "0216 391 49 40",
     mobile: "0533 479 83 87",
     whatsapp: "905334798387",
+    email: "info@alkanyapi.com.tr",
+    address: "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
   })
 
   const isYonetimPage = pathname === "/yonetim"
@@ -34,11 +36,14 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     fetch("/api/github/content?file=contact")
       .then((r) => r.json())
       .then((data) => {
-        if (data.data?.phone) {
+        if (data.data) {
           setContactInfo({
-            phone: data.data.phone,
-            mobile: data.data.mobile || data.data.phone,
+            phone: data.data.phone || "0216 391 49 40",
+            mobile: data.data.mobile || "0533 479 83 87",
             whatsapp: data.data.whatsapp || "905334798387",
+            email: data.data.email || "info@alkanyapi.com.tr",
+            address:
+              data.data.address || "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
           })
         }
       })
@@ -275,8 +280,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, color: "#a1a1aa", fontSize: "14px" }}>
                   <li style={{ marginBottom: "8px" }}>Tel: {contactInfo.phone}</li>
                   <li style={{ marginBottom: "8px" }}>Mobil: {contactInfo.mobile}</li>
-                  <li style={{ marginBottom: "8px" }}>Email: info@alkanyapi.com.tr</li>
-                  <li>Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul</li>
+                  <li style={{ marginBottom: "8px" }}>Email: {contactInfo.email}</li>
+                  <li>{contactInfo.address}</li>
                 </ul>
               </div>
             </div>
