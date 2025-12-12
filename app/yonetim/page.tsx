@@ -687,10 +687,14 @@ const AdminPanel = () => {
                 <p className="text-primary-foreground/80">İçerik Yönetim Sistemi</p>
               </div>
               <button
-                onClick={() => router.push("/")}
+                onClick={() => {
+                  setAuthenticated(false)
+                  setPassword("")
+                  router.push("/")
+                }}
                 className="px-6 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-lg transition-all border border-white/20"
               >
-                Kaydet
+                Çıkış Yap
               </button>
             </div>
           </div>
