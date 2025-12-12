@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle2, Building2, Landmark, ArrowRight, Phone, Mail } from "lucide-react"
+import { CheckCircle2, ArrowRight, Phone, Mail } from "lucide-react"
 import { getProjectImage } from "@/lib/image-helper"
 import { getContent, defaultHome, defaultProjects } from "@/lib/github-content"
 
@@ -18,11 +18,12 @@ export const metadata = {
 async function getHomeContent() {
   try {
     const data = await getContent("home")
-    if (!data?.content) {
-      return { content: defaultHome }
+    if (data) {
+      console.log("[v0] Using home data from GitHub")
+      return { content: data }
     }
-    // GitHub'dan gelen veriyi olduğu gibi kullan, sadece eksik alanları defaults ile doldur
-    return { content: { ...defaultHome, ...data.content } }
+    console.log("[v0] Using default home data")
+    return { content: defaultHome }
   } catch (error) {
     console.error("[v0] Failed to fetch home content:", error)
     return { content: defaultHome }
@@ -32,11 +33,12 @@ async function getHomeContent() {
 async function getProjectsContent() {
   try {
     const data = await getContent("projects")
-    if (!data?.content) {
-      return { content: defaultProjects }
+    if (data) {
+      console.log("[v0] Using projects data from GitHub")
+      return { content: data }
     }
-    // GitHub'dan gelen veriyi olduğu gibi kullan
-    return { content: data.content }
+    console.log("[v0] Using default projects data")
+    return { content: defaultProjects }
   } catch (error) {
     console.error("[v0] Failed to fetch projects content:", error)
     return { content: defaultProjects }
@@ -62,23 +64,23 @@ export default async function HomePage() {
   const home = homeData.content
   const projects = projectsData.content
 
-  const commercialProjects = projects.ongoing?.filter((p: any) => p.type === "commercial") || []
-  const mixedProjects = projects.ongoing?.filter((p: any) => p.type === "mixed-use") || []
+  const completedProjects = projects?.completed || []
+  const ongoingProjects = projects?.ongoing || []
 
   return (
     <div className="min-h-screen">
       {/* Hero Video Section */}
       <section className="relative h-[600px] overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
-          <source src={home.video?.url || defaultHome.video.url} type="video/mp4" />
+          <source src={home?.video?.url || defaultHome.video.url} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
           <div className="container px-4">
             <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">
-              {home.video?.title || defaultHome.video.title}
+              {home?.video?.title || defaultHome.video.title}
             </h1>
-            <p className="text-xl md:text-2xl">{home.video?.subtitle || defaultHome.video.subtitle}</p>
+            <p className="text-xl md:text-2xl">{home?.video?.subtitle || defaultHome.video.subtitle}</p>
           </div>
         </div>
       </section>
@@ -166,79 +168,90 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Commercial Projects */}
-      {commercialProjects.length > 0 && (
+      {/* Projects Section - Completed */}
+      {completedProjects.length > 0 && (
         <section className="py-20">
           <div className="container px-4">
-            <div className="mb-12 flex items-center justify-between">
+            <div className="mb-12 flex items-end justify-between">
               <div>
-                <Building2 className="mb-4 h-12 w-12 text-primary" />
-                <h2 className="text-3xl font-bold">Ticari Projeler</h2>
-                <p className="mt-2 text-muted-foreground">
-                  İş dünyasının dinamik ihtiyaçlarına yönelik, fonksiyonel ve prestijli ticari binalar inşa ediyoruz.
-                </p>
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">Tamamlanan Projeler</p>
+                <h2 className="text-4xl font-bold">Başarıyla Tamamlanan İşlerimiz</h2>
               </div>
-              <Button asChild variant="outline">
-                <Link href="/projeler">Tümünü Gör</Link>
-              </Button>
+              <Link href="/projeler">
+                <Button variant="outline" className="group bg-transparent">
+                  Tümünü Gör
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
-            <div className="grid gap-8 md:grid-cols-2">
-              {commercialProjects.slice(0, 2).map((project: any) => {
-                const imageUrl = project.mainImage || getProjectImage(project, "commercial")
-                return (
-                  <Card key={project.id} className="overflow-hidden">
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {completedProjects.slice(0, 3).map((project: any) => (
+                <Link key={project.id} href={`/projeler/${project.slug}`}>
+                  <Card className="overflow-hidden transition-all hover:shadow-xl">
                     <div className="relative h-64">
-                      <Image src={imageUrl || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
+                      <Image
+                        src={project.mainImage || getProjectImage(project.type || "residential")}
+                        alt={project.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <CardContent className="p-6">
                       <h3 className="mb-2 text-xl font-bold">{project.title}</h3>
-                      <p className="mb-4 text-sm text-muted-foreground">{project.shortDescription}</p>
-                      <Button asChild variant="outline" size="sm">
-                        <Link href={`/projeler/${project.slug}`}>Detayları Görüntüle</Link>
-                      </Button>
+                      <p className="mb-4 text-muted-foreground">{project.shortDescription}</p>
+                      <p className="text-sm text-primary">{project.details}</p>
                     </CardContent>
                   </Card>
-                )
-              })}
+                </Link>
+              ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Mixed-Use Projects */}
-      {mixedProjects.length > 0 && (
-        <section className="bg-muted/30 py-20">
+      {/* Projects Section - Ongoing */}
+      {ongoingProjects.length > 0 && (
+        <section className="bg-muted py-20">
           <div className="container px-4">
-            <div className="mb-12 flex items-center justify-between">
+            <div className="mb-12 flex items-end justify-between">
               <div>
-                <Landmark className="mb-4 h-12 w-12 text-primary" />
-                <h2 className="text-3xl font-bold">Karma Kullanımlı Projeler</h2>
-                <p className="mt-2 text-muted-foreground">
-                  Yaşam, iş ve alışveriş alanlarını bir araya getiren entegre yaşam merkezleri tasarlıyoruz.
-                </p>
+                <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">Devam Eden Projeler</p>
+                <h2 className="text-4xl font-bold">Üzerinde Çalıştığımız Projeler</h2>
               </div>
-              <Button asChild variant="outline">
-                <Link href="/projeler">Tümünü Gör</Link>
-              </Button>
+              <Link href="/projeler">
+                <Button variant="outline" className="group bg-transparent">
+                  Tümünü Gör
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </div>
-            <div className="grid gap-8 md:grid-cols-2">
-              {mixedProjects.slice(0, 2).map((project: any) => {
-                const imageUrl = project.mainImage || getProjectImage(project, "mixed-use")
-                return (
-                  <Card key={project.id} className="overflow-hidden">
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {ongoingProjects.slice(0, 3).map((project: any) => (
+                <Link key={project.id} href={`/projeler/${project.slug}`}>
+                  <Card className="overflow-hidden transition-all hover:shadow-xl">
                     <div className="relative h-64">
-                      <Image src={imageUrl || "/placeholder.svg"} alt={project.title} fill className="object-cover" />
+                      <Image
+                        src={project.mainImage || getProjectImage(project.type || "residential")}
+                        alt={project.title}
+                        fill
+                        className="object-cover"
+                      />
+                      {project.progress && (
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/75 p-2 text-center text-sm text-white">
+                          İlerleme: %{project.progress}
+                        </div>
+                      )}
                     </div>
                     <CardContent className="p-6">
                       <h3 className="mb-2 text-xl font-bold">{project.title}</h3>
-                      <p className="mb-4 text-sm text-muted-foreground">{project.shortDescription}</p>
-                      <Button asChild variant="outline" size="sm">
-                        <Link href={`/projeler/${project.slug}`}>Detayları Görüntüle</Link>
-                      </Button>
+                      <p className="mb-4 text-muted-foreground">{project.shortDescription}</p>
+                      <p className="text-sm text-primary">{project.details}</p>
                     </CardContent>
                   </Card>
-                )
-              })}
+                </Link>
+              ))}
             </div>
           </div>
         </section>

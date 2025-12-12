@@ -11,23 +11,27 @@ export async function getContent<T>(file: string): Promise<T | null> {
   }
 
   try {
-    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/content/${file}.json?ref=${GITHUB_BRANCH}`
+    const url = `/api/github/content?file=${file}&t=${Date.now()}`
     const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
-        Accept: "application/vnd.github.v3+json",
-      },
       cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache",
+      },
     })
 
     if (!res.ok) {
-      console.log(`[v0] GitHub fetch failed for ${file}: ${res.status}`)
+      console.log(`[v0] API fetch failed for ${file}: ${res.status}`)
       return null
     }
 
     const data = await res.json()
-    const content = JSON.parse(Buffer.from(data.content, "base64").toString("utf-8"))
-    return content as T
+    if (!data.content) {
+      console.log(`[v0] No content found for ${file}`)
+      return null
+    }
+
+    console.log(`[v0] Successfully loaded ${file} - keys:`, Object.keys(data.content))
+    return data.content as T
   } catch (err) {
     console.log(`[v0] Error fetching ${file}:`, err)
     return null
