@@ -68,7 +68,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
   }
 
   const statusInfo = statusColors[project.status] || statusColors.completed
-  const projectImage = getProjectImage(project)
+  const projectImage = project.mainImage || getProjectImage(project)
 
   return (
     <div className="min-h-screen pb-16">
@@ -125,7 +125,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
                 <h3 className="text-xl font-semibold mb-4">Proje Galerisi</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {project.gallery.map((image: string, index: number) => {
-                    const galleryImage = image?.includes("placeholder") ? projectImage : image
+                    const galleryImage = image || projectImage
                     return (
                       <div key={index} className="relative aspect-[4/3] rounded-xl overflow-hidden">
                         <Image

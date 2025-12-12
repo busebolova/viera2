@@ -394,7 +394,16 @@ export async function PUT(request: Request) {
 
     const result = await res.json()
     console.log("[v0] Successfully saved", file, "to GitHub")
-    return NextResponse.json({ success: true, sha: result.content?.sha })
+
+    const { revalidatePath, revalidateTag } = await import("next/cache")
+    revalidatePath("/", "layout")
+    revalidatePath(`/${file}`)
+
+    return NextResponse.json({
+      success: true,
+      sha: result.content?.sha,
+      message: "Değişiklikler kaydedildi ve önbellek temizlendi",
+    })
   } catch (err: any) {
     console.log("[v0] PUT error:", err)
     return NextResponse.json({ error: err.message }, { status: 500 })

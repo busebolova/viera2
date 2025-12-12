@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { Upload, Save, Menu, X, Plus, Trash2 } from "lucide-react"
+import { Upload, Save, Plus, Trash2 } from "lucide-react"
 import Image from "next/image" // Import Image component
 
 type ContentType = "home" | "about" | "services" | "projects" | "contact"
@@ -336,42 +336,13 @@ export default function AdminPanel() {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
   const [activeTab, setActiveTab] = useState<ContentType>("home")
+  const [projectTab, setProjectTab] = useState<"completed" | "ongoing" | "upcoming">("completed")
   const [content, setContent] = useState<ContentState>({
-    home: {
-      video: { url: "", title: "", subtitle: "" },
-      experience: { title: "", description: "" },
-      stats: {},
-      about: {},
-      whyUs: {},
-      process: { title: "", subtitle: "", steps: [] },
-      clients: { title: "", subtitle: "", logos: [] },
-      cta: { title: "", description: "" },
-    },
-    about: {
-      title: "",
-      pageTitle: "",
-      description: "",
-      stats: {},
-      company: {},
-      contact: {},
-      vision: {},
-      mission: {},
-      values: {},
-      whyUs: {},
-    },
-    services: { hero: {}, intro: {}, services: [], cta: {} },
-    projects: { pageTitle: "", pageDescription: "", categories: {}, completed: [], ongoing: [], upcoming: [] },
-    contact: {
-      address: "",
-      phone: "",
-      mobile: "",
-      email: "",
-      fax: "",
-      authorized: "",
-      hours: "",
-      whatsapp: "",
-      authorizedPersons: [],
-    },
+    home: defaultHome,
+    about: defaultAbout,
+    services: defaultServices,
+    projects: defaultProjects,
+    contact: defaultContact,
   })
   const [shas, setShas] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
@@ -383,91 +354,91 @@ export default function AdminPanel() {
     if (authenticated) loadAllContent()
   }, [authenticated])
 
+  const loadContent = async (file: ContentType) => {
+    const timestamp = Date.now()
+    try {
+      console.log(`[v0] Loading ${file}...`)
+      const res = await fetch(`/api/github/content?file=${file}&t=${timestamp}`, {
+        cache: "no-store",
+      })
+
+      if (!res.ok) {
+        console.log(`[v0] Failed to load ${file}, status:`, res.status)
+        return
+      }
+
+      const data = await res.json()
+      console.log(`[v0] Received data for ${file}:`, data)
+
+      if (data.content) {
+        let mergedContent = data.content
+
+        if (file === "home") {
+          mergedContent = {
+            video: { ...defaultHome.video, ...(data.content.video || {}) },
+            experience: { ...defaultHome.experience, ...(data.content.experience || {}) },
+            stats: { ...defaultHome.stats, ...(data.content.stats || {}) },
+            about: { ...defaultHome.about, ...(data.content.about || {}) },
+            whyUs: { ...defaultHome.whyUs, ...(data.content.whyUs || {}) },
+            process: { ...defaultHome.process, ...(data.content.process || {}) },
+            clients: { ...defaultHome.clients, ...(data.content.clients || {}) },
+            cta: { ...defaultHome.cta, ...(data.content.cta || {}) },
+          }
+        } else if (file === "contact") {
+          mergedContent = { ...defaultContact, ...data.content }
+        } else if (file === "about") {
+          mergedContent = {
+            ...defaultAbout,
+            ...data.content,
+            stats: { ...defaultAbout.stats, ...(data.content.stats || {}) },
+            company: { ...defaultAbout.company, ...(data.content.company || {}) },
+            contact: { ...defaultAbout.contact, ...(data.content.contact || {}) },
+            vision: { ...defaultAbout.vision, ...(data.content.vision || {}) },
+            mission: { ...defaultAbout.mission, ...(data.content.mission || {}) },
+            values: { ...defaultAbout.values, ...(data.content.values || {}) },
+            whyUs: { ...defaultAbout.whyUs, ...(data.content.whyUs || {}) },
+          }
+        } else if (file === "services") {
+          mergedContent = {
+            ...defaultServices,
+            ...data.content,
+            hero: { ...defaultServices.hero, ...(data.content.hero || {}) },
+            intro: { ...defaultServices.intro, ...(data.content.intro || {}) },
+            cta: { ...defaultServices.cta, ...(data.content.cta || {}) },
+          }
+        } else if (file === "projects") {
+          mergedContent = {
+            pageTitle: data.content.pageTitle || defaultProjects.pageTitle,
+            pageDescription: data.content.pageDescription || defaultProjects.pageDescription,
+            categories: data.content.categories || defaultProjects.categories,
+            completed: data.content.completed || defaultProjects.completed,
+            ongoing: data.content.ongoing || defaultProjects.ongoing,
+            upcoming: data.content.upcoming || defaultProjects.upcoming,
+          }
+        }
+
+        setContent((prev) => ({
+          ...prev,
+          [file]: mergedContent,
+        }))
+
+        if (data.sha) {
+          setShas((prev) => ({ ...prev, [file]: data.sha }))
+        }
+
+        console.log(`[v0] Successfully loaded and merged ${file}`)
+      }
+    } catch (err) {
+      console.log(`[v0] Error loading ${file}:`, err)
+    }
+  }
+
   const loadAllContent = async () => {
     setLoading(true)
     const files: ContentType[] = ["home", "about", "services", "projects", "contact"]
 
-    const timestamp = Date.now()
-
     for (const file of files) {
-      try {
-        console.log(`[v0] Loading ${file}...`)
-        const res = await fetch(`/api/github/content?file=${file}&t=${timestamp}`, {
-          cache: "no-store",
-        })
-
-        if (!res.ok) {
-          console.log(`[v0] Failed to load ${file}, status:`, res.status)
-          continue
-        }
-
-        const data = await res.json()
-        console.log(`[v0] Received data for ${file}:`, data)
-
-        if (data.content) {
-          let mergedContent = data.content
-
-          if (file === "home") {
-            mergedContent = {
-              video: { ...defaultHome.video, ...(data.content.video || {}) },
-              experience: { ...defaultHome.experience, ...(data.content.experience || {}) },
-              stats: { ...defaultHome.stats, ...(data.content.stats || {}) },
-              about: { ...defaultHome.about, ...(data.content.about || {}) },
-              whyUs: { ...defaultHome.whyUs, ...(data.content.whyUs || {}) },
-              process: { ...defaultHome.process, ...(data.content.process || {}) },
-              clients: { ...defaultHome.clients, ...(data.content.clients || {}) },
-              cta: { ...defaultHome.cta, ...(data.content.cta || {}) },
-            }
-          } else if (file === "contact") {
-            // Merging with defaultContact ensures all fields from defaultContact are present
-            // and fields from data.content overwrite them if they exist.
-            mergedContent = { ...defaultContact, ...data.content }
-          } else if (file === "about") {
-            mergedContent = {
-              ...defaultAbout,
-              ...data.content,
-              stats: { ...defaultAbout.stats, ...(data.content.stats || {}) },
-              company: { ...defaultAbout.company, ...(data.content.company || {}) },
-              contact: { ...defaultAbout.contact, ...(data.content.contact || {}) },
-              vision: { ...defaultAbout.vision, ...(data.content.vision || {}) },
-              mission: { ...defaultAbout.mission, ...(data.content.mission || {}) },
-              values: { ...defaultAbout.values, ...(data.content.values || {}) },
-              whyUs: { ...defaultAbout.whyUs, ...(data.content.whyUs || {}) },
-            }
-          } else if (file === "services") {
-            mergedContent = {
-              ...defaultServices,
-              ...data.content,
-              hero: { ...defaultServices.hero, ...(data.content.hero || {}) },
-              intro: { ...defaultServices.intro, ...(data.content.intro || {}) },
-              cta: { ...defaultServices.cta, ...(data.content.cta || {}) },
-            }
-          } else if (file === "projects") {
-            // Specific handling for projects to ensure all sub-arrays are present
-            mergedContent = {
-              pageTitle: data.content.pageTitle || defaultProjects.pageTitle,
-              pageDescription: data.content.pageDescription || defaultProjects.pageDescription,
-              categories: data.content.categories || defaultProjects.categories,
-              completed: data.content.completed || defaultProjects.completed,
-              ongoing: data.content.ongoing || defaultProjects.ongoing,
-              upcoming: data.content.upcoming || defaultProjects.upcoming,
-            }
-          }
-
-          setContent((prev) => ({
-            ...prev,
-            [file]: mergedContent,
-          }))
-
-          if (data.sha) {
-            setShas((prev) => ({ ...prev, [file]: data.sha }))
-          }
-
-          console.log(`[v0] Successfully loaded and merged ${file}`)
-        }
-      } catch (err) {
-        console.log(`[v0] Error loading ${file}:`, err)
-      }
+      await loadContent(file)
     }
 
     setLoading(false)
@@ -488,6 +459,7 @@ export default function AdminPanel() {
           content: content[fileToSave],
           sha: shas[fileToSave],
         }),
+        cache: "no-store",
       })
 
       const text = await res.text()
@@ -502,9 +474,15 @@ export default function AdminPanel() {
 
       if (res.ok && data.success) {
         if (data.sha) setShas((prev) => ({ ...prev, [fileToSave]: data.sha }))
-        setMessage("✓ Kaydedildi! Değişiklikler sitede görünecek.")
+        setMessage("✓ Kaydedildi! Değişiklikler sitede görünecek. Sayfayı yenileyin.")
         console.log(`[v0] Successfully saved ${fileToSave}`)
-        setTimeout(() => setMessage(""), 5000)
+
+        setTimeout(async () => {
+          console.log(`[v0] Reloading ${fileToSave} to show saved changes...`)
+          await loadContent(fileToSave)
+          setMessage("✓ Kaydedildi ve yenilendi!")
+          setTimeout(() => setMessage(""), 3000)
+        }, 1000)
       } else {
         console.log("[v0] Save failed:", data)
         setMessage(`Hata: ${data.error || "Kayıt başarısız"}`)
@@ -860,7 +838,7 @@ export default function AdminPanel() {
       { key: "upcoming", label: "Başlayacak", color: "bg-amber-600" },
     ]
 
-    const currentProjects = (getNestedValue([activeTab], []) as any[]) || []
+    const currentProjects = (getNestedValue([projectTab], []) as any[]) || []
 
     const addProject = () => {
       const newProject = {
@@ -875,59 +853,59 @@ export default function AdminPanel() {
         area: "",
         units: "",
         floors: "",
-        status: activeTab,
+        status: projectTab,
         mainImage: "",
         gallery: [],
         features: [],
-        ...(activeTab === "ongoing" ? { progress: 50, updates: [] } : {}),
+        ...(projectTab === "ongoing" ? { progress: 50, updates: [] } : {}),
       }
 
       const updated = [...currentProjects, newProject]
-      updateNestedValue([activeTab], updated)
+      updateNestedValue([projectTab], updated)
     }
 
     const removeProject = (index: number) => {
       const updated = currentProjects.filter((_: any, i: number) => i !== index)
-      updateNestedValue([activeTab], updated)
+      updateNestedValue([projectTab], updated)
     }
 
     const addFeature = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = project.features || []
       features.push("Yeni özellik")
-      updateNestedValue([activeTab, projectIndex.toString(), "features"], features)
+      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
     }
 
     const removeFeature = (projectIndex: number, featureIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = (project.features || []).filter((_: any, i: number) => i !== featureIndex)
-      updateNestedValue([activeTab, projectIndex.toString(), "features"], features)
+      updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
     }
 
     const addGalleryImage = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const gallery = project.gallery || []
       gallery.push("")
-      updateNestedValue([activeTab, projectIndex.toString(), "gallery"], gallery)
+      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
     }
 
     const removeGalleryImage = (projectIndex: number, imageIndex: number) => {
       const project = currentProjects[projectIndex]
       const gallery = (project.gallery || []).filter((_: any, i: number) => i !== imageIndex)
-      updateNestedValue([activeTab, projectIndex.toString(), "gallery"], gallery)
+      updateNestedValue([projectTab, projectIndex.toString(), "gallery"], gallery)
     }
 
     const addUpdate = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const updates = project.updates || []
       updates.push({ date: new Date().toISOString().slice(0, 7), title: "Yeni Güncelleme", description: "" })
-      updateNestedValue([activeTab, projectIndex.toString(), "updates"], updates)
+      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
     }
 
     const removeUpdate = (projectIndex: number, updateIndex: number) => {
       const project = currentProjects[projectIndex]
       const updates = (project.updates || []).filter((_: any, i: number) => i !== updateIndex)
-      updateNestedValue([activeTab, projectIndex.toString(), "updates"], updates)
+      updateNestedValue([projectTab, projectIndex.toString(), "updates"], updates)
     }
 
     return (
@@ -943,9 +921,9 @@ export default function AdminPanel() {
           {projectCategories.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => setActiveTab(cat.key as any)}
+              onClick={() => setProjectTab(cat.key as any)}
               className={`px-6 py-3 rounded-lg font-medium transition-all ${
-                activeTab === cat.key ? `${cat.color} text-white shadow-lg` : "bg-muted hover:bg-muted/80"
+                projectTab === cat.key ? `${cat.color} text-white shadow-lg` : "bg-muted hover:bg-muted/80"
               }`}
             >
               {cat.label}
@@ -956,7 +934,7 @@ export default function AdminPanel() {
         <div className="bg-muted/50 rounded-lg p-4 mb-6">
           <p className="text-sm text-muted-foreground">
             <strong className="text-foreground">{currentProjects.length}</strong> adet{" "}
-            <strong className="text-foreground">{projectCategories.find((c) => c.key === activeTab)?.label}</strong>{" "}
+            <strong className="text-foreground">{projectCategories.find((c) => c.key === projectTab)?.label}</strong>{" "}
             proje
           </p>
         </div>
@@ -966,7 +944,7 @@ export default function AdminPanel() {
           className="w-full py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors flex items-center justify-center gap-2"
         >
           <Plus className="h-5 w-5" />
-          Yeni Proje Ekle ({projectCategories.find((c) => c.key === activeTab)?.label})
+          Yeni Proje Ekle ({projectCategories.find((c) => c.key === projectTab)?.label})
         </button>
 
         {currentProjects.map((project: any, index: number) => (
@@ -982,21 +960,21 @@ export default function AdminPanel() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {renderInput("Proje Adı", [activeTab, index.toString(), "title"])}
-              {renderInput("Slug (URL)", [activeTab, index.toString(), "slug"])}
-              {renderInput("Kısa Açıklama", [activeTab, index.toString(), "shortDescription"])}
-              {renderInput("Yıl", [activeTab, index.toString(), "year"])}
-              {renderInput("Konum", [activeTab, index.toString(), "location"])}
-              {renderInput("Alan (m²)", [activeTab, index.toString(), "area"])}
-              {renderInput("Birim Sayısı", [activeTab, index.toString(), "units"])}
-              {renderInput("Kat Sayısı", [activeTab, index.toString(), "floors"])}
-              {renderInput("Detaylar", [activeTab, index.toString(), "details"])}
+              {renderInput("Proje Adı", [projectTab, index.toString(), "title"])}
+              {renderInput("Slug (URL)", [projectTab, index.toString(), "slug"])}
+              {renderInput("Kısa Açıklama", [projectTab, index.toString(), "shortDescription"])}
+              {renderInput("Yıl", [projectTab, index.toString(), "year"])}
+              {renderInput("Konum", [projectTab, index.toString(), "location"])}
+              {renderInput("Alan (m²)", [projectTab, index.toString(), "area"])}
+              {renderInput("Birim Sayısı", [projectTab, index.toString(), "units"])}
+              {renderInput("Kat Sayısı", [projectTab, index.toString(), "floors"])}
+              {renderInput("Detaylar", [projectTab, index.toString(), "details"])}
             </div>
 
-            {renderInput("Detaylı Açıklama", [activeTab, index.toString(), "fullDescription"], "textarea")}
-            {renderInput("Ana Görsel", [activeTab, index.toString(), "mainImage"], "image")}
+            {renderInput("Detaylı Açıklama", [projectTab, index.toString(), "fullDescription"], "textarea")}
+            {renderInput("Ana Görsel", [projectTab, index.toString(), "mainImage"], "image")}
 
-            {activeTab === "ongoing" && (
+            {projectTab === "ongoing" && (
               <div className="space-y-2">
                 <label className="block text-sm font-medium">İlerleme (%{project.progress || 0})</label>
                 <input
@@ -1004,7 +982,9 @@ export default function AdminPanel() {
                   min="0"
                   max="100"
                   value={project.progress || 0}
-                  onChange={(e) => updateNestedValue([activeTab, index.toString(), "progress"], Number(e.target.value))}
+                  onChange={(e) =>
+                    updateNestedValue([projectTab, index.toString(), "progress"], Number(e.target.value))
+                  }
                   className="w-full accent-primary"
                 />
               </div>
@@ -1028,7 +1008,7 @@ export default function AdminPanel() {
                     onChange={(e) => {
                       const features = [...(project.features || [])]
                       features[fIndex] = e.target.value
-                      updateNestedValue([activeTab, index.toString(), "features"], features)
+                      updateNestedValue([projectTab, index.toString(), "features"], features)
                     }}
                     className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
@@ -1049,18 +1029,18 @@ export default function AdminPanel() {
                   onClick={() => addGalleryImage(index)}
                   className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
                 >
-                  + Görsel Ekle
+                  + Ekle
                 </button>
               </div>
-              {(project.gallery || []).map((image: string, gIndex: number) => (
+              {(project.gallery || []).map((img: string, gIndex: number) => (
                 <div key={gIndex} className="flex gap-2">
                   <input
                     type="text"
-                    value={image}
+                    value={img}
                     onChange={(e) => {
                       const gallery = [...(project.gallery || [])]
                       gallery[gIndex] = e.target.value
-                      updateNestedValue([activeTab, index.toString(), "gallery"], gallery)
+                      updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
                     }}
                     placeholder="Görsel URL"
                     className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -1080,7 +1060,7 @@ export default function AdminPanel() {
                         if (data.url) {
                           const gallery = [...(project.gallery || [])]
                           gallery[gIndex] = data.url
-                          updateNestedValue([activeTab, index.toString(), "gallery"], gallery)
+                          updateNestedValue([projectTab, index.toString(), "gallery"], gallery)
                         }
                       }
                       input.click()
@@ -1099,7 +1079,7 @@ export default function AdminPanel() {
               ))}
             </div>
 
-            {activeTab === "ongoing" && (
+            {projectTab === "ongoing" && (
               <div className="p-4 bg-muted rounded-lg space-y-2">
                 <div className="flex justify-between items-center">
                   <h4 className="text-sm font-medium">Proje Güncellemeleri</h4>
@@ -1107,32 +1087,21 @@ export default function AdminPanel() {
                     onClick={() => addUpdate(index)}
                     className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
                   >
-                    + Güncelleme Ekle
+                    + Ekle
                   </button>
                 </div>
                 {(project.updates || []).map((update: any, uIndex: number) => (
-                  <div key={uIndex} className="p-3 bg-background rounded-lg space-y-2">
-                    <div className="flex gap-2">
+                  <div key={uIndex} className="space-y-2 p-3 bg-background rounded-lg border">
+                    <div className="flex justify-between items-center">
                       <input
                         type="month"
                         value={update.date}
                         onChange={(e) => {
                           const updates = [...(project.updates || [])]
                           updates[uIndex].date = e.target.value
-                          updateNestedValue([activeTab, index.toString(), "updates"], updates)
+                          updateNestedValue([projectTab, index.toString(), "updates"], updates)
                         }}
-                        className="px-3 py-2 bg-muted border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                      <input
-                        type="text"
-                        value={update.title}
-                        onChange={(e) => {
-                          const updates = [...(project.updates || [])]
-                          updates[uIndex].title = e.target.value
-                          updateNestedValue([activeTab, index.toString(), "updates"], updates)
-                        }}
-                        placeholder="Başlık"
-                        className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                       />
                       <button
                         onClick={() => removeUpdate(index, uIndex)}
@@ -1141,15 +1110,26 @@ export default function AdminPanel() {
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
+                    <input
+                      type="text"
+                      value={update.title}
+                      onChange={(e) => {
+                        const updates = [...(project.updates || [])]
+                        updates[uIndex].title = e.target.value
+                        updateNestedValue([projectTab, index.toString(), "updates"], updates)
+                      }}
+                      placeholder="Güncelleme Başlığı"
+                      className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
                     <textarea
                       value={update.description}
                       onChange={(e) => {
                         const updates = [...(project.updates || [])]
                         updates[uIndex].description = e.target.value
-                        updateNestedValue([activeTab, index.toString(), "updates"], updates)
+                        updateNestedValue([projectTab, index.toString(), "updates"], updates)
                       }}
-                      placeholder="Açıklama"
-                      rows={2}
+                      placeholder="Güncelleme Açıklaması"
+                      rows={3}
                       className="w-full px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                     />
                   </div>
@@ -1168,18 +1148,40 @@ export default function AdminPanel() {
     const addAuthorizedPerson = () => {
       const newPerson = { name: "", title: "", phone: "", email: "" }
       const updatedPersons = [...(contactData.authorizedPersons || []), newPerson]
-      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
+      // Ensure updateNestedValue correctly handles the path for contact's authorizedPersons
+      const currentContact = content.contact
+      setContent((prev) => ({
+        ...prev,
+        contact: {
+          ...currentContact,
+          authorizedPersons: updatedPersons,
+        },
+      }))
     }
 
     const removeAuthorizedPerson = (index: number) => {
       const updatedPersons = (contactData.authorizedPersons || []).filter((_, i) => i !== index)
-      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
+      const currentContact = content.contact
+      setContent((prev) => ({
+        ...prev,
+        contact: {
+          ...currentContact,
+          authorizedPersons: updatedPersons,
+        },
+      }))
     }
 
     const updatePerson = (index: number, field: string, value: string) => {
       const updatedPersons = [...(contactData.authorizedPersons || [])]
       updatedPersons[index] = { ...updatedPersons[index], [field]: value }
-      updateNestedValue("contact", ["authorizedPersons"], updatedPersons)
+      const currentContact = content.contact
+      setContent((prev) => ({
+        ...prev,
+        contact: {
+          ...currentContact,
+          authorizedPersons: updatedPersons,
+        },
+      }))
     }
 
     return (
@@ -1308,27 +1310,14 @@ export default function AdminPanel() {
         </div>
       </header>
 
-      <div className="md:hidden sticky top-16 z-40 bg-card border-b p-4">
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="w-full flex items-center justify-between px-4 py-2 bg-muted rounded-lg"
-        >
-          <span className="font-medium">{tabs.find((t) => t.id === activeTab)?.label}</span>
-          {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </div>
-
-      <div className={`${mobileMenuOpen ? "block" : "hidden"} md:block sticky top-32 md:top-16 z-30 bg-card border-b`}>
+      <div className="sticky top-16 z-30 bg-card border-b">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:gap-2 py-2">
+          <div className="flex gap-2 py-2 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => {
-                  setActiveTab(tab.id as ContentType)
-                  setMobileMenuOpen(false)
-                }}
-                className={`px-4 py-2 rounded-lg transition-colors text-left md:text-center ${
+                onClick={() => setActiveTab(tab.id as ContentType)}
+                className={`px-4 py-2 rounded-lg transition-colors whitespace-nowrap ${
                   activeTab === tab.id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                 }`}
               >

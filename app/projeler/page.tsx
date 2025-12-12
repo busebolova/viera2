@@ -14,13 +14,7 @@ export const dynamic = "force-dynamic"
 
 export default async function ProjectsPage() {
   const data = await getContent<typeof defaultProjects>("projects")
-  const projectsData = {
-    ...defaultProjects,
-    ...data,
-    completed: data?.completed || defaultProjects.completed,
-    ongoing: data?.ongoing || defaultProjects.ongoing,
-    upcoming: data?.upcoming || defaultProjects.upcoming,
-  }
+  const projectsData = data || defaultProjects
 
   console.log("[v0] Projects data:", JSON.stringify(projectsData, null, 2))
 
@@ -45,7 +39,7 @@ export default async function ProjectsPage() {
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.ongoing.map((project: any) => {
-                  const projectImage = getProjectImage(project)
+                  const projectImage = project.mainImage || getProjectImage(project)
                   console.log("[v0] Ongoing project image:", project.title, projectImage)
                   return (
                     <ProjectCard
@@ -80,7 +74,7 @@ export default async function ProjectsPage() {
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.upcoming.map((project: any) => {
-                  const projectImage = getProjectImage(project)
+                  const projectImage = project.mainImage || getProjectImage(project)
                   console.log("[v0] Upcoming project image:", project.title, projectImage)
                   return (
                     <ProjectCard
@@ -115,7 +109,7 @@ export default async function ProjectsPage() {
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.completed.map((project: any) => {
-                  const projectImage = getProjectImage(project)
+                  const projectImage = project.mainImage || getProjectImage(project)
                   console.log("[v0] Completed project image:", project.title, projectImage)
                   return (
                     <ProjectCard
