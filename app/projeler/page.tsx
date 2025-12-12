@@ -2,21 +2,45 @@ import Link from "next/link"
 import { ChevronRight, Clock, CheckCircle, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProjectCard } from "@/components/project-card"
-import { getContent, defaultProjects } from "@/lib/github-content"
-import { getProjectImage } from "@/lib/image-helper"
+import { getContent } from "@/lib/github-content"
+
+interface Project {
+  id: string
+  slug: string
+  title: string
+  shortDescription: string
+  year: string
+  mainImage?: string
+  image?: string
+}
+
+interface ProjectsData {
+  pageTitle?: string
+  pageDescription?: string
+  categories?: {
+    completed: string
+    ongoing: string
+    upcoming: string
+  }
+  completed: Project[]
+  ongoing: Project[]
+  upcoming: Project[]
+}
 
 export const metadata = {
-  title: "Projelerimiz - Tamamlanan ve Devam Eden Projeler | VIERA",
-  description: "VIERA - Alkan Yapı & Viera Ortaklığı tamamlanan, devam eden ve yakında başlayacak inşaat projeleri.",
+  title: "Projelerimiz - Tamamlanan ve Devam Eden Projeler | Viera & Alkan Yapı",
+  description: "Viera & Alkan Yapı tamamlanan, devam eden ve yakında başlayacak inşaat projeleri.",
 }
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export default async function ProjectsPage() {
-  const data = await getContent<typeof defaultProjects>("projects")
-  const projectsData = data || defaultProjects
+  const projectsData = await getContent<ProjectsData>("projects")
 
-  console.log("[v0] Projects data:", JSON.stringify(projectsData, null, 2))
+  console.log("[v0] Projects loaded - completed:", projectsData.completed?.length || 0)
+  console.log("[v0] Projects loaded - ongoing:", projectsData.ongoing?.length || 0)
+  console.log("[v0] Projects loaded - upcoming:", projectsData.upcoming?.length || 0)
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
@@ -38,9 +62,9 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.ongoing.map((project: any) => {
-                  const projectImage = project.mainImage || getProjectImage(project)
-                  console.log("[v0] Ongoing project image:", project.title, projectImage)
+                {projectsData.ongoing.map((project) => {
+                  const projectImage = project.mainImage || project.image || "/placeholder.svg"
+                  console.log("[v0] Ongoing project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}
@@ -73,9 +97,9 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.upcoming.map((project: any) => {
-                  const projectImage = project.mainImage || getProjectImage(project)
-                  console.log("[v0] Upcoming project image:", project.title, projectImage)
+                {projectsData.upcoming.map((project) => {
+                  const projectImage = project.mainImage || project.image || "/placeholder.svg"
+                  console.log("[v0] Upcoming project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}
@@ -108,9 +132,9 @@ export default async function ProjectsPage() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {projectsData.completed.map((project: any) => {
-                  const projectImage = project.mainImage || getProjectImage(project)
-                  console.log("[v0] Completed project image:", project.title, projectImage)
+                {projectsData.completed.map((project) => {
+                  const projectImage = project.mainImage || project.image || "/placeholder.svg"
+                  console.log("[v0] Completed project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}

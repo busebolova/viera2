@@ -1,12 +1,12 @@
 {
-  "video": {
-    "url": "https://cdn.pixabay.com/video/2020/06/23/42926-434300944_large.mp4",
-    "title": "Viera & Alkan Yapı 2",
-    "subtitle": "Güven, Kalite, Profesyonellik"
-  },
-  "experience": {
-    "title": "60 Yılı Aşkın Tecrübe",
-    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
+  "hero": {
+    "title": "Viera & Alkan Yapı",
+    "typewriterWords": ["Güven", "Kalite", "Profesyonellik", "Deneyim", "Başarı"],
+    "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
+    "buttonText": "Hizmetlerimiz",
+    "buttonLink": "/hizmetlerimiz",
+    "secondButtonText": "İletişime Geçin",
+    "secondButtonLink": "/iletisim"
   },
   "stats": {
     "founded": "1965",
@@ -17,6 +17,10 @@
     "completedProjectsLabel": "TAMAMLANAN PROJE",
     "experience": "60+",
     "experienceLabel": "YIL DENEYİM"
+  },
+  "experience": {
+    "title": "60 Yılı Aşkın Tecrübe",
+    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
   "about": {
     "badge": "Hakkımızda",
@@ -44,49 +48,5 @@
         "description": "Çevreye duyarlı projeler geliştiriyoruz."
       }
     ]
-  },
-  "process": {
-    "title": "Çalışma Sürecimiz",
-    "subtitle": "Proje aşamalarını adım adım takip ediyoruz.",
-    "steps": [
-      {
-        "title": "Planlama",
-        "description": "İhtiyaçlarınızı analiz edip detaylı planlama yapıyoruz."
-      },
-      {
-        "title": "Tasarım",
-        "description": "Modern ve fonksiyonel tasarımlar geliştiriyoruz."
-      },
-      {
-        "title": "İnşaat",
-        "description": "Kaliteli malzemeler ve uzman ekibimizle inşa ediyoruz."
-      },
-      {
-        "title": "Teslimat",
-        "description": "Projelerinizi zamanında ve eksiksiz teslim ediyoruz."
-      }
-    ]
-  },
-  "clients": {
-    "title": "Referanslarımız",
-    "subtitle": "Güvenilir iş ortaklarımızla başarıya ulaşıyoruz.",
-    "logos": [
-      {
-        "name": "Örnek Firma 1",
-        "logo": "/client-logo-1.png"
-      },
-      {
-        "name": "Örnek Firma 2",
-        "logo": "/client-logo-2.png"
-      },
-      {
-        "name": "Örnek Firma 3",
-        "logo": "/client-logo-3.png"
-      }
-    ]
-  },
-  "cta": {
-    "title": "Hayalinizdeki Yapıyı Birlikte İnşa Edelim",
-    "description": "Detaylı bilgi ve teklif için bizimle iletişime geçin."
   }
 }

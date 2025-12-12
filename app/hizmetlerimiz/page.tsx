@@ -2,15 +2,15 @@ import Link from "next/link"
 import { ChevronRight, Building2, Home, Building, Landmark, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { getContent, defaultServices } from "@/lib/github-content"
+import { getContent } from "@/lib/github-content"
 
 export const metadata = {
-  title: "Hizmetlerimiz - Konut, Ticari ve Karma Projeler | VIERA",
-  description:
-    "VIERA - Alkan Yapı & Viera Ortaklığı inşaat hizmetleri: Konut projeleri, ticari binalar ve karma kullanımlı projeler.",
+  title: "Hizmetlerimiz - Konut, Ticari ve Karma Projeler | Viera & Alkan Yapı",
+  description: "Viera & Alkan Yapı inşaat hizmetleri: Konut projeleri, ticari binalar ve karma kullanımlı projeler.",
 }
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 const iconMap: Record<string, any> = {
   Home,
@@ -19,15 +19,7 @@ const iconMap: Record<string, any> = {
 }
 
 export default async function ServicesPage() {
-  const data = await getContent<typeof defaultServices>("services")
-  const servicesData = {
-    ...defaultServices,
-    ...data,
-    hero: { ...defaultServices.hero, ...(data?.hero || {}) },
-    intro: { ...defaultServices.intro, ...(data?.intro || {}) },
-    services: data?.services || defaultServices.services,
-    cta: { ...defaultServices.cta, ...(data?.cta || {}) },
-  }
+  const servicesData = await getContent<any>("services")
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">

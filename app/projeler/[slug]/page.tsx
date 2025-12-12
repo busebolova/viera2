@@ -2,45 +2,72 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronLeft, Calendar, MapPin, Building2, Layers, ArrowRight, CheckCircle2 } from "lucide-react"
 import { getContent } from "@/lib/github-content"
-import { getProjectImage } from "@/lib/image-helper"
 
-async function getProjectsData() {
-  const data = await getContent<any>("projects")
-  if (!data) {
-    // Varsayılan veri
-    return {
-      completed: [],
-      ongoing: [],
-      upcoming: [],
-    }
-  }
-  return data
+interface Project {
+  id: string
+  slug: string
+  title: string
+  shortDescription: string
+  fullDescription: string
+  details: string
+  year: string
+  location: string
+  area?: string
+  units?: string
+  floors?: string
+  status: "completed" | "ongoing" | "upcoming"
+  mainImage?: string
+  image?: string
+  gallery?: string[]
+  features?: string[]
+  progress?: number
+  updates?: Array<{
+    date: string
+    title: string
+    description: string
+  }>
 }
 
-async function getProject(slug: string) {
-  const projectsData = await getProjectsData()
-  const allProjects = [
-    ...(projectsData.completed || []),
-    ...(projectsData.ongoing || []),
-    ...(projectsData.upcoming || []),
-  ]
-  return allProjects.find((p: any) => p.slug === slug) || null
+interface ProjectsData {
+  completed: Project[]
+  ongoing: Project[]
+  upcoming: Project[]
+}
+
+async function getProject(slug: string): Promise<Project | null> {
+  try {
+    const data = await getContent<ProjectsData>("projects")
+
+    // Tüm projeleri birleştir
+    const allProjects = [...(data.completed || []), ...(data.ongoing || []), ...(data.upcoming || [])]
+
+    // Slug ile eşleştir
+    const project = allProjects.find((p) => p.slug === slug)
+
+    console.log(`[v0] Looking for slug: ${slug}, found: ${project?.title || "not found"}`)
+
+    return project || null
+  } catch (error) {
+    console.error("[v0] Error loading project:", error)
+    return null
+  }
 }
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const project = await getProject(params.slug)
 
   if (!project) {
     return {
-      title: "Proje Bulunamadı | VIERA Construction",
+      title: "Proje Bulunamadı | Viera & Alkan Yapı",
       description: "Aradığınız proje bulunamadı.",
     }
   }
 
   return {
-    title: `${project.title} | VIERA Construction`,
+    title: `${project.title} | Viera & Alkan Yapı`,
     description: project.shortDescription,
   }
 }
@@ -68,14 +95,14 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
   }
 
   const statusInfo = statusColors[project.status] || statusColors.completed
-  const projectImage = project.mainImage || getProjectImage(project)
+  const heroImage = project.mainImage || project.image || "/placeholder.svg"
 
   return (
     <div className="min-h-screen pb-16">
       {/* Hero Section */}
       <div className="relative w-full h-[50vh] min-h-[400px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70 z-10" />
-        <Image src={projectImage || "/placeholder.svg"} alt={project.title} fill className="object-cover" priority />
+        <Image src={heroImage || "/placeholder.svg"} alt={project.title} fill className="object-cover" priority />
         <div className="absolute inset-0 z-20 flex items-end p-8 md:p-12">
           <div className="max-w-3xl">
             <span
@@ -109,7 +136,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               <div>
                 <h3 className="text-xl font-semibold mb-4">Proje Özellikleri</h3>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {project.features.map((feature: string, index: number) => (
+                  {project.features.map((feature, index) => (
                     <li key={index} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                       <span>{feature}</span>
@@ -124,19 +151,16 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               <div>
                 <h3 className="text-xl font-semibold mb-4">Proje Galerisi</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {project.gallery.map((image: string, index: number) => {
-                    const galleryImage = image || projectImage
-                    return (
-                      <div key={index} className="relative aspect-[4/3] rounded-xl overflow-hidden">
-                        <Image
-                          src={galleryImage || "/placeholder.svg"}
-                          alt={`${project.title} - Görsel ${index + 1}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )
-                  })}
+                  {project.gallery.map((image, index) => (
+                    <div key={index} className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                      <Image
+                        src={image || heroImage}
+                        alt={`${project.title} - Görsel ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -146,7 +170,7 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
               <div>
                 <h3 className="text-xl font-semibold mb-4">Proje Güncellemeleri</h3>
                 <div className="space-y-4">
-                  {project.updates.map((update: any, index: number) => (
+                  {project.updates.map((update, index) => (
                     <div key={index} className="p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl border-l-4 border-blue-500">
                       <p className="text-xs text-zinc-500 mb-1">{update.date}</p>
                       <h4 className="font-semibold mb-2">{update.title}</h4>

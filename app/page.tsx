@@ -3,8 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle2, ArrowRight, Phone, Mail } from "lucide-react"
-import { getProjectImage } from "@/lib/image-helper"
-import { getContent, defaultHome, defaultProjects } from "@/lib/github-content"
+import { getContent } from "@/lib/github-content"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -16,53 +15,28 @@ export const metadata = {
 }
 
 async function getHomeContent() {
-  try {
-    const data = await getContent("home")
-    if (data) {
-      console.log("[v0] Using home data from GitHub")
-      return { content: data }
-    }
-    console.log("[v0] Using default home data")
-    return { content: defaultHome }
-  } catch (error) {
-    console.error("[v0] Failed to fetch home content:", error)
-    return { content: defaultHome }
-  }
+  const data = await getContent("home")
+  console.log("[v0] Home data loaded from GitHub")
+  return data
 }
 
 async function getProjectsContent() {
-  try {
-    const data = await getContent("projects")
-    if (data) {
-      console.log("[v0] Using projects data from GitHub")
-      return { content: data }
-    }
-    console.log("[v0] Using default projects data")
-    return { content: defaultProjects }
-  } catch (error) {
-    console.error("[v0] Failed to fetch projects content:", error)
-    return { content: defaultProjects }
-  }
+  const data = await getContent("projects")
+  console.log("[v0] Projects data loaded from GitHub")
+  return data
 }
 
 async function getServicesContent() {
   try {
     const data = await getContent("services")
-    return data?.content?.services || []
+    return data?.services || []
   } catch (error) {
     return []
   }
 }
 
 export default async function HomePage() {
-  const [homeData, projectsData, services] = await Promise.all([
-    getHomeContent(),
-    getProjectsContent(),
-    getServicesContent(),
-  ])
-
-  const home = homeData.content
-  const projects = projectsData.content
+  const [home, projects, services] = await Promise.all([getHomeContent(), getProjectsContent(), getServicesContent()])
 
   const completedProjects = projects?.completed || []
   const ongoingProjects = projects?.ongoing || []
@@ -72,15 +46,13 @@ export default async function HomePage() {
       {/* Hero Video Section */}
       <section className="relative h-[600px] overflow-hidden">
         <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover">
-          <source src={home?.video?.url || defaultHome.video.url} type="video/mp4" />
+          <source src={home?.video?.url} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
           <div className="container px-4">
-            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">
-              {home?.video?.title || defaultHome.video.title}
-            </h1>
-            <p className="text-xl md:text-2xl">{home?.video?.subtitle || defaultHome.video.subtitle}</p>
+            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">{home?.video?.title}</h1>
+            <p className="text-xl md:text-2xl">{home?.video?.subtitle}</p>
           </div>
         </div>
       </section>
@@ -90,34 +62,20 @@ export default async function HomePage() {
         <div className="container px-4">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">{home.stats?.founded || defaultHome.stats.founded}</div>
-              <div className="mt-2 text-sm text-muted-foreground">
-                {home.stats?.foundedLabel || defaultHome.stats.foundedLabel}
-              </div>
+              <div className="text-4xl font-bold text-primary">{home?.stats?.founded}</div>
+              <div className="mt-2 text-sm text-muted-foreground">{home?.stats?.foundedLabel}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">
-                {home.stats?.employees || defaultHome.stats.employees}
-              </div>
-              <div className="mt-2 text-sm text-muted-foreground">
-                {home.stats?.employeesLabel || defaultHome.stats.employeesLabel}
-              </div>
+              <div className="text-4xl font-bold text-primary">{home?.stats?.employees}</div>
+              <div className="mt-2 text-sm text-muted-foreground">{home?.stats?.employeesLabel}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">
-                {home.stats?.completedProjects || defaultHome.stats.completedProjects}
-              </div>
-              <div className="mt-2 text-sm text-muted-foreground">
-                {home.stats?.completedProjectsLabel || defaultHome.stats.completedProjectsLabel}
-              </div>
+              <div className="text-4xl font-bold text-primary">{home?.stats?.completedProjects}</div>
+              <div className="mt-2 text-sm text-muted-foreground">{home?.stats?.completedProjectsLabel}</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">
-                {home.stats?.experience || defaultHome.stats.experience}
-              </div>
-              <div className="mt-2 text-sm text-muted-foreground">
-                {home.stats?.experienceLabel || defaultHome.stats.experienceLabel}
-              </div>
+              <div className="text-4xl font-bold text-primary">{home?.stats?.experience}</div>
+              <div className="mt-2 text-sm text-muted-foreground">{home?.stats?.experienceLabel}</div>
             </div>
           </div>
         </div>
@@ -127,10 +85,8 @@ export default async function HomePage() {
       <section className="py-20">
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-6 text-4xl font-bold">{home.experience?.title || defaultHome.experience.title}</h2>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              {home.experience?.description || defaultHome.experience.description}
-            </p>
+            <h2 className="mb-6 text-4xl font-bold">{home?.experience?.title}</h2>
+            <p className="text-lg leading-relaxed text-muted-foreground">{home?.experience?.description}</p>
             <Button asChild size="lg" className="mt-8">
               <Link href="/hakkimizda">Firmamız Hakkında</Link>
             </Button>
@@ -191,7 +147,7 @@ export default async function HomePage() {
                   <Card className="overflow-hidden transition-all hover:shadow-xl">
                     <div className="relative h-64">
                       <Image
-                        src={project.mainImage || getProjectImage(project.type || "residential")}
+                        src={project.mainImage || project.image || "/placeholder.svg"}
                         alt={project.title}
                         fill
                         className="object-cover"
@@ -233,7 +189,7 @@ export default async function HomePage() {
                   <Card className="overflow-hidden transition-all hover:shadow-xl">
                     <div className="relative h-64">
                       <Image
-                        src={project.mainImage || getProjectImage(project.type || "residential")}
+                        src={project.mainImage || project.image || "/placeholder.svg"}
                         alt={project.title}
                         fill
                         className="object-cover"
@@ -258,7 +214,7 @@ export default async function HomePage() {
       )}
 
       {/* Working Process Section */}
-      {home.process?.steps && home.process.steps.length > 0 && (
+      {home?.process?.steps && home.process.steps.length > 0 && (
         <section className="bg-zinc-900 py-20 text-white">
           <div className="container px-4">
             <div className="mb-12 text-center">
@@ -283,9 +239,9 @@ export default async function HomePage() {
       {/* Why Us Section */}
       <section className="bg-muted/30 py-20">
         <div className="container px-4">
-          <h2 className="mb-12 text-center text-3xl font-bold">{home.whyUs?.title || defaultHome.whyUs.title}</h2>
+          <h2 className="mb-12 text-center text-3xl font-bold">{home?.whyUs?.title}</h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {(home.whyUs?.items || defaultHome.whyUs.items).map((item: any, index: number) => (
+            {(home?.whyUs?.items || []).map((item: any, index: number) => (
               <Card key={index}>
                 <CardContent className="p-6">
                   <CheckCircle2 className="mb-4 h-10 w-10 text-primary" />
@@ -302,13 +258,8 @@ export default async function HomePage() {
       <section className="bg-white py-16">
         <div className="container px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-4 text-2xl font-bold text-foreground">
-              {home.cta?.title || "Projeniz İçin Bizimle İletişime Geçin"}
-            </h2>
-            <p className="mb-8 text-base text-muted-foreground">
-              {home.cta?.description ||
-                "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."}
-            </p>
+            <h2 className="mb-4 text-2xl font-bold text-foreground">{home?.cta?.title}</h2>
+            <p className="mb-8 text-base text-muted-foreground">{home?.cta?.description}</p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-4">
               <Button asChild size="lg" className="w-full sm:w-auto h-10 bg-zinc-900 text-white hover:bg-zinc-800">
                 <Link href="/iletisim">

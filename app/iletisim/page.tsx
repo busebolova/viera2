@@ -1,18 +1,18 @@
 import { MapPin, Phone, Mail } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
-import { getContent, defaultContact } from "@/lib/github-content"
+import { getContent } from "@/lib/github-content"
 
 export const metadata = {
-  title: "İletişim - Bize Ulaşın | VIERA - Alkan Yapı & Viera Ortaklığı",
+  title: "İletişim - Bize Ulaşın | Viera & Alkan Yapı",
   description:
-    "VIERA - Alkan Yapı & Viera Ortaklığı iletişim bilgileri. Adres: Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/İstanbul.",
+    "Viera & Alkan Yapı iletişim bilgileri. Adres: Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/İstanbul.",
 }
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export default async function ContactPage() {
-  const data = await getContent<typeof defaultContact>("contact")
-  const contactData = data || defaultContact
+  const contactData = await getContent<any>("contact")
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">

@@ -14,31 +14,30 @@ import {
   FileCheck,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { getContent, defaultAbout } from "@/lib/github-content"
+import { getContent } from "@/lib/github-content"
 
 export const metadata = {
-  title: "Hakkımızda - Firma Geçmişimiz | VIERA Construction",
-  description:
-    "VIERA Construction - Alkan Yapı & Viera Ortaklığı. D sınıfı Müteahhitlik Belgesiyle İstanbul'da konut ve iş yeri üretimi.",
+  title: "Hakkımızda - Firma Geçmişimiz | Viera & Alkan Yapı",
+  description: "Viera & Alkan Yapı. D sınıfı Müteahhitlik Belgesiyle İstanbul'da konut ve iş yeri üretimi.",
 }
 
 export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export default async function AboutPage() {
-  const data = await getContent<typeof defaultAbout>("about")
-  const aboutData = { ...defaultAbout, ...data }
+  const aboutData = await getContent<any>("about")
 
   const stats = [
     {
       icon: Calendar,
-      value: aboutData.stats?.founded || "1965",
-      label: aboutData.stats?.foundedLabel || "Kuruluş Yılı",
+      value: aboutData.stats?.founded,
+      label: aboutData.stats?.foundedLabel,
     },
-    { icon: Users, value: aboutData.stats?.employees || "50+", label: aboutData.stats?.employeesLabel || "Çalışan" },
+    { icon: Users, value: aboutData.stats?.employees, label: aboutData.stats?.employeesLabel },
     {
       icon: Award,
-      value: aboutData.stats?.completedProjects || "100+",
-      label: aboutData.stats?.completedProjectsLabel || "Tamamlanan Proje",
+      value: aboutData.stats?.completedProjects,
+      label: aboutData.stats?.completedProjectsLabel,
     },
     { icon: FileCheck, value: "D Sınıfı", label: "Müteahhitlik Belgesi" },
   ]
@@ -47,14 +46,14 @@ export default async function AboutPage() {
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
-      {/* Main Content - Yazı ve firma bilgileri önce, stats sonra */}
+      {/* Main Content */}
       <section className="w-full py-16 md:py-24 bg-background mt-20">
         <div className="container px-4 md:px-6">
           <div className="grid gap-16">
             {/* About Text & Image */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold">{aboutData.company?.name || "VIERA Construction"}</h2>
+                <h2 className="text-2xl font-bold">{aboutData.company?.name}</h2>
                 <p className="text-muted-foreground leading-relaxed">{aboutData.description}</p>
                 <p className="text-muted-foreground leading-relaxed">
                   Firmamız <strong>{aboutData.certificate}</strong>ne sahiptir. {aboutData.certificateDescription}
@@ -122,7 +121,7 @@ export default async function AboutPage() {
                   <div className="bg-foreground rounded-lg p-2">
                     <Eye className="h-5 w-5 text-background" />
                   </div>
-                  <h3 className="text-xl font-bold">{aboutData.vision?.title || "Vizyonumuz"}</h3>
+                  <h3 className="text-xl font-bold">{aboutData.vision?.title}</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">{aboutData.vision?.description}</p>
               </div>
@@ -132,7 +131,7 @@ export default async function AboutPage() {
                   <div className="bg-foreground rounded-lg p-2">
                     <Target className="h-5 w-5 text-background" />
                   </div>
-                  <h3 className="text-xl font-bold">{aboutData.mission?.title || "Misyonumuz"}</h3>
+                  <h3 className="text-xl font-bold">{aboutData.mission?.title}</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">{aboutData.mission?.description}</p>
               </div>
@@ -142,7 +141,7 @@ export default async function AboutPage() {
                   <div className="bg-foreground rounded-lg p-2">
                     <Heart className="h-5 w-5 text-background" />
                   </div>
-                  <h3 className="text-xl font-bold">{aboutData.values?.title || "Değerlerimiz"}</h3>
+                  <h3 className="text-xl font-bold">{aboutData.values?.title}</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">{aboutData.values?.description}</p>
               </div>
@@ -150,9 +149,7 @@ export default async function AboutPage() {
 
             {/* Why Us Grid */}
             <div className="bg-zinc-800 dark:bg-zinc-900 rounded-xl p-8 md:p-12">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">
-                {aboutData.whyUs?.title || "Neden VIERA Construction?"}
-              </h3>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">{aboutData.whyUs?.title}</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {values.map((value: any, index: number) => (
                   <div key={index} className="flex gap-3 items-start">
@@ -169,7 +166,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Stats Section - İstatistikler en sona taşındı */}
+      {/* Stats Section */}
       <section className="bg-zinc-800 py-12">
         <div className="container px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
