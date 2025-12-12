@@ -1,13 +1,7 @@
 {
   "hero": {
     "title": "Viera & Alkan Yapı",
-    "typewriterWords": [
-      "Güven",
-      "Kalite",
-      "Profesyonellik",
-      "Deneyim",
-      "Başarı"
-    ],
+    "typewriterWords": ["Güven", "Kalite", "Profesyonellik", "Deneyim", "Başarı"],
     "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
     "buttonText": "Hizmetlerimiz",
     "buttonLink": "/hizmetlerimiz",
@@ -25,7 +19,7 @@
     "experienceLabel": "YIL DENEYİM"
   },
   "experience": {
-    "title": "60 Yılı Aşkın Tecrübe 333",
+    "title": "60 Yılı Aşkın Tecrübe",
     "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
   "about": {
