@@ -1,65 +1,20 @@
 {
-  "title": "Hakkımızda",
-  "pageTitle": "Firmamız Hakkında",
-  "description": "VIERA Construction - Alkan Yapı & Viera Ortaklığı olarak konut ve iş yeri üretimine aralıksız devam etmekteyiz. Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
-  "certificate": "D Sınıfı Müteahhitlik Belgesi",
-  "certificateDescription": "Deneyimli kadromuz ve modern ekipmanlarımızla müşterilerimizin ihtiyaçlarına en uygun çözümleri sunmaktayız.",
-  "stats": {
-    "founded": "1965",
-    "foundedLabel": "KURULUŞ YILI",
-    "employees": "50+",
-    "employeesLabel": "ÇALIŞAN",
-    "completedProjects": "100+",
-    "completedProjectsLabel": "TAMAMLANAN PROJE",
-    "experience": "60+",
-    "experienceLabel": "YIL DENEYİM"
-  },
-  "company": {
-    "name": "VIERA Construction",
-    "subtitle": "Alkan Yapı & Viera Ortaklığı",
-    "founder": "Servet Alkan",
-    "founderTitle": "Kurucu"
-  },
-  "contact": {
-    "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
-    "authorized": "Erdem Alkan",
-    "phone": "0216 391 49 40",
-    "fax": "0216 310 90 74",
-    "mobile": "0533 479 83 87",
-    "email": "info@vieraconstruction.com"
-  },
-  "vision": {
-    "title": "Vizyonumuz",
-    "description": "Türkiye'nin en güvenilir inşaat firması olmak ve sektörde öncü konumumuzu sürdürmek."
-  },
-  "mission": {
-    "title": "Misyonumuz",
-    "description": "Kaliteli, güvenilir ve sürdürülebilir projeler üretmek. Her projede müşteri memnuniyetini en üst düzeyde tutmak."
-  },
-  "values": {
-    "title": "Değerlerimiz",
-    "description": "Dürüstlük, şeffaflık, müşteri odaklılık, çevreye saygı ve sürekli gelişim ilkelerimizdir."
-  },
-  "whyUs": {
-    "title": "Neden VIERA Construction?",
-    "items": [
-      {
-        "title": "Kalite",
-        "description": "Her projede en yüksek kalite standartlarını uyguluyoruz."
-      },
-      {
-        "title": "Güvenilirlik",
-        "description": "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz."
-      },
-      {
-        "title": "Yenilikçilik",
-        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz."
-      },
-      {
-        "title": "Sürdürülebilirlik",
-        "description": "Çevreye duyarlı projeler geliştiriyoruz."
-      }
-    ]
-  },
-  "image": "/about-office.jpg"
+  "title": "Firmamız Hakkında",
+  "description": "1965 yılından bu yana inşaat sektöründe faaliyet gösteren firmamız, kaliteli ve güvenilir hizmet anlayışıyla müşterilerimize değer katmaktadır.",
+  "mission": "Modern yapı teknolojileri ve sürdürülebilir inşaat yöntemleriyle, müşterilerimizin hayallerini gerçeğe dönüştürmek.",
+  "vision": "Türkiye'nin en güvenilir ve tercih edilen inşaat firmalarından biri olmak.",
+  "values": [
+    {
+      "title": "Kalite",
+      "description": "Her projede en yüksek kalite standartlarını uyguluyoruz"
+    },
+    {
+      "title": "Güvenilirlik",
+      "description": "Sözlerimizin arkasında duruyoruz ve zamanında teslim ediyoruz"
+    },
+    {
+      "title": "İnovasyon",
+      "description": "Modern teknolojileri ve yöntemleri projelerimizde kullanıyoruz"
+    }
+  ]
 }
