@@ -20,6 +20,12 @@ interface Project {
   image?: string
   gallery?: string[]
   features?: string[]
+  authorizedPersons?: Array<{
+    name: string
+    title: string
+    phone?: string
+    email?: string
+  }>
   progress?: number
   updates?: Array<{
     date: string

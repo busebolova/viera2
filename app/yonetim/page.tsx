@@ -5,6 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { Upload, Save, Plus, Trash2 } from "lucide-react"
 import Image from "next/image" // Import Image component
+import { Label } from "@/components/ui/label" // Assuming Label component is available
 
 type ContentType = "home" | "about" | "services" | "projects" | "contact"
 
@@ -324,26 +325,36 @@ export default function AdminPanel() {
 
       if (!res.ok) {
         console.log(`[v0] CLIENT: Failed to load ${file}, status:`, res.status)
+        if (res.status === 404) {
+          setContent((prev) => ({
+            ...prev,
+            [file]: emptyDefaults[file] || {},
+          }))
+        }
         return
       }
 
       const data = await res.json()
       console.log(`[v0] CLIENT: Received data for ${file}:`, data)
 
-      if (data.content) {
-        setContent((prev) => ({
-          ...prev,
-          [file]: data.content,
-        }))
+      const contentData = data.content || data
 
-        if (data.sha) {
-          setShas((prev) => ({ ...prev, [file]: data.sha }))
-        }
+      setContent((prev) => ({
+        ...prev,
+        [file]: contentData,
+      }))
 
-        console.log(`[v0] CLIENT: Successfully loaded ${file}`)
+      if (data.sha) {
+        setShas((prev) => ({ ...prev, [file]: data.sha }))
       }
+
+      console.log(`[v0] CLIENT: Successfully loaded ${file}`)
     } catch (err) {
       console.error(`[v0] CLIENT: Error loading ${file}:`, err)
+      setContent((prev) => ({
+        ...prev,
+        [file]: emptyDefaults[file] || {},
+      }))
     }
   }
 
@@ -514,7 +525,7 @@ export default function AdminPanel() {
   const renderInput = (
     label: string,
     path: string[],
-    type: "text" | "textarea" | "image" = "text",
+    type: "text" | "textarea" | "image" | "number" = "text",
     placeholder?: string,
   ) => {
     const value = getNestedValue(path, "")
@@ -559,6 +570,21 @@ export default function AdminPanel() {
             placeholder={placeholder}
             rows={4}
             className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+          />
+        </div>
+      )
+    }
+
+    if (type === "number") {
+      return (
+        <div className="space-y-2">
+          <label className="block text-sm font-medium">{label}</label>
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => updateNestedValue(path, Number(e.target.value))}
+            placeholder={placeholder}
+            className="w-full px-4 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       )
@@ -707,7 +733,6 @@ export default function AdminPanel() {
         <h3 className="text-lg font-semibold text-primary mb-4">Hero Bölümü</h3>
         {renderInput("Başlık", ["hero", "title"])}
         {renderInput("Alt Başlık", ["hero", "subtitle"], "textarea")}
-        {renderInput("Hero Görseli", ["hero", "image"], "image")}
       </div>
 
       <div className="bg-card rounded-xl p-6 border">
@@ -793,6 +818,7 @@ export default function AdminPanel() {
       updateNestedValue([projectTab], updated)
     }
 
+    // No changes here, keeping as is.
     const addFeature = (projectIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = project.features || []
@@ -800,6 +826,7 @@ export default function AdminPanel() {
       updateNestedValue([projectTab, projectIndex.toString(), "features"], features)
     }
 
+    // No changes here, keeping as is.
     const removeFeature = (projectIndex: number, featureIndex: number) => {
       const project = currentProjects[projectIndex]
       const features = (project.features || []).filter((_: any, i: number) => i !== featureIndex)
@@ -899,51 +926,30 @@ export default function AdminPanel() {
             {renderInput("Ana Görsel", [projectTab, index.toString(), "mainImage"], "image")}
 
             {projectTab === "ongoing" && (
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">İlerleme (%{project.progress || 0})</label>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={project.progress || 0}
-                  onChange={(e) =>
-                    updateNestedValue([projectTab, index.toString(), "progress"], Number(e.target.value))
-                  }
-                  className="w-full accent-primary"
-                />
-              </div>
+              <>
+                {renderInput(
+                  "İlerleme Durumu (%)",
+                  [projectTab, index.toString(), "progress"],
+                  "number",
+                  "0-100 arası bir değer girin",
+                )}
+              </>
             )}
 
-            <div className="p-4 bg-muted rounded-lg space-y-2">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-medium">Özellikler</h4>
-                <button
-                  onClick={() => addFeature(index)}
-                  className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-md transition-colors"
-                >
-                  + Ekle
-                </button>
+            <div className="bg-card rounded-xl p-6 border">
+              <h3 className="text-lg font-semibold text-primary mb-4">Proje Özellikleri</h3>
+              <div className="space-y-2">
+                <Label>Özellikler (Her satır bir özellik)</Label>
+                <textarea
+                  className="w-full min-h-[150px] rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  placeholder="Kentsel dönüşüm projesi&#10;Kapalı otopark&#10;Akıllı ev sistemleri"
+                  value={(project.features || []).join("\n")}
+                  onChange={(e) => {
+                    const features = e.target.value.split("\n").filter((f) => f.trim())
+                    updateNestedValue([projectTab, index.toString(), "features"], features)
+                  }}
+                />
               </div>
-              {(project.features || []).map((feature: string, fIndex: number) => (
-                <div key={fIndex} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={feature}
-                    onChange={(e) => {
-                      const features = [...(project.features || [])]
-                      features[fIndex] = e.target.value
-                      updateNestedValue([projectTab, index.toString(), "features"], features)
-                    }}
-                    className="flex-1 px-3 py-2 bg-background border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <button
-                    onClick={() => removeFeature(index, fIndex)}
-                    className="px-3 py-2 bg-destructive hover:bg-destructive/90 text-white rounded-lg"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
             </div>
 
             <div className="p-4 bg-muted rounded-lg space-y-2">
@@ -1060,6 +1066,16 @@ export default function AdminPanel() {
                 ))}
               </div>
             )}
+
+            <div className="bg-card rounded-xl p-6 border">
+              <h3 className="text-lg font-semibold text-primary mb-4">Yetkili Kişi</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {renderInput("Ad Soyad", [projectTab, index.toString(), "contact", "name"])}
+                {renderInput("Ünvan", [projectTab, index.toString(), "contact", "title"])}
+                {renderInput("Telefon", [projectTab, index.toString(), "contact", "phone"])}
+                {renderInput("E-posta", [projectTab, index.toString(), "contact", "email"])}
+              </div>
+            </div>
           </div>
         ))}
       </div>

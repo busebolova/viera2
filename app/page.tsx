@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle2, ArrowRight, Phone, Mail } from "lucide-react"
+import { CheckCircle2, ArrowRight, Mail } from "lucide-react"
 import { getContent, getProjects } from "@/lib/github-content"
 
 export const dynamic = "force-dynamic"
@@ -140,13 +140,15 @@ export default async function HomePage() {
         ) : (
           <Image src={videoUrl || "/placeholder.svg"} alt="Hero background" fill className="object-cover" priority />
         )}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 flex h-full items-center justify-center text-center text-white">
           <div className="container px-4">
-            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl">
+            <h1 className="mb-4 text-5xl font-bold md:text-6xl lg:text-7xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
               {home?.video?.title || defaultContent.video.title}
             </h1>
-            <p className="text-xl md:text-2xl">{home?.video?.subtitle || defaultContent.video.subtitle}</p>
+            <p className="text-xl md:text-2xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              {home?.video?.subtitle || defaultContent.video.subtitle}
+            </p>
           </div>
         </div>
       </section>
@@ -351,11 +353,11 @@ export default async function HomePage() {
       {/* CTA Section */}
       <section className="bg-white py-16">
         <div className="container px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-4 text-2xl font-bold text-foreground">{home?.cta?.title}</h2>
-            <p className="mb-8 text-base text-muted-foreground">{home?.cta?.description}</p>
+          <div className="mx-auto max-w-3xl rounded-2xl bg-zinc-900 px-8 py-12 text-center">
+            <h2 className="mb-4 text-3xl font-bold text-white">{home?.cta?.title || defaultContent.cta.title}</h2>
+            <p className="mb-8 text-lg text-zinc-300">{home?.cta?.description || defaultContent.cta.description}</p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-4">
-              <Button asChild size="lg" className="w-full sm:w-auto h-10 bg-zinc-900 text-white hover:bg-zinc-800">
+              <Button asChild size="lg" className="w-full sm:w-auto h-12 bg-white text-zinc-900 hover:bg-zinc-100">
                 <Link href="/iletisim">
                   <Mail className="mr-2 h-5 w-5" />
                   İletişime Geç
@@ -365,11 +367,11 @@ export default async function HomePage() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-auto h-10 border-zinc-300 text-foreground hover:bg-zinc-50 bg-transparent"
+                className="w-full sm:w-auto h-12 border-2 border-white text-white hover:bg-white hover:text-zinc-900 bg-transparent"
               >
-                <Link href="tel:02163914940">
-                  <Phone className="mr-2 h-5 w-5" />
-                  0216 391 49 40
+                <Link href="/projeler">
+                  Projelerimizi İnceleyin
+                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
             </div>
