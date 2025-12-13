@@ -1,4 +1,5 @@
-// GitHub'dan içerik çeken yardımcı fonksiyonlar
+// lib/github-content.ts
+
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN
 const GITHUB_OWNER = process.env.GITHUB_OWNER
 const GITHUB_REPO = process.env.GITHUB_REPO
@@ -17,24 +18,20 @@ function generateSlug(title: string): string {
     .replace(/^-+|-+$/g, "")
 }
 
-/**
- * ANA DÜZELTME BURADA
- * - timestamp SİLİNDİ
- * - ?t=Date.now() SİLİNDİ
- * - Next cache tamamen kapatıldı
- */
-export async function getContent<T>(file: string): Promise<T> {
+export async function getContent<T>(file: string, timestamp?: number): Promise<T> {
   if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
     throw new Error(`GitHub config missing for ${file}`)
   }
 
-  const url = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/${file}.json`
+  const ts = timestamp || Date.now()
+  const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/${file}.json?t=${ts}`
 
-  const res = await fetch(url, {
+  const res = await fetch(rawUrl, {
     cache: "no-store",
     next: { revalidate: 0 },
     headers: {
       Authorization: `Bearer ${GITHUB_TOKEN}`,
+      "Cache-Control": "no-cache",
     },
   })
 
@@ -42,11 +39,11 @@ export async function getContent<T>(file: string): Promise<T> {
     throw new Error(`Failed to fetch ${file}: ${res.status}`)
   }
 
-  return res.json()
+  return (await res.json()) as T
 }
 
-export async function getProjects() {
-  const data = await getContent<any>("projects")
+export async function getProjects(timestamp?: number) {
+  const data = await getContent<any>("projects", timestamp)
 
   const processProjects = (projects: any[]) =>
     projects.map((project, index) => ({
