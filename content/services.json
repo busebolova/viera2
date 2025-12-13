@@ -1,7 +1,7 @@
 {
   "intro": {
     "badge": "Hizmetlerimiz",
-    "title": "İnşaat ve Yapı Çözümleri",
+    "title": "İnşaat ve Yapı Çözümleri 2",
     "description": "Konut projelerinden ticari binalara, karma kullanımlı projelerden özel yapılara kadar geniş bir yelpazede profesyonel inşaat hizmetleri sunuyoruz."
   },
   "services": [
@@ -52,7 +52,7 @@
       "description": "Yaşam ve iş alanlarını bir araya getiren entegre projeler",
       "items": [
         {
-          "title": "Rezidans + Ofis",
+          "title": "Rezidans + Ofis 2",
           "description": "Konut ve ofis alanlarının bir arada bulunduğu karma projeler"
         },
         {
