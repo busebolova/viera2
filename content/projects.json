@@ -49,8 +49,17 @@
       "floors": "6 Kat",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
+      "features": [
+        "Merkezi konum",
+        "Kaliteli malzeme",
+        "Kapalı otopark",
+        "Peyzaj düzenlemesi",
+        "Çocuk oyun alanı"
+      ]
     },
     {
       "id": "eski-anadolu-b",
@@ -67,7 +76,31 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
+      "features": [
+        "Kentsel dönüşüm projesi",
+        "Depreme dayanıklı yapı",
+        "Modern altyapı",
+        "Yalıtım sistemi"
+      ]
+    },
+    {
+      "id": "project-1765625308766",
+      "slug": "deneme",
+      "title": "Yeni Proje",
+      "shortDescription": "deneme",
+      "fullDescription": "deneme",
+      "details": "deneme",
+      "year": "2025",
+      "location": "deneme",
+      "area": "",
+      "units": "deneme",
+      "floors": "deneme",
+      "status": "completed",
+      "mainImage": "/placeholder.svg?height=400&width=600",
+      "gallery": [],
+      "features": [
+        "deneme"
+      ]
     }
   ],
   "ongoing": [
@@ -87,7 +120,10 @@
       "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
