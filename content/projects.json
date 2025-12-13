@@ -9,8 +9,8 @@
   "completed": [
     {
       "id": "validebag-27-28",
-      "slug": "validebag-27-28-blok",
-      "title": "Validebağ 27-28 Blok",
+      "slug": "valideba-27-28-blok-deneme",
+      "title": "Validebağ 27-28 Blok deneme",
       "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
       "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
       "details": "56 Daire",
@@ -49,8 +49,17 @@
       "floors": "6 Kat",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
+      "features": [
+        "Merkezi konum",
+        "Kaliteli malzeme",
+        "Kapalı otopark",
+        "Peyzaj düzenlemesi",
+        "Çocuk oyun alanı"
+      ]
     },
     {
       "id": "eski-anadolu-b",
@@ -67,7 +76,12 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
+      "features": [
+        "Kentsel dönüşüm projesi",
+        "Depreme dayanıklı yapı",
+        "Modern altyapı",
+        "Yalıtım sistemi"
+      ]
     }
   ],
   "ongoing": [
@@ -87,7 +101,10 @@
       "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
