@@ -118,6 +118,23 @@
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
       "features": []
+    },
+    {
+      "id": "project-1765626697202",
+      "slug": "yeni-proje-1765626697202",
+      "title": "Yeni Proje",
+      "shortDescription": "Kısa açıklama",
+      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
+      "year": "2025",
+      "location": "İstanbul",
+      "area": "5.000 m²",
+      "units": "40 Daire",
+      "floors": "8 Kat",
+      "status": "completed",
+      "mainImage": "/construction-site-overview.png",
+      "gallery": [],
+      "features": [],
+      "updates": []
     }
   ],
   "ongoing": [
@@ -134,7 +151,7 @@
       "area": "6.200 m²",
       "units": "38 Daire",
       "floors": "8 Kat",
-      "progress": 65,
+      "progress": 35,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [
