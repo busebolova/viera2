@@ -47,11 +47,27 @@
       }
     ]
   },
+  "team": [
+    {
+      "name": "Erdem Alkan",
+      "position": "Yetkili Kişi"
+    }
+  ],
+  "phones": [
+    {
+      "label": "Tel",
+      "number": "0216 391 49 40"
+    },
+    {
+      "label": "Fax",
+      "number": "0216 310 90 74"
+    },
+    {
+      "label": "Cep",
+      "number": "0533 479 83 87"
+    }
+  ],
   "contact": {
-    "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul",
-    "authorized": "Erdem Alkan",
-    "phone": "0216 391 49 40",
-    "fax": "0216 310 90 74",
-    "mobile": "0533 479 83 87"
+    "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar - İstanbul"
   }
 }
