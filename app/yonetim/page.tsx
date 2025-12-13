@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -30,6 +31,7 @@ import {
   CheckCircle2,
   Calendar,
 } from "lucide-react"
+// REMOVING THIS IMPORT: import { put } from "@vercel/blob"
 import { uploadImage } from "@/app/actions/upload-image"
 import { cn } from "@/lib/utils"
 
@@ -89,15 +91,28 @@ const AdminPanel = () => {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState("")
   const [activeTab, setActiveTab] = useState<ContentType>("home")
+  const [content, setContent] = useState<Record<ContentType, any>>({
+    home: {},
+    about: {},
+    services: [],
+    projects: {},
+    contact: {},
+  })
+  const [shas, setShas] = useState<Record<ContentType, string>>({
+    home: "",
+    about: "",
+    services: "",
+    projects: "",
+    contact: "",
+  })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
-  const [isUploading, setIsUploading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false) // Added state for image upload
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({})
 
   const servicesContainerRef = useRef<{ [key: number]: HTMLDivElement | null }>({})
   const projectsContainerRef = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
-  // ✅ Doğru başlangıç şeması (bu kritik)
   const emptyDefaults: Record<ContentType, any> = {
     home: {
       video: { url: "", title: "", subtitle: "" },
@@ -131,35 +146,18 @@ const AdminPanel = () => {
     contact: {},
   }
 
-  const [content, setContent] = useState<Record<ContentType, any>>(() => ({
-    home: emptyDefaults.home,
-    about: emptyDefaults.about,
-    services: emptyDefaults.services,
-    projects: emptyDefaults.projects,
-    contact: emptyDefaults.contact,
-  }))
-
-  const [shas, setShas] = useState<Record<ContentType, string>>({
-    home: "",
-    about: "",
-    services: "",
-    projects: "",
-    contact: "",
-  })
-
   useEffect(() => {
     const isAuth = sessionStorage.getItem("admin_authenticated") === "true"
     setAuthenticated(isAuth)
     if (isAuth) {
       loadAllContent()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadAllContent = async () => {
     const types: ContentType[] = ["home", "about", "services", "projects", "contact"]
     for (const type of types) {
-      await loadContent(type, { keepActiveTab: true })
+      await loadContent(type)
     }
   }
 
@@ -171,7 +169,7 @@ const AdminPanel = () => {
     }
   }
 
-  const loadContent = async (type: ContentType, opts?: { keepActiveTab?: boolean }) => {
+  const loadContent = async (type: ContentType) => {
     setSaving(false)
     setMessage("")
 
@@ -189,15 +187,13 @@ const AdminPanel = () => {
 
       console.log(`[v0] Loaded ${type}:`, contentData)
 
-      // ✅ contentData boş/eksik gelse bile default şemaya merge et
+      // STATE'i doğru şekilde set et - tüm verileri kaydet
       setContent((prev) => ({
         ...prev,
-        [type]: {
-          ...(emptyDefaults[type] || {}),
-          ...(contentData || {}),
-        },
+        [type]: contentData,
       }))
 
+      // SHA'yı kaydet
       if (data.sha) {
         setShas((prev) => ({
           ...prev,
@@ -205,8 +201,7 @@ const AdminPanel = () => {
         }))
       }
 
-      // ✅ loadAllContent sırasında sekme zıplatma yok
-      if (!opts?.keepActiveTab) setActiveTab(type)
+      setActiveTab(type)
     } catch (err: any) {
       console.error("[v0] Load error:", err)
       setMessage(`❌ Yükleme hatası: ${err.message}`)
@@ -214,7 +209,7 @@ const AdminPanel = () => {
   }
 
   const handleSave = async (file?: string) => {
-    const fileToSave = (file || activeTab) as ContentType
+    const fileToSave = file || activeTab
     setSaving(true)
     setMessage("")
 
@@ -243,9 +238,9 @@ const AdminPanel = () => {
         router.refresh()
 
         setTimeout(async () => {
-          await loadContent(fileToSave, { keepActiveTab: true })
+          await loadContent(fileToSave as ContentType)
           setMessage("✅ Tamamlandı")
-        }, 800)
+        }, 1000)
       } else {
         setMessage(`❌ Hata: ${data.error || "Bilinmeyen hata"}`)
       }
@@ -254,6 +249,78 @@ const AdminPanel = () => {
     } finally {
       setSaving(false)
     }
+  }
+
+  // UPDATED HANDLEIMAGEUPLOAD
+  const handleImageUpload = async (path: string[], uploadKey: string, customUpdate?: (url: string) => void) => {
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = "image/*"
+    input.onchange = async (e: any) => {
+      const file = e.target?.files?.[0]
+      if (!file) return
+
+      setIsUploading(true)
+      setUploadProgress((prev) => ({ ...prev, [uploadKey]: 0 }))
+
+      // Progress simulation
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          const current = prev[uploadKey] || 0
+          if (current >= 90) {
+            clearInterval(progressInterval)
+            return prev
+          }
+          return { ...prev, [uploadKey]: current + 10 }
+        })
+      }, 100)
+
+      try {
+        // Use server action for upload
+        const formData = new FormData()
+        formData.append("file", file)
+        const result = await uploadImage(formData)
+
+        if (!result.success) {
+          throw new Error(result.error)
+        }
+
+        clearInterval(progressInterval)
+        setUploadProgress((prev) => ({ ...prev, [uploadKey]: 100 }))
+
+        // Use custom update if provided, otherwise use nested value update
+        if (customUpdate) {
+          customUpdate(result.url)
+        } else {
+          updateNestedValue(path, result.url)
+        }
+
+        // Force re-render
+        setContent((prev) => ({ ...prev }))
+
+        setMessage("✅ Görsel başarıyla yüklendi!")
+        setTimeout(() => {
+          setMessage("")
+          setUploadProgress((prev) => {
+            const newProgress = { ...prev }
+            delete newProgress[uploadKey]
+            return newProgress
+          })
+          setIsUploading(false)
+        }, 2000)
+      } catch (error: any) {
+        console.error("[v0] Görsel yükleme hatası:", error)
+        clearInterval(progressInterval)
+        setUploadProgress((prev) => {
+          const newProgress = { ...prev }
+          delete newProgress[uploadKey]
+          return newProgress
+        })
+        setMessage(`❌ Görsel yüklenirken hata: ${error.message}`)
+        setIsUploading(false)
+      }
+    }
+    input.click()
   }
 
   const updateNestedValue = (path: string[], value: any) => {
@@ -280,72 +347,6 @@ const AdminPanel = () => {
     return obj ?? defaultValue
   }
 
-  // UPDATED HANDLEIMAGEUPLOAD (safe state updates)
-  const handleImageUpload = async (path: string[], uploadKey: string, customUpdate?: (url: string) => void) => {
-    const input = document.createElement("input")
-    input.type = "file"
-    input.accept = "image/*"
-    input.onchange = async (e: any) => {
-      const file = e.target?.files?.[0]
-      if (!file) return
-
-      setIsUploading(true)
-      setUploadProgress((prev) => ({ ...prev, [uploadKey]: 0 }))
-
-      const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          const current = prev[uploadKey] || 0
-          if (current >= 90) {
-            clearInterval(progressInterval)
-            return prev
-          }
-          return { ...prev, [uploadKey]: current + 10 }
-        })
-      }, 100)
-
-      try {
-        const formData = new FormData()
-        formData.append("file", file)
-        const result = await uploadImage(formData)
-
-        if (!result.success) {
-          throw new Error(result.error)
-        }
-
-        clearInterval(progressInterval)
-        setUploadProgress((prev) => ({ ...prev, [uploadKey]: 100 }))
-
-        if (customUpdate) {
-          customUpdate(result.url)
-        } else {
-          updateNestedValue(path, result.url)
-        }
-
-        setMessage("✅ Görsel başarıyla yüklendi!")
-        setTimeout(() => {
-          setMessage("")
-          setUploadProgress((prev) => {
-            const newProgress = { ...prev }
-            delete newProgress[uploadKey]
-            return newProgress
-          })
-          setIsUploading(false)
-        }, 1500)
-      } catch (error: any) {
-        console.error("[v0] Görsel yükleme hatası:", error)
-        clearInterval(progressInterval)
-        setUploadProgress((prev) => {
-          const newProgress = { ...prev }
-          delete newProgress[uploadKey]
-          return newProgress
-        })
-        setMessage(`❌ Görsel yüklenirken hata: ${error.message}`)
-        setIsUploading(false)
-      }
-    }
-    input.click()
-  }
-
   const renderInput = (
     label: string,
     field: string,
@@ -355,6 +356,7 @@ const AdminPanel = () => {
     const tabContent = content[activeTab]
     if (!tabContent) return null
 
+    // Nested path desteği: "video.url" -> ["video", "url"]
     const pathParts = field.split(".")
     let value = tabContent
     for (const part of pathParts) {
@@ -366,11 +368,16 @@ const AdminPanel = () => {
         const updated = { ...prev[activeTab] }
         let current = updated
         for (let i = 0; i < pathParts.length - 1; i++) {
-          if (!current[pathParts[i]]) current[pathParts[i]] = {}
+          if (!current[pathParts[i]]) {
+            current[pathParts[i]] = {}
+          }
           current = current[pathParts[i]]
         }
         current[pathParts[pathParts.length - 1]] = newValue
-        return { ...prev, [activeTab]: updated }
+        return {
+          ...prev,
+          [activeTab]: updated,
+        }
       })
     }
 
@@ -399,6 +406,44 @@ const AdminPanel = () => {
           placeholder={placeholder}
           className="w-full p-2 border rounded"
         />
+      </div>
+    )
+  }
+
+  const renderIconPicker = (label: string, path: string[]) => {
+    const availableIcons = [
+      { name: "Home", icon: Home, label: "Ev" },
+      { name: "Building", icon: Building, label: "Bina" },
+      { name: "Landmark", icon: Landmark, label: "Anıt" },
+      { name: "Hammer", icon: Hammer, label: "Çekiç" },
+      { name: "Wrench", icon: Wrench, label: "Anahtar" },
+      { name: "Package", icon: Package, label: "Paket" },
+      { name: "Factory", icon: Factory, label: "Fabrika" },
+      { name: "Warehouse", icon: Warehouse, label: "Depo" },
+      { name: "Construction", icon: Construction, label: "İnşaat" },
+    ]
+
+    const currentIcon = getNestedValue(content, path) || "Home"
+
+    return (
+      <div className="space-y-2">
+        <Label>{label}</Label>
+        <div className="grid grid-cols-3 gap-2">
+          {availableIcons.map(({ name, icon: Icon, label: iconLabel }) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => updateNestedValue(path, name)}
+              className={cn(
+                "flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all hover:bg-accent",
+                currentIcon === name ? "border-primary bg-primary/10" : "border-border bg-card",
+              )}
+            >
+              <Icon className="h-6 w-6" />
+              <span className="text-xs font-medium">{iconLabel}</span>
+            </button>
+          ))}
+        </div>
       </div>
     )
   }
@@ -451,21 +496,20 @@ const AdminPanel = () => {
               placeholder="Görsel URL"
               value={content.about?.officeImage || ""}
               onChange={(e) => {
-                const val = e.target.value
-                setContent((prev) => ({
-                  ...prev,
-                  about: { ...prev.about, officeImage: val },
-                }))
+                setContent({
+                  ...content,
+                  about: { ...content.about, officeImage: e.target.value },
+                })
               }}
               className="flex-1"
             />
             <Button
               onClick={() =>
                 handleImageUpload(["officeImage"], "about-office", (url) => {
-                  setContent((prev) => ({
-                    ...prev,
-                    about: { ...prev.about, officeImage: url },
-                  }))
+                  setContent({
+                    ...content,
+                    about: { ...content.about, officeImage: url },
+                  })
                 })
               }
               disabled={isUploading}
@@ -521,18 +565,16 @@ const AdminPanel = () => {
           <h3 className="text-lg font-semibold text-primary">Neden VIERA Construction?</h3>
           <Button
             onClick={() => {
-              setContent((prev) => {
-                const currentItems = prev.about?.whyUs?.items || []
-                return {
-                  ...prev,
-                  about: {
-                    ...prev.about,
-                    whyUs: {
-                      ...prev.about?.whyUs,
-                      items: [...currentItems, { title: "", description: "" }],
-                    },
+              const currentItems = content.about?.whyUs?.items || []
+              setContent({
+                ...content,
+                about: {
+                  ...content.about,
+                  whyUs: {
+                    ...content.about?.whyUs,
+                    items: [...currentItems, { title: "", description: "" }],
                   },
-                }
+                },
               })
             }}
             size="sm"
@@ -550,15 +592,13 @@ const AdminPanel = () => {
                   variant="destructive"
                   size="sm"
                   onClick={() => {
-                    setContent((prev) => {
-                      const newItems = (prev.about?.whyUs?.items || []).filter((_: any, i: number) => i !== index)
-                      return {
-                        ...prev,
-                        about: {
-                          ...prev.about,
-                          whyUs: { ...prev.about?.whyUs, items: newItems },
-                        },
-                      }
+                    const newItems = (content.about?.whyUs?.items || []).filter((_: any, i: number) => i !== index)
+                    setContent({
+                      ...content,
+                      about: {
+                        ...content.about,
+                        whyUs: { ...content.about?.whyUs, items: newItems },
+                      },
                     })
                   }}
                 >
@@ -570,17 +610,14 @@ const AdminPanel = () => {
                   placeholder="Başlık"
                   value={item.title || ""}
                   onChange={(e) => {
-                    const val = e.target.value
-                    setContent((prev) => {
-                      const newItems = [...(prev.about?.whyUs?.items || [])]
-                      newItems[index] = { ...newItems[index], title: val }
-                      return {
-                        ...prev,
-                        about: {
-                          ...prev.about,
-                          whyUs: { ...prev.about?.whyUs, items: newItems },
-                        },
-                      }
+                    const newItems = [...(content.about?.whyUs?.items || [])]
+                    newItems[index] = { ...newItems[index], title: e.target.value }
+                    setContent({
+                      ...content,
+                      about: {
+                        ...content.about,
+                        whyUs: { ...content.about?.whyUs, items: newItems },
+                      },
                     })
                   }}
                 />
@@ -588,17 +625,14 @@ const AdminPanel = () => {
                   placeholder="Açıklama"
                   value={item.description || ""}
                   onChange={(e) => {
-                    const val = e.target.value
-                    setContent((prev) => {
-                      const newItems = [...(prev.about?.whyUs?.items || [])]
-                      newItems[index] = { ...newItems[index], description: val }
-                      return {
-                        ...prev,
-                        about: {
-                          ...prev.about,
-                          whyUs: { ...prev.about?.whyUs, items: newItems },
-                        },
-                      }
+                    const newItems = [...(content.about?.whyUs?.items || [])]
+                    newItems[index] = { ...newItems[index], description: e.target.value }
+                    setContent({
+                      ...content,
+                      about: {
+                        ...content.about,
+                        whyUs: { ...content.about?.whyUs, items: newItems },
+                      },
                     })
                   }}
                 />
@@ -628,7 +662,9 @@ const AdminPanel = () => {
 
         setTimeout(() => {
           const containerRef = servicesContainerRef.current[updatedServices.length - 1]
-          if (containerRef) containerRef.scrollIntoView({ behavior: "smooth", block: "center" })
+          if (containerRef) {
+            containerRef.scrollIntoView({ behavior: "smooth", block: "center" })
+          }
         }, 100)
 
         return {
@@ -658,10 +694,16 @@ const AdminPanel = () => {
     const updateService = (index: number, field: string, value: any) => {
       setContent((prev) => {
         const currentServices = Array.isArray(prev.services?.services) ? [...prev.services.services] : []
-        currentServices[index] = { ...currentServices[index], [field]: value }
+        currentServices[index] = {
+          ...currentServices[index],
+          [field]: value,
+        }
         return {
           ...prev,
-          services: { ...prev.services, services: currentServices },
+          services: {
+            ...prev.services,
+            services: currentServices,
+          },
         }
       })
     }
@@ -712,26 +754,34 @@ const AdminPanel = () => {
                 <div className="space-y-2">
                   <Label>İkon</Label>
                   <div className="grid grid-cols-3 gap-2">
-                    {["Home", "Building", "Landmark", "Hammer", "Wrench", "Package", "Factory", "Warehouse", "Construction"].map(
-                      (iconName) => {
-                        const IconComponent = iconMap[iconName]
-                        return (
-                          <button
-                            key={iconName}
-                            type="button"
-                            onClick={() => updateService(index, "icon", iconName)}
-                            className={`flex flex-col items-center gap-2 p-3 border rounded-lg transition-colors ${
-                              service.icon === iconName
-                                ? "bg-primary text-primary-foreground border-primary"
-                                : "hover:bg-accent"
-                            }`}
-                          >
-                            <IconComponent className="h-6 w-6" />
-                            <span className="text-xs">{iconName}</span>
-                          </button>
-                        )
-                      },
-                    )}
+                    {[
+                      "Home",
+                      "Building",
+                      "Landmark",
+                      "Hammer",
+                      "Wrench", // Changed 'Key' to 'Wrench' to match iconMap
+                      "Package",
+                      "Factory",
+                      "Warehouse",
+                      "Construction",
+                    ].map((iconName) => {
+                      const IconComponent = iconMap[iconName]
+                      return (
+                        <button
+                          key={iconName}
+                          type="button"
+                          onClick={() => updateService(index, "icon", iconName)}
+                          className={`flex flex-col items-center gap-2 p-3 border rounded-lg transition-colors ${
+                            service.icon === iconName
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "hover:bg-accent"
+                          }`}
+                        >
+                          <IconComponent className="h-6 w-6" />
+                          <span className="text-xs">{iconName}</span>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
 
@@ -840,7 +890,9 @@ const AdminPanel = () => {
 
         setTimeout(() => {
           const containerRef = projectsContainerRef.current[`${category}-${updatedProjects[category].length - 1}`]
-          if (containerRef) containerRef.scrollIntoView({ behavior: "smooth", block: "center" })
+          if (containerRef) {
+            containerRef.scrollIntoView({ behavior: "smooth", block: "center" })
+          }
         }, 100)
 
         return { ...prev, projects: updatedProjects }
@@ -853,7 +905,10 @@ const AdminPanel = () => {
         categoryProjects.splice(index, 1)
         return {
           ...prev,
-          projects: { ...prev.projects, [category]: categoryProjects },
+          projects: {
+            ...prev.projects,
+            [category]: categoryProjects,
+          },
         }
       })
     }
@@ -861,18 +916,31 @@ const AdminPanel = () => {
     const updateProjectField = (category: string, index: number, field: string, value: any) => {
       setContent((prev) => {
         const categoryProjects = [...(prev.projects[category] || [])]
-        categoryProjects[index] =
-          field === "title"
-            ? { ...categoryProjects[index], [field]: value, slug: generateSlug(value) }
-            : { ...categoryProjects[index], [field]: value }
+        if (field === "title") {
+          categoryProjects[index] = {
+            ...categoryProjects[index],
+            [field]: value,
+            slug: generateSlug(value),
+          }
+        } else {
+          categoryProjects[index] = {
+            ...categoryProjects[index],
+            [field]: value,
+          }
+        }
         return {
           ...prev,
-          projects: { ...prev.projects, [category]: categoryProjects },
+          projects: {
+            ...prev.projects,
+            [category]: categoryProjects,
+          },
         }
       })
     }
 
     const renderProjectCard = (project: Project, category: string, index: number) => {
+      const uploadKey = `${category}-${index}`
+
       return (
         <div
           ref={(el) => (projectsContainerRef.current[`${category}-${index}`] = el)}
@@ -973,7 +1041,9 @@ const AdminPanel = () => {
                 <Input
                   type="number"
                   value={project.progress || 0}
-                  onChange={(e) => updateProjectField(category, index, "progress", Number.parseInt(e.target.value) || 0)}
+                  onChange={(e) =>
+                    updateProjectField(category, index, "progress", Number.parseInt(e.target.value) || 0)
+                  }
                   min="0"
                   max="100"
                   className="w-24"
@@ -991,7 +1061,11 @@ const AdminPanel = () => {
             <div className="space-y-2">
               {project.mainImage && !project.mainImage.includes("placeholder") && (
                 <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-border">
-                  <img src={project.mainImage || "/placeholder.svg"} alt="Ana görsel önizleme" className="w-full h-full object-cover" />
+                  <img
+                    src={project.mainImage || "/placeholder.svg"}
+                    alt="Ana görsel önizleme"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               )}
               <div className="flex gap-2">
@@ -1005,13 +1079,29 @@ const AdminPanel = () => {
                   type="button"
                   onClick={() => {
                     const uploadKeyMain = `${category}-${index}-main`
-                    handleImageUpload([], uploadKeyMain, (url) => updateProjectField(category, index, "mainImage", url))
+                    handleImageUpload([], uploadKeyMain, (url) => {
+                      updateProjectField(category, index, "mainImage", url)
+                    })
                   }}
                   disabled={isUploading}
                 >
                   {uploadProgress[`${category}-${index}-main`] !== undefined ? "Yükleniyor..." : "Görsel Yükle"}
                 </Button>
               </div>
+              {uploadProgress[`${category}-${index}-main`] !== undefined && (
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Yükleniyor...</span>
+                    <span>{uploadProgress[`${category}-${index}-main`]}%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-500 transition-all duration-300"
+                      style={{ width: `${uploadProgress[`${category}-${index}-main`]}%` }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1021,7 +1111,10 @@ const AdminPanel = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => updateProjectField(category, index, "features", [...(project.features || []), ""])}
+                onClick={() => {
+                  const features = [...(project.features || []), ""]
+                  updateProjectField(category, index, "features", features)
+                }}
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Özellik Ekle
@@ -1061,7 +1154,10 @@ const AdminPanel = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => updateProjectField(category, index, "gallery", [...(project.gallery || []), ""])}
+                onClick={() => {
+                  const gallery = [...(project.gallery || []), ""]
+                  updateProjectField(category, index, "gallery", gallery)
+                }}
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Görsel Ekle
@@ -1072,7 +1168,11 @@ const AdminPanel = () => {
                 <div key={imgIndex} className="space-y-2">
                   {imgUrl && !imgUrl.includes("placeholder") && (
                     <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-border">
-                      <img src={imgUrl || "/placeholder.svg"} alt={`Galeri ${imgIndex + 1} önizleme`} className="w-full h-full object-cover" />
+                      <img
+                        src={imgUrl || "/placeholder.svg"}
+                        alt={`Galeri ${imgIndex + 1} önizleme`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   )}
                   <div className="flex gap-2">
@@ -1098,7 +1198,9 @@ const AdminPanel = () => {
                       }}
                       disabled={isUploading}
                     >
-                      {uploadProgress[`${category}-${index}-gallery-${imgIndex}`] !== undefined ? "Yükleniyor..." : "Yükle"}
+                      {uploadProgress[`${category}-${index}-gallery-${imgIndex}`] !== undefined
+                        ? "Yükleniyor..."
+                        : "Yükle"}
                     </Button>
                     <Button
                       variant="destructive"
@@ -1111,6 +1213,20 @@ const AdminPanel = () => {
                       Sil
                     </Button>
                   </div>
+                  {uploadProgress[`${category}-${index}-gallery-${imgIndex}`] !== undefined && (
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Yükleniyor...</span>
+                        <span>{uploadProgress[`${category}-${index}-gallery-${imgIndex}`]}%</span>
+                      </div>
+                      <div className="h-2 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-blue-500 transition-all duration-300"
+                          style={{ width: `${uploadProgress[`${category}-${index}-gallery-${imgIndex}`]}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -1122,9 +1238,10 @@ const AdminPanel = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() =>
-                  updateProjectField(category, index, "updates", [...(project.updates || []), { date: "", title: "", description: "" }])
-                }
+                onClick={() => {
+                  const updates = [...(project.updates || []), { date: "", title: "", description: "" }]
+                  updateProjectField(category, index, "updates", updates)
+                }}
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Güncelleme Ekle
@@ -1195,7 +1312,9 @@ const AdminPanel = () => {
             Tamamlanmış Proje Ekle
           </Button>
           <div className="space-y-4">
-            {(projectsData.completed || []).map((project: Project, index: number) => renderProjectCard(project, "completed", index))}
+            {(projectsData.completed || []).map((project: Project, index: number) =>
+              renderProjectCard(project, "completed", index),
+            )}
           </div>
         </div>
 
@@ -1209,7 +1328,9 @@ const AdminPanel = () => {
             Devam Eden Proje Ekle
           </Button>
           <div className="space-y-4">
-            {(projectsData.ongoing || []).map((project: Project, index: number) => renderProjectCard(project, "ongoing", index))}
+            {(projectsData.ongoing || []).map((project: Project, index: number) =>
+              renderProjectCard(project, "ongoing", index),
+            )}
           </div>
         </div>
 
@@ -1223,7 +1344,9 @@ const AdminPanel = () => {
             Başlayacak Proje Ekle
           </Button>
           <div className="space-y-4">
-            {(projectsData.upcoming || []).map((project: Project, index: number) => renderProjectCard(project, "upcoming", index))}
+            {(projectsData.upcoming || []).map((project: Project, index: number) =>
+              renderProjectCard(project, "upcoming", index),
+            )}
           </div>
         </div>
       </div>
@@ -1243,6 +1366,15 @@ const AdminPanel = () => {
           {renderInput("Adres", "address", "textarea", "")}
           {renderInput("Google Maps Embed URL", "mapUrl", "textarea", "https://www.google.com/maps/embed?pb=...")}
         </div>
+        <div className="mt-4 p-3 bg-muted/50 rounded border text-sm text-muted-foreground">
+          <p className="font-medium mb-1">Google Maps URL Nasıl Alınır?</p>
+          <ol className="list-decimal list-inside space-y-1 text-xs">
+            <li>Google Maps'te konumunuzu bulun</li>
+            <li>"Paylaş" butonuna tıklayın</li>
+            <li>"Harita yerleştir" sekmesini seçin</li>
+            <li>HTML kodundan src="..." içindeki URL'yi kopyalayın</li>
+          </ol>
+        </div>
       </Card>
 
       <Card className="bg-card rounded-xl p-6 border">
@@ -1250,16 +1382,22 @@ const AdminPanel = () => {
           <h3 className="text-lg font-semibold text-primary">Yetkili Kişiler</h3>
           <Button
             onClick={() => {
-              setContent((prev) => {
-                const team = (prev.contact as any)?.team || []
-                return {
-                  ...prev,
-                  contact: {
-                    ...(prev.contact as any),
-                    team: [...team, { name: "", title: "", icon: "User", phone: "" }],
-                  },
-                }
-              })
+              const team = (content.contact as any)?.team || []
+              setContent((prev) => ({
+                ...prev,
+                contact: {
+                  ...(prev.contact as any),
+                  team: [
+                    ...team,
+                    {
+                      name: "",
+                      title: "",
+                      icon: "User",
+                      phone: "",
+                    },
+                  ],
+                },
+              }))
             }}
             className="flex items-center gap-2"
           >
@@ -1267,7 +1405,6 @@ const AdminPanel = () => {
             Ekle
           </Button>
         </div>
-
         <div className="space-y-4">
           {((content.contact as any)?.team || []).map((person: any, index: number) => (
             <Card key={index} className="p-4 bg-muted/30 border">
@@ -1277,43 +1414,47 @@ const AdminPanel = () => {
                   variant="destructive"
                   size="sm"
                   onClick={() => {
-                    setContent((prev) => {
-                      const team = (prev.contact as any)?.team || []
-                      return {
-                        ...prev,
-                        contact: {
-                          ...(prev.contact as any),
-                          team: team.filter((_: any, i: number) => i !== index),
-                        },
-                      }
-                    })
+                    const team = (content.contact as any)?.team || []
+                    setContent((prev) => ({
+                      ...prev,
+                      contact: {
+                        ...(prev.contact as any),
+                        team: team.filter((_: any, i: number) => i !== index),
+                      },
+                    }))
                   }}
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-
               <div className="space-y-3">
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">İkon Seç</Label>
                   <div className="grid grid-cols-4 gap-2">
                     {["User", "Phone", "Mail", "Briefcase"].map((iconName) => {
                       const Icon =
-                        iconName === "User" ? Users : iconName === "Phone" ? Phone : iconName === "Mail" ? Mail : Briefcase
+                        iconName === "User"
+                          ? Users
+                          : iconName === "Phone"
+                            ? Phone
+                            : iconName === "Mail"
+                              ? Mail
+                              : Briefcase
                       const isSelected = person.icon === iconName
                       return (
                         <button
                           key={iconName}
                           onClick={() => {
-                            setContent((prev) => {
-                              const team = (prev.contact as any)?.team || []
-                              const updated = [...team]
-                              updated[index] = { ...updated[index], icon: iconName }
-                              return {
-                                ...prev,
-                                contact: { ...(prev.contact as any), team: updated },
-                              }
-                            })
+                            const team = (content.contact as any)?.team || []
+                            const updated = [...team]
+                            updated[index] = { ...updated[index], icon: iconName }
+                            setContent((prev) => ({
+                              ...prev,
+                              contact: {
+                                ...(prev.contact as any),
+                                team: updated,
+                              },
+                            }))
                           }}
                           className={`flex items-center justify-center p-3 rounded-lg border-2 transition-all ${
                             isSelected
@@ -1327,46 +1468,52 @@ const AdminPanel = () => {
                     })}
                   </div>
                 </div>
-
                 <Input
                   placeholder="İsim"
                   value={person.name || ""}
                   onChange={(e) => {
-                    const val = e.target.value
-                    setContent((prev) => {
-                      const team = (prev.contact as any)?.team || []
-                      const updated = [...team]
-                      updated[index] = { ...updated[index], name: val }
-                      return { ...prev, contact: { ...(prev.contact as any), team: updated } }
-                    })
+                    const team = (content.contact as any)?.team || []
+                    const updated = [...team]
+                    updated[index] = { ...updated[index], name: e.target.value }
+                    setContent((prev) => ({
+                      ...prev,
+                      contact: {
+                        ...(prev.contact as any),
+                        team: updated,
+                      },
+                    }))
                   }}
                 />
-
                 <Input
                   placeholder="Unvan"
                   value={person.title || ""}
                   onChange={(e) => {
-                    const val = e.target.value
-                    setContent((prev) => {
-                      const team = (prev.contact as any)?.team || []
-                      const updated = [...team]
-                      updated[index] = { ...updated[index], title: val }
-                      return { ...prev, contact: { ...(prev.contact as any), team: updated } }
-                    })
+                    const team = (content.contact as any)?.team || []
+                    const updated = [...team]
+                    updated[index] = { ...updated[index], title: e.target.value }
+                    setContent((prev) => ({
+                      ...prev,
+                      contact: {
+                        ...(prev.contact as any),
+                        team: updated,
+                      },
+                    }))
                   }}
                 />
-
                 <Input
                   placeholder="Telefon"
                   value={person.phone || ""}
                   onChange={(e) => {
-                    const val = e.target.value
-                    setContent((prev) => {
-                      const team = (prev.contact as any)?.team || []
-                      const updated = [...team]
-                      updated[index] = { ...updated[index], phone: val }
-                      return { ...prev, contact: { ...(prev.contact as any), team: updated } }
-                    })
+                    const team = (content.contact as any)?.team || []
+                    const updated = [...team]
+                    updated[index] = { ...updated[index], phone: e.target.value }
+                    setContent((prev) => ({
+                      ...prev,
+                      contact: {
+                        ...(prev.contact as any),
+                        team: updated,
+                      },
+                    }))
                   }}
                 />
               </div>
@@ -1460,7 +1607,7 @@ const AdminPanel = () => {
             value={activeTab}
             onValueChange={(value) => {
               setActiveTab(value as ContentType)
-              loadContent(value as ContentType, { keepActiveTab: true })
+              loadContent(value as ContentType)
             }}
           >
             <TabsList className="flex border-b bg-muted/30">
