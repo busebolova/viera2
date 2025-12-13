@@ -1,5 +1,3 @@
-export const fetchCache = "force-no-store"
-
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -90,15 +88,14 @@ async function getHomeContent() {
   try {
     const timestamp = Date.now()
     const data = await getContent("home", timestamp)
-  return {
-  video: data?.video ?? defaultContent.video,
-  stats: data?.stats ?? defaultContent.stats,
-  experience: data?.experience ?? defaultContent.experience,
-  process: data?.process ?? defaultContent.process,
-  whyUs: data?.whyUs ?? defaultContent.whyUs,
-  cta: data?.cta ?? defaultContent.cta,
-}
-
+    return {
+      video: data?.video || defaultContent.video,
+      stats: data?.stats || defaultContent.stats,
+      experience: data?.experience || defaultContent.experience,
+      process: data?.process || defaultContent.process,
+      whyUs: data?.whyUs || defaultContent.whyUs,
+      cta: data?.cta || defaultContent.cta,
+    }
   } catch (error) {
     console.error("[v0] Home content error:", error)
     return defaultContent

@@ -9,8 +9,8 @@
   "completed": [
     {
       "id": "validebag-27-28",
-      "slug": "valideba-27-28-blok22",
-      "title": "Validebağ 27-28 Blok22",
+      "slug": "validebag-27-28-blok",
+      "title": "Validebağ 27-28 Blok",
       "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
       "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
       "details": "56 Daire",
@@ -20,7 +20,7 @@
       "units": "56 Daire",
       "floors": "8 Kat",
       "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/amblem-3ZWMuQIGZbt1i2YRznGncENyM9wuxi.png",
+      "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600",
@@ -48,18 +48,9 @@
       "units": "36 Daire",
       "floors": "6 Kat",
       "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/amblem2-jMOjvwjITpS2m6OXRkIBKJplCHNFCH.jpg",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
-      "features": [
-        "Merkezi konum",
-        "Kaliteli malzeme",
-        "Kapalı otopark",
-        "Peyzaj düzenlemesi",
-        "Çocuk oyun alanı"
-      ]
+      "mainImage": "/placeholder.svg?height=400&width=600",
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
     },
     {
       "id": "eski-anadolu-b",
@@ -76,19 +67,14 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": [
-        "Kentsel dönüşüm projesi",
-        "Depreme dayanıklı yapı",
-        "Modern altyapı",
-        "Yalıtım sistemi"
-      ]
+      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
     }
   ],
   "ongoing": [
     {
       "id": "validebag-29",
-      "slug": "valideba-29-kentsel-d-n-m-dede",
-      "title": "Validebağ 29 Kentsel Dönüşüm dede",
+      "slug": "validebag-29-kentsel-donusum",
+      "title": "Validebağ 29 Kentsel Dönüşüm",
       "shortDescription": "38 Daire - Kaba inşaat tamamlandı",
       "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
       "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
@@ -100,11 +86,8 @@
       "floors": "8 Kat",
       "progress": 65,
       "status": "ongoing",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/go%C3%8C%C2%88rsel1-csHoUmiSPCbD3K649Y1AOgdojb3xZ5.jpg",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
+      "mainImage": "/placeholder.svg?height=400&width=600",
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
