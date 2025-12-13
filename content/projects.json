@@ -204,5 +204,12 @@
       "gallery": [],
       "features": []
     }
-  ]
+  ],
+  "projects": {
+    "completed": {
+      "0": {
+        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/c%CC%A72.jpg"
+      }
+    }
+  }
 }
