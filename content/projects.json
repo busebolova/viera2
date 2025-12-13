@@ -97,9 +97,18 @@
       "floors": "deneme",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [],
+      "gallery": [
+        "/art-gallery.png"
+      ],
       "features": [
         "deneme"
+      ],
+      "updates": [
+        {
+          "date": "deneme",
+          "title": "",
+          "description": ""
+        }
       ]
     },
     {
