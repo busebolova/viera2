@@ -1,18 +1,18 @@
 {
   "video": {
     "url": "https://cdn.pixabay.com/video/2020/06/23/42923-434300950_large.mp4",
-    "title": "VIERA - Alkan Yapı & Viera Ortaklığı 2",
+    "title": "VIERA - Alkan Yapı & Viera Ortaklığı deneme",
     "subtitle": "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri"
   },
   "stats": {
     "founded": "1965 2",
-    "foundedLabel": "KURULUŞ YILI",
-    "employees": "50+",
-    "employeesLabel": "ÇALIŞAN",
+    "foundedLabel": "deneme denemKURULUŞ YILI",
+    "employees": "deneme 50+ ",
+    "employeesLabel": "ÇALIŞANdeneme ",
     "completedProjects": "100+",
-    "completedProjectsLabel": "TAMAMLANAN PROJE",
+    "completedProjectsLabel": "TAMAMLANAN PROJEdeneme ",
     "experience": "60+",
-    "experienceLabel": "YIL DENEYİM"
+    "experienceLabel": "YIL DENEYİM deneme"
   },
   "experience": {
     "title": "60 Yılı Aşkın Tecrübe deneme",
@@ -52,17 +52,17 @@
         "description": "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz."
       },
       {
-        "title": "Yenilikçilik",
-        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz."
+        "title": "Yenilikçilikdeneme",
+        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz.  deneme deneme"
       },
       {
-        "title": "Sürdürülebilirlik",
-        "description": "Çevre duyarlı projeler geliştiriyoruz."
+        "title": "eSürdürülebilirlik",
+        "description": "Çevre duyarlı projeler geliştiriyoruz. deneme den"
       }
     ]
   },
   "cta": {
-    "title": "Projeniz İçin Bizimle İletişime Geçin",
-    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."
+    "title": "Projeniz İçin Bizimle İletişime Geçin deneme",
+    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim. deneme"
   }
 }
