@@ -1,7 +1,13 @@
 {
   "hero": {
     "title": "VIERA - Alkan Yapı & Viera Ortaklığı",
-    "typewriterWords": ["Güven", "Kalite", "Profesyonellik", "Deneyim", "Başarı"],
+    "typewriterWords": [
+      "Güven",
+      "Kalite",
+      "Profesyonellik",
+      "Deneyim",
+      "Başarı"
+    ],
     "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
     "buttonText": "Hizmetlerimiz",
     "buttonLink": "/hizmetlerimiz",
@@ -10,7 +16,7 @@
   },
   "video": {
     "url": "/construction-site-timelapse.jpg",
-    "title": "VIERA - Alkan Yapı & Viera Ortaklığı",
+    "title": " 2VIERA - Alkan Yapı & Viera Ortaklığı",
     "subtitle": "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri"
   },
   "stats": {
