@@ -82,13 +82,30 @@
         "Modern altyapı",
         "Yalıtım sistemi"
       ]
+    },
+    {
+      "id": "project-1765628073519",
+      "slug": "yeni-proje-1765628073519",
+      "title": "Yeni Proje",
+      "shortDescription": "Kısa açıklama",
+      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
+      "year": "2025",
+      "location": "İstanbul",
+      "area": "5.000 m²",
+      "units": "40 Daire",
+      "floors": "8 Kat",
+      "status": "completed",
+      "mainImage": "/construction-site-overview.png",
+      "gallery": [],
+      "features": [],
+      "updates": []
     }
   ],
   "ongoing": [
     {
       "id": "validebag-29",
-      "slug": "validebag-29-kentsel-donusum",
-      "title": "Validebağ 29 Kentsel Dönüşüm",
+      "slug": "valideba-29-kentsel-d-n-m-deneme",
+      "title": "Validebağ 29 Kentsel Dönüşüm deneme",
       "shortDescription": "38 Daire - Kaba inşaat tamamlandı",
       "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
       "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
@@ -142,5 +159,12 @@
       "gallery": [],
       "features": []
     }
-  ]
+  ],
+  "projects": {
+    "completed": {
+      "3": {
+        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/m3.jpg"
+      }
+    }
+  }
 }
