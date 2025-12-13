@@ -27,7 +27,7 @@
     },
     {
       "id": "commercial",
-      "icon": "Building",
+      "icon": "Factory",
       "title": "Ticari Projeler",
       "description": "İş dünyasına hitap eden modern ticari binalar",
       "items": [
