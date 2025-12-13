@@ -99,6 +99,23 @@
       "gallery": [],
       "features": [],
       "updates": []
+    },
+    {
+      "id": "project-1765628216569",
+      "slug": "tamamaland-yeni-proje",
+      "title": " tamamalandı Yeni Proje",
+      "shortDescription": "Kısa açıklama",
+      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
+      "year": "2025",
+      "location": "İstanbul",
+      "area": "5.000 m²",
+      "units": "40 Daire",
+      "floors": "8 Kat",
+      "status": "completed",
+      "mainImage": "/construction-site-overview.png",
+      "gallery": [],
+      "features": [],
+      "updates": []
     }
   ],
   "ongoing": [
@@ -141,6 +158,24 @@
           "description": "Çatı katı betonarme işleri tamamlanmıştır."
         }
       ]
+    },
+    {
+      "id": "project-1765628228286",
+      "slug": "yeni-proje-devame-den",
+      "title": "Yeni Proje devame den",
+      "shortDescription": "Kısa açıklama",
+      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
+      "year": "2025",
+      "location": "İstanbul",
+      "area": "5.000 m²",
+      "units": "40 Daire",
+      "floors": "8 Kat",
+      "status": "ongoing",
+      "mainImage": "/construction-site-overview.png",
+      "gallery": [],
+      "features": [],
+      "progress": 0,
+      "updates": []
     }
   ],
   "upcoming": [
@@ -158,6 +193,23 @@
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
       "features": []
+    },
+    {
+      "id": "project-1765628236452",
+      "slug": "yeni-proje-ba-layacak",
+      "title": "Yeni Proje başlayacak",
+      "shortDescription": "Kısa açıklama",
+      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
+      "year": "2025",
+      "location": "İstanbul",
+      "area": "5.000 m²",
+      "units": "40 Daire",
+      "floors": "8 Kat",
+      "status": "upcoming",
+      "mainImage": "/construction-site-overview.png",
+      "gallery": [],
+      "features": [],
+      "updates": []
     }
   ],
   "projects": {
