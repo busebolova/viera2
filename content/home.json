@@ -1,21 +1,21 @@
 {
   "video": {
     "url": "https://cdn.pixabay.com/video/2020/06/23/42923-434300950_large.mp4",
-    "title": "VIERA - Alkan Yapı & Viera Ortaklığı deneme",
+    "title": "VIERA - Alkan Yapı & Viera Ortaklığı",
     "subtitle": "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri"
   },
   "stats": {
-    "founded": "1965 2",
-    "foundedLabel": "deneme denemKURULUŞ YILI",
-    "employees": "deneme 50+ ",
-    "employeesLabel": "ÇALIŞANdeneme ",
+    "founded": "1965",
+    "foundedLabel": "KURULUŞ YILI",
+    "employees": "50+ ",
+    "employeesLabel": "ÇALIŞAN",
     "completedProjects": "100+",
-    "completedProjectsLabel": "TAMAMLANAN PROJEdeneme ",
+    "completedProjectsLabel": "TAMAMLANAN PROJE",
     "experience": "60+",
-    "experienceLabel": "YIL DENEYİM deneme"
+    "experienceLabel": "YIL DENEYİM"
   },
   "experience": {
-    "title": "60 Yılı Aşkın Tecrübe deneme",
+    "title": "60 Yılı Aşkın Tecrübe",
     "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
   "process": {
@@ -52,17 +52,17 @@
         "description": "Söz verdiğimiz zamanda, söz verdiğimiz kalitede teslim ediyoruz."
       },
       {
-        "title": "Yenilikçilikdeneme",
-        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz.  deneme deneme"
+        "title": "Yenilikçilik",
+        "description": "Sektördeki en son teknolojileri ve yöntemleri kullanıyoruz."
       },
       {
-        "title": "eSürdürülebilirlik",
-        "description": "Çevre duyarlı projeler geliştiriyoruz. deneme den"
+        "title": "Sürdürülebilirlik",
+        "description": "Çevre duyarlı projeler geliştiriyoruz."
       }
     ]
   },
   "cta": {
-    "title": "Projeniz İçin Bizimle İletişime Geçin deneme",
-    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim. deneme"
+    "title": "Projeniz İçin Bizimle İletişime Geçin",
+    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."
   }
 }
