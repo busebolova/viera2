@@ -87,8 +87,8 @@
   "ongoing": [
     {
       "id": "validebag-29",
-      "slug": "validebag-29-kentsel-donusum",
-      "title": "Validebağ 29 Kentsel Dönüşüm",
+      "slug": "valideba-29-kentsel-d-n-m-dede",
+      "title": "Validebağ 29 Kentsel Dönüşüm dede",
       "shortDescription": "38 Daire - Kaba inşaat tamamlandı",
       "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
       "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
@@ -100,7 +100,7 @@
       "floors": "8 Kat",
       "progress": 65,
       "status": "ongoing",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/go%C3%8C%C2%88rsel1-csHoUmiSPCbD3K649Y1AOgdojb3xZ5.jpg",
       "gallery": [
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600"
