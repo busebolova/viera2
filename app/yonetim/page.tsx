@@ -448,28 +448,170 @@ const AdminPanel = () => {
     )
   }
 
-  const renderHomeEditor = () => (
-    <div className="space-y-8 p-6 bg-card rounded-lg border">
-      <div className="space-y-6">
-        <h3 className="text-lg font-semibold">Hero / Video Bölümü</h3>
-        {renderInput("Video URL", "video.url")}
-        {renderInput("Hero Başlık", "video.title")}
-        {renderInput("Hero Alt Başlık", "video.subtitle")}
-      </div>
+const renderHomeEditor = () => (
+  <div className="space-y-10 p-6 bg-card rounded-lg border">
 
-      <div className="space-y-6">
-        <h3 className="text-lg font-semibold">Çalışma Sürecimiz</h3>
-        {renderInput("Başlık", "process.title")}
-        {renderInput("Alt Başlık", "process.subtitle")}
-      </div>
-
-      <div className="space-y-6">
-        <h3 className="text-lg font-semibold">İletişim Çağrısı (CTA)</h3>
-        {renderInput("Başlık", "cta.title")}
-        {renderInput("Açıklama", "cta.description", "textarea")}
-      </div>
+    {/* HERO / VIDEO */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">Hero / Video Bölümü</h3>
+      {renderInput("Video URL", "video.url")}
+      {renderInput("Hero Başlık", "video.title")}
+      {renderInput("Hero Alt Başlık", "video.subtitle")}
     </div>
-  )
+
+    {/* EXPERIENCE */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">Deneyim ve Uzmanlık</h3>
+      {renderInput("Başlık", "experience.title")}
+      {renderInput("Açıklama", "experience.description", "textarea")}
+    </div>
+
+    {/* PROCESS */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">Çalışma Sürecimiz</h3>
+      {renderInput("Başlık", "process.title")}
+      {renderInput("Alt Başlık", "process.subtitle")}
+
+      {(content.home?.process?.steps || []).map((step: any, index: number) => (
+        <div key={index} className="border rounded-lg p-4 space-y-2">
+          <div className="flex justify-between items-center">
+            <strong>Adım {index + 1}</strong>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => {
+                const steps = content.home.process.steps.filter((_: any, i: number) => i !== index)
+                setContent({
+                  ...content,
+                  home: {
+                    ...content.home,
+                    process: { ...content.home.process, steps },
+                  },
+                })
+              }}
+            >
+              Sil
+            </Button>
+          </div>
+
+          <Input
+            placeholder="Başlık"
+            value={step.title || ""}
+            onChange={(e) => {
+              const steps = [...content.home.process.steps]
+              steps[index].title = e.target.value
+              setContent({
+                ...content,
+                home: { ...content.home, process: { ...content.home.process, steps } },
+              })
+            }}
+          />
+
+          <Textarea
+            placeholder="Açıklama"
+            value={step.description || ""}
+            onChange={(e) => {
+              const steps = [...content.home.process.steps]
+              steps[index].description = e.target.value
+              setContent({
+                ...content,
+                home: { ...content.home, process: { ...content.home.process, steps } },
+              })
+            }}
+          />
+        </div>
+      ))}
+
+      <Button
+        size="sm"
+        onClick={() => {
+          const steps = [...(content.home?.process?.steps || []), { title: "", description: "" }]
+          setContent({
+            ...content,
+            home: { ...content.home, process: { ...content.home.process, steps } },
+          })
+        }}
+      >
+        <Plus className="h-4 w-4 mr-1" />
+        Adım Ekle
+      </Button>
+    </div>
+
+    {/* WHY US */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">Neden Bizi Seçmelisiniz?</h3>
+      {renderInput("Başlık", "whyUs.title")}
+
+      {(content.home?.whyUs?.items || []).map((item: any, index: number) => (
+        <div key={index} className="border rounded-lg p-4 space-y-2">
+          <div className="flex justify-between items-center">
+            <strong>Özellik {index + 1}</strong>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => {
+                const items = content.home.whyUs.items.filter((_: any, i: number) => i !== index)
+                setContent({
+                  ...content,
+                  home: { ...content.home, whyUs: { ...content.home.whyUs, items } },
+                })
+              }}
+            >
+              Sil
+            </Button>
+          </div>
+
+          <Input
+            placeholder="Başlık"
+            value={item.title || ""}
+            onChange={(e) => {
+              const items = [...content.home.whyUs.items]
+              items[index].title = e.target.value
+              setContent({
+                ...content,
+                home: { ...content.home, whyUs: { ...content.home.whyUs, items } },
+              })
+            }}
+          />
+
+          <Textarea
+            placeholder="Açıklama"
+            value={item.description || ""}
+            onChange={(e) => {
+              const items = [...content.home.whyUs.items]
+              items[index].description = e.target.value
+              setContent({
+                ...content,
+                home: { ...content.home, whyUs: { ...content.home.whyUs, items } },
+              })
+            }}
+          />
+        </div>
+      ))}
+
+      <Button
+        size="sm"
+        onClick={() => {
+          const items = [...(content.home?.whyUs?.items || []), { title: "", description: "" }]
+          setContent({
+            ...content,
+            home: { ...content.home, whyUs: { ...content.home.whyUs, items } },
+          })
+        }}
+      >
+        <Plus className="h-4 w-4 mr-1" />
+        Özellik Ekle
+      </Button>
+    </div>
+
+    {/* CTA */}
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold">İletişim Çağrısı (CTA)</h3>
+      {renderInput("Başlık", "cta.title")}
+      {renderInput("Açıklama", "cta.description", "textarea")}
+    </div>
+  </div>
+)
 
   const renderAboutEditor = () => (
     <div className="space-y-6">
