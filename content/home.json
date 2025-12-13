@@ -1,13 +1,17 @@
 {
-  "video": {
-    "url": "https://cdn.pixabay.com/video/2020/06/23/42923-434300950_large.mp4",
-    "title": "VIERA - Alkan Yapı & Viera Ortaklığı",
-    "subtitle": "60 Yılı Aşkın Deneyim ile İnşaat ve Yapı Çözümleri"
+  "hero": {
+    "title": "Viera & Alkan Yapı",
+    "typewriterWords": ["Güven", "Kalite", "Profesyonellik", "Deneyim", "Başarı"],
+    "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
+    "buttonText": "Hizmetlerimiz",
+    "buttonLink": "/hizmetlerimiz",
+    "secondButtonText": "İletişime Geçin",
+    "secondButtonLink": "/iletisim"
   },
   "stats": {
     "founded": "1965",
     "foundedLabel": "KURULUŞ YILI",
-    "employees": "50+ ",
+    "employees": "50+",
     "employeesLabel": "ÇALIŞAN",
     "completedProjects": "100+",
     "completedProjectsLabel": "TAMAMLANAN PROJE",
@@ -18,27 +22,11 @@
     "title": "60 Yılı Aşkın Tecrübe",
     "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir."
   },
-  "process": {
-    "title": "Çalışma Sürecimiz",
-    "subtitle": "Projelerinizi nasıl hayata geçiriyoruz",
-    "steps": [
-      {
-        "title": "Planlama",
-        "description": "Projenizi detaylı analiz ediyor ve en uygun çözümleri sunuyoruz"
-      },
-      {
-        "title": "Tasarım",
-        "description": "Mimarlar ve mühendislerimiz projenizi tasarlıyor"
-      },
-      {
-        "title": "İnşaat",
-        "description": "Uzman ekibimizle projenizi kaliteli bir şekilde inşa ediyoruz"
-      },
-      {
-        "title": "Teslim",
-        "description": "Projenizi zamanında ve eksiksiz olarak teslim ediyoruz"
-      }
-    ]
+  "about": {
+    "badge": "Hakkımızda",
+    "title": "Firma Geçmişimiz",
+    "description": "Kurucumuz Servet Alkan'ın temellerini attığı firmamız, 60 yılı aşkın deneyimi ve köklü geçmişinden aldığı güçle konut ve iş yeri üretimine aralıksız devam etmektedir. Çağın gereksinimlerine uygun, estetik ve fonksiyonel yapılar inşa etme anlayışımızla, her projede titizlikle çalışıyor, güven ve kaliteyi ön planda tutuyoruz.",
+    "image": "/about-office.jpg"
   },
   "whyUs": {
     "title": "Neden VIERA Construction?",
@@ -57,12 +45,8 @@
       },
       {
         "title": "Sürdürülebilirlik",
-        "description": "Çevre duyarlı projeler geliştiriyoruz."
+        "description": "Çevreye duyarlı projeler geliştiriyoruz."
       }
     ]
-  },
-  "cta": {
-    "title": "Projeniz İçin Bizimle İletişime Geçin",
-    "description": "60 yılı aşkın deneyimimiz ve uzman kadromuzla hayalinizdeki projeyi birlikte hayata geçirelim."
   }
 }

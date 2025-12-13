@@ -1,18 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import {
-  ChevronRight,
-  Users,
-  Award,
-  Calendar,
-  Target,
-  Eye,
-  Heart,
-  CheckCircle,
-  MapPin,
-  Phone,
-  FileCheck,
-} from "lucide-react"
+import { ChevronRight, Users, Award, Calendar, Target, Eye, Heart, CheckCircle, FileCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getContent } from "@/lib/github-content"
 
@@ -26,6 +14,7 @@ export const revalidate = 0
 
 export default async function AboutPage() {
   const aboutData = await getContent<any>("about")
+  const contactData = await getContent<any>("contact")
 
   const stats = [
     {
@@ -59,48 +48,14 @@ export default async function AboutPage() {
                   Firmamız <strong>{aboutData.certificate}</strong>ne sahiptir. {aboutData.certificateDescription}
                 </p>
 
-                {/* Contact Info Card */}
-                <div className="bg-muted rounded-lg p-6 space-y-4">
-                  <h3 className="font-semibold text-lg">Firma Bilgileri</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3">
-                      <MapPin className="h-5 w-5 text-foreground shrink-0 mt-0.5" />
-                      <span className="text-sm text-muted-foreground leading-relaxed">
-                        {aboutData.contact?.address}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Users className="h-5 w-5 text-foreground shrink-0" />
-                      <span className="text-sm text-muted-foreground">
-                        Yetkili: <strong>{aboutData.contact?.authorized}</strong>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-foreground shrink-0" />
-                      <span className="text-sm text-muted-foreground">
-                        Tel:{" "}
-                        <a
-                          href={`tel:${aboutData.contact?.phone?.replace(/\s/g, "")}`}
-                          className="font-medium hover:underline"
-                        >
-                          {aboutData.contact?.phone}
-                        </a>{" "}
-                        | Fax: {aboutData.contact?.fax}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-foreground shrink-0" />
-                      <span className="text-sm text-muted-foreground">
-                        Cep:{" "}
-                        <a
-                          href={`tel:${aboutData.contact?.mobile?.replace(/\s/g, "")}`}
-                          className="font-medium hover:underline"
-                        >
-                          {aboutData.contact?.mobile}
-                        </a>
-                      </span>
-                    </div>
-                  </div>
+                <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-dashed">
+                  <p className="text-sm text-muted-foreground text-center">
+                    <strong>İletişim bilgileri için</strong>{" "}
+                    <Link href="/iletisim" className="font-semibold text-primary hover:underline">
+                      İletişim sayfamızı
+                    </Link>{" "}
+                    ziyaret edebilirsiniz.
+                  </p>
                 </div>
               </div>
               <div className="relative rounded-xl overflow-hidden shadow-2xl">

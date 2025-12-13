@@ -1,17 +1,9 @@
 {
-  "phone": "0216 391 49 40",
-  "fax": "0216 310 90 74",
-  "mobile": "0533 479 83 87",
-  "whatsapp": "905334798387",
-  "email": "info@alkanyapi.com.tr",
   "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
-  "mapUrl": "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d53858.236823471394!2d29.006589928162242!3d41.03530585828458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sAltunizade%20Mah.%20Ord.%20Prof%20Fahrettin%20Kerim%20G%C3%B6kay%20Cad.%20No7%2F8%20%C3%9Csk%C3%BCdar%2F%20%C4%B0stanbul!5e1!3m2!1str!2str!4v1765626031460!5m2!1str!2str\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=",
-  "team": [
-    {
-      "name": "Erdem Alkan",
-      "title": "Yetkili Kişi",
-      "icon": "User",
-      "phone": "0533 479 83 87"
-    }
-  ]
+  "phone": "0216 391 49 40",
+  "mobile": "0533 479 83 87",
+  "email": "info@alkanyapi.com.tr",
+  "fax": "0216 310 90 74",
+  "authorized": "Erdem Alkan",
+  "hours": "Pazartesi - Cuma: 09:00 - 18:00"
 }

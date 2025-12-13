@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail } from "lucide-react"
+import { MapPin, Phone, Mail, Briefcase, Users } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
 import { getContent } from "@/lib/github-content"
 
@@ -13,6 +13,8 @@ export const revalidate = 0
 
 export default async function ContactPage() {
   const contactData = await getContent<any>("contact")
+
+  console.log("[v0] Contact page - contactData:", JSON.stringify(contactData, null, 2))
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">
@@ -39,8 +41,8 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-medium">Telefon</h3>
-                    <p className="text-muted-foreground">{contactData.phone}</p>
-                    <p className="text-muted-foreground">{contactData.mobile}</p>
+                    <p className="text-muted-foreground">{contactData?.phone || "0216 391 49 40"}</p>
+                    <p className="text-muted-foreground">{contactData?.mobile || "0533 479 83 87"}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -49,7 +51,7 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-medium">E-posta</h3>
-                    <p className="text-muted-foreground">{contactData.email}</p>
+                    <p className="text-muted-foreground">{contactData?.email || "info@alkanyapi.com.tr"}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -58,45 +60,47 @@ export default async function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-medium">Adres</h3>
-                    <p className="text-muted-foreground">{contactData.address}</p>
+                    <p className="text-muted-foreground">
+                      {contactData?.address ||
+                        "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul"}
+                    </p>
                   </div>
                 </div>
 
-                {contactData.team && contactData.team.length > 0 && (
+                {contactData?.team && contactData.team.length > 0 && (
                   <>
-                    {contactData.team.map((person: any, index: number) => (
-                      <div key={index} className="flex items-start">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 mr-4">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="h-5 w-5"
-                          >
-                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                          </svg>
+                    {contactData.team.map((person: any, index: number) => {
+                      const IconComponent =
+                        person.icon === "Phone"
+                          ? Phone
+                          : person.icon === "Mail"
+                            ? Mail
+                            : person.icon === "Briefcase"
+                              ? Briefcase
+                              : Users
+                      return (
+                        <div key={index} className="flex items-start">
+                          <div className="flex items-center justify-center h-10 w-10 rounded-full bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200 mr-4">
+                            <IconComponent className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <h3 className="font-medium">{person.title || "Yetkili Kişi"}</h3>
+                            <p className="text-muted-foreground font-semibold">{person.name}</p>
+                            {person.phone && <p className="text-muted-foreground text-sm">{person.phone}</p>}
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-medium">{person.title || "Yetkili Kişi"}</h3>
-                          <p className="text-muted-foreground font-semibold">{person.name}</p>
-                          {person.phone && <p className="text-muted-foreground text-sm">{person.phone}</p>}
-                          {person.email && <p className="text-muted-foreground text-sm">{person.email}</p>}
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </>
                 )}
               </div>
               <div className="aspect-video overflow-hidden rounded-xl border shadow-lg">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.4725!2d29.0238!3d41.0228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzIyLjQiTiAyOcKwMDEnMjUuNyJF!5e0!3m2!1str!2str!4v1620000000000!5m2!1str!2str"
+                  key={contactData?.mapUrl || "default-map"}
+                  src={
+                    contactData?.mapUrl ||
+                    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010.4725!2d29.0238!3d41.0228!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzIyLjQiTiAyOcKwMDEnMjUuNyJF!5e0!3m2!1str!2str!4v1620000000000!5m2!1str!2str"
+                  }
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}

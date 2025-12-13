@@ -38,10 +38,6 @@ export const revalidate = 0
 export default async function ProjectsPage() {
   const projectsData = await getProjects()
 
-  console.log("[v0] Projects loaded - completed:", projectsData.completed?.length || 0)
-  console.log("[v0] Projects loaded - ongoing:", projectsData.ongoing?.length || 0)
-  console.log("[v0] Projects loaded - upcoming:", projectsData.upcoming?.length || 0)
-
   return (
     <div className="min-h-screen pb-16 md:pb-0">
       {/* Projects Sections */}
@@ -64,7 +60,6 @@ export default async function ProjectsPage() {
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.ongoing.map((project) => {
                   const projectImage = project.mainImage || project.image || "/placeholder.svg"
-                  console.log("[v0] Ongoing project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}
@@ -99,7 +94,6 @@ export default async function ProjectsPage() {
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.upcoming.map((project) => {
                   const projectImage = project.mainImage || project.image || "/placeholder.svg"
-                  console.log("[v0] Upcoming project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}
@@ -134,7 +128,6 @@ export default async function ProjectsPage() {
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projectsData.completed.map((project) => {
                   const projectImage = project.mainImage || project.image || "/placeholder.svg"
-                  console.log("[v0] Completed project:", project.title, "slug:", project.slug, "image:", projectImage)
                   return (
                     <ProjectCard
                       key={project.id}

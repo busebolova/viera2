@@ -9,8 +9,8 @@
   "completed": [
     {
       "id": "validebag-27-28",
-      "slug": "validebag-27-28-blok-deneme",
-      "title": "Validebağ 27-28 Blok deneme",
+      "slug": "validebag-27-28-blok",
+      "title": "Validebağ 27-28 Blok",
       "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
       "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
       "details": "56 Daire",
@@ -49,17 +49,8 @@
       "floors": "6 Kat",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
-      "features": [
-        "Merkezi konum",
-        "Kaliteli malzeme",
-        "Kapalı otopark",
-        "Peyzaj düzenlemesi",
-        "Çocuk oyun alanı"
-      ]
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
     },
     {
       "id": "eski-anadolu-b",
@@ -76,91 +67,7 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": [
-        "Kentsel dönüşüm projesi",
-        "Depreme dayanıklı yapı",
-        "Modern altyapı",
-        "Yalıtım sistemi"
-      ]
-    },
-    {
-      "id": "project-1765625308766",
-      "slug": "deneme",
-      "title": "deneme",
-      "shortDescription": "deneme",
-      "fullDescription": "deneme",
-      "details": "deneme",
-      "year": "2025",
-      "location": "deneme",
-      "area": "deneme",
-      "units": "deneme",
-      "floors": "deneme",
-      "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/art-gallery.png"
-      ],
-      "features": [
-        "deneme"
-      ],
-      "updates": [
-        {
-          "date": "deneme",
-          "title": "",
-          "description": ""
-        }
-      ]
-    },
-    {
-      "id": "project-1765626066518",
-      "slug": "deneme",
-      "title": "deneme",
-      "shortDescription": "Proje deneme",
-      "fullDescription": "Detaylı proje açıklaması",
-      "details": "Proje detayları",
-      "year": "2025",
-      "location": "Lokasyon",
-      "area": "Alan bilgisi",
-      "units": "Ünite sayısı",
-      "floors": "Kat sayısı",
-      "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [],
-      "features": []
-    },
-    {
-      "id": "project-1765626697202",
-      "slug": "yeni-proje-1765626697202",
-      "title": "Yeni Proje",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "completed",
-      "mainImage": "/construction-site-overview.png",
-      "gallery": [],
-      "features": [],
-      "updates": []
-    },
-    {
-      "id": "project-1765627525635",
-      "slug": "yeni-proje-1765627525635",
-      "title": "Yeni Proje",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "completed",
-      "mainImage": "/construction-site-overview.png",
-      "gallery": [],
-      "features": [],
-      "updates": []
+      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
     }
   ],
   "ongoing": [
@@ -177,13 +84,10 @@
       "area": "6.200 m²",
       "units": "38 Daire",
       "floors": "8 Kat",
-      "progress": 35,
+      "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
@@ -208,8 +112,8 @@
   "upcoming": [
     {
       "id": "yeni-proje-2025",
-      "slug": "yeni-proje-2025-deneme",
-      "title": "Yeni Proje 2025 deneme",
+      "slug": "yeni-proje-2025",
+      "title": "Yeni Proje 2025",
       "shortDescription": "Yakında başlayacak yeni projemiz",
       "fullDescription": "2025 yılında başlayacak yeni projemiz hakkında detaylar yakında paylaşılacaktır.",
       "details": "Detaylar yakında açıklanacak",
@@ -221,15 +125,5 @@
       "gallery": [],
       "features": []
     }
-  ],
-  "projects": {
-    "completed": {
-      "0": {
-        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/c%CC%A72.jpg"
-      },
-      "6": {
-        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/i2.jpg"
-      }
-    }
-  }
+  ]
 }

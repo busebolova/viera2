@@ -18,8 +18,15 @@ const iconMap: Record<string, any> = {
   Landmark,
 }
 
-export default async function ServicesPage() {
+async function getServicesData() {
   const servicesData = await getContent<any>("services")
+  return servicesData
+}
+
+export default async function ServicesPage() {
+  const servicesData = await getServicesData()
+
+  console.log("[v0] Hizmetler sayfası render edildi, servis sayısı:", servicesData.services?.length || 0)
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">

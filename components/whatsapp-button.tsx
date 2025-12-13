@@ -2,26 +2,31 @@
 
 import { useEffect, useState } from "react"
 
-export default function WhatsAppButton() {
-  const [whatsappNumber, setWhatsappNumber] = useState("905334798387")
+export default function WhatsAppButton({ whatsappNumber }: { whatsappNumber?: string }) {
+  const [number, setNumber] = useState(whatsappNumber || "905334798387")
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
 
-    fetch("/api/github/content?file=contact")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.data?.whatsapp) {
-          setWhatsappNumber(data.data.whatsapp)
-        }
-      })
-      .catch(() => {})
-  }, [])
+    // Eğer prop gelmezse API'den çek
+    if (!whatsappNumber) {
+      fetch("/api/github/content?file=contact")
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.content?.whatsapp) {
+            setNumber(data.content.whatsapp)
+          }
+        })
+        .catch(() => {})
+    } else {
+      setNumber(whatsappNumber)
+    }
+  }, [whatsappNumber])
 
   return (
     <a
-      href={`https://wa.me/${whatsappNumber}`}
+      href={`https://wa.me/${number}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="WhatsApp ile iletişime geçin"
