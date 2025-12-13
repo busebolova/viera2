@@ -64,6 +64,13 @@
           "description": "Konut, ofis, alışveriş ve sosyal alanları içeren büyük ölçekli projeler"
         }
       ]
+    },
+    {
+      "id": "service-1765626882801",
+      "icon": "Building",
+      "title": "Yeni Hizmet",
+      "description": "Hizmet açıklaması",
+      "items": []
     }
   ],
   "cta": {
