@@ -9,8 +9,8 @@
   "completed": [
     {
       "id": "validebag-27-28",
-      "slug": "valideba-27-28-blok-deneme22",
-      "title": "Validebağ 27-28 Blok deneme22",
+      "slug": "validebag-27-28-blok",
+      "title": "Validebağ 27-28 Blok",
       "shortDescription": "Altunizade Mah. Kalfa Çeşme Sok.",
       "fullDescription": "Altunizade Mahallesi Kalfa Çeşme Sokak'ta konumlanan Validebağ 27-28 Blok projemiz, modern mimari anlayışı ve kaliteli işçiliğiyle öne çıkmaktadır. 56 daireden oluşan projemiz, Üsküdar'ın en prestijli lokasyonlarından birinde yer almaktadır.",
       "details": "56 Daire",
@@ -20,7 +20,7 @@
       "units": "56 Daire",
       "floors": "8 Kat",
       "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/7cb95787-bb01-4847-bfaf-9c34b9691bd2-PSiuLCMn3rJPkejV8ZtjxHI0shR1Ck.png",
+      "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600",
@@ -48,18 +48,9 @@
       "units": "36 Daire",
       "floors": "6 Kat",
       "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/m2-IjPXf64N5F4q8PRvpqO5z2sY7NkUmO.jpg",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
-      "features": [
-        "Merkezi konum",
-        "Kaliteli malzeme",
-        "Kapalı otopark",
-        "Peyzaj düzenlemesi",
-        "Çocuk oyun alanı"
-      ]
+      "mainImage": "/placeholder.svg?height=400&width=600",
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
     },
     {
       "id": "eski-anadolu-b",
@@ -76,53 +67,14 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": [
-        "Kentsel dönüşüm projesi",
-        "Depreme dayanıklı yapı",
-        "Modern altyapı",
-        "Yalıtım sistemi"
-      ]
-    },
-    {
-      "id": "project-1765628073519",
-      "slug": "yeni-proje-1765628073519",
-      "title": "Yeni Proje",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/i2-kogFI8ETQxlhKdFExXr9gp4AaWkKVF.jpg",
-      "gallery": [],
-      "features": [],
-      "updates": []
-    },
-    {
-      "id": "project-1765628216569",
-      "slug": "tamamaland-yeni-proje",
-      "title": " tamamalandı Yeni Proje",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "completed",
-      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/c2-npqoOQrRNa7EFNVKNiYPv5PtuwDsG9.jpg",
-      "gallery": [],
-      "features": [],
-      "updates": []
+      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
     }
   ],
   "ongoing": [
     {
       "id": "validebag-29",
-      "slug": "valideba-29-kentsel-d-n-m-deneme",
-      "title": "Validebağ 29 Kentsel Dönüşüm deneme",
+      "slug": "validebag-29-kentsel-donusum",
+      "title": "Validebağ 29 Kentsel Dönüşüm",
       "shortDescription": "38 Daire - Kaba inşaat tamamlandı",
       "fullDescription": "Validebağ 29 Kentsel Dönüşüm projemiz, 38 daire kapasitesiyle devam etmektedir. Kaba inşaat aşaması tamamlanmış olup, 2025 yılının 3. çeyreğinde teslim edilmesi planlanmaktadır.",
       "details": "2. Etap 2025 3. Çeyrek tamamlanacak",
@@ -135,10 +87,7 @@
       "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": [
-        "/placeholder.svg?height=400&width=600",
-        "/placeholder.svg?height=400&width=600"
-      ],
+      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
@@ -158,24 +107,6 @@
           "description": "Çatı katı betonarme işleri tamamlanmıştır."
         }
       ]
-    },
-    {
-      "id": "project-1765628228286",
-      "slug": "yeni-proje-devame-den",
-      "title": "Yeni Proje devame den",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "ongoing",
-      "mainImage": "/construction-site-overview.png",
-      "gallery": [],
-      "features": [],
-      "progress": 0,
-      "updates": []
     }
   ],
   "upcoming": [
@@ -193,36 +124,6 @@
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
       "features": []
-    },
-    {
-      "id": "project-1765628236452",
-      "slug": "yeni-proje-ba-layacak",
-      "title": "Yeni Proje başlayacak",
-      "shortDescription": "Kısa açıklama",
-      "fullDescription": "Detaylı proje açıklaması buraya gelecek",
-      "year": "2025",
-      "location": "İstanbul",
-      "area": "5.000 m²",
-      "units": "40 Daire",
-      "floors": "8 Kat",
-      "status": "upcoming",
-      "mainImage": "/construction-site-overview.png",
-      "gallery": [],
-      "features": [],
-      "updates": []
     }
-  ],
-  "projects": {
-    "completed": {
-      "0": {
-        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/post3_01.jpg"
-      },
-      "1": {
-        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/site-kapak-%C3%85%C2%9Fablonu-1.png"
-      },
-      "3": {
-        "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/m3.jpg"
-      }
-    }
-  }
+  ]
 }

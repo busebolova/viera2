@@ -19,14 +19,13 @@ const iconMap: Record<string, any> = {
 }
 
 async function getServicesData() {
-  const servicesData = await getContent<any>("services")
+  const timestamp = Date.now()
+  const servicesData = await getContent<any>("services", timestamp)
   return servicesData
 }
 
 export default async function ServicesPage() {
   const servicesData = await getServicesData()
-
-  console.log("[v0] Hizmetler sayfası render edildi, servis sayısı:", servicesData.services?.length || 0)
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">

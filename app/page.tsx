@@ -86,7 +86,8 @@ const defaultContent = {
 
 async function getHomeContent() {
   try {
-    const data = await getContent("home")
+    const timestamp = Date.now()
+    const data = await getContent("home", timestamp)
     return {
       video: data?.video || defaultContent.video,
       stats: data?.stats || defaultContent.stats,
@@ -96,23 +97,28 @@ async function getHomeContent() {
       cta: data?.cta || defaultContent.cta,
     }
   } catch (error) {
+    console.error("[v0] Home content error:", error)
     return defaultContent
   }
 }
 
 async function getProjectsContent() {
   try {
-    return await getProjects()
+    const timestamp = Date.now()
+    return await getProjects(timestamp)
   } catch (error) {
+    console.error("[v0] Projects content error:", error)
     return { completed: [], ongoing: [], upcoming: [] }
   }
 }
 
 async function getServicesContent() {
   try {
-    const data = await getContent("services")
+    const timestamp = Date.now()
+    const data = await getContent("services", timestamp)
     return data?.services || []
   } catch (error) {
+    console.error("[v0] Services content error:", error)
     return []
   }
 }

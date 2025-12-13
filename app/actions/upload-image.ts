@@ -11,6 +11,7 @@ export async function uploadImage(formData: FormData) {
 
     const blob = await put(file.name, file, {
       access: "public",
+      addRandomSuffix: true,
     })
 
     return { success: true, url: blob.url }

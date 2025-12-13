@@ -1,4 +1,4 @@
-x"use client"
+"use client"
 
 import type React from "react"
 
@@ -1666,4 +1666,3 @@ const AdminPanel = () => {
 }
 
 export default AdminPanel
-

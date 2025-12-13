@@ -36,7 +36,8 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function ProjectsPage() {
-  const projectsData = await getProjects()
+  const timestamp = Date.now()
+  const projectsData = await getProjects(timestamp)
 
   return (
     <div className="min-h-screen pb-16 md:pb-0">

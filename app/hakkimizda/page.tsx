@@ -13,8 +13,9 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function AboutPage() {
-  const aboutData = await getContent<any>("about")
-  const contactData = await getContent<any>("contact")
+  const timestamp = Date.now()
+  const aboutData = await getContent<any>("about", timestamp)
+  const contactData = await getContent<any>("contact", timestamp)
 
   const stats = [
     {
