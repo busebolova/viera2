@@ -71,6 +71,13 @@
       "title": "Yeni Hizmet",
       "description": "Hizmet açıklaması",
       "items": []
+    },
+    {
+      "id": "service-1765627246998",
+      "icon": "Home",
+      "title": "Yeni Hizmet",
+      "description": "Hizmet açıklaması",
+      "items": []
     }
   ],
   "cta": {
