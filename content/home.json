@@ -1,7 +1,13 @@
 {
   "hero": {
     "title": "Viera & Alkan Yapı",
-    "typewriterWords": ["Güven", "Kalite", "Profesyonellik", "Deneyim", "Başarı"],
+    "typewriterWords": [
+      "Güven",
+      "Kalite",
+      "Profesyonellik",
+      "Deneyim",
+      "Başarı"
+    ],
     "description": "60 yılı aşkın tecrübemizle İstanbul'un prestijli projelerinde fark yaratıyoruz.",
     "buttonText": "Hizmetlerimiz",
     "buttonLink": "/hizmetlerimiz",
