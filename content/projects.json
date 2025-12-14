@@ -20,7 +20,7 @@
       "units": "56 Daire",
       "floors": "8 Kat",
       "status": "completed",
-      "mainImage": "/placeholder.svg?height=400&width=600",
+      "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/c%C3%8C%C2%A72-DZRD9gEln8iTBoah8KB1nAVdrcxQSr.jpg",
       "gallery": [
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600",
@@ -49,8 +49,17 @@
       "floors": "6 Kat",
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
-      "features": ["Merkezi konum", "Kaliteli malzeme", "Kapalı otopark", "Peyzaj düzenlemesi", "Çocuk oyun alanı"]
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
+      "features": [
+        "Merkezi konum",
+        "Kaliteli malzeme",
+        "Kapalı otopark",
+        "Peyzaj düzenlemesi",
+        "Çocuk oyun alanı"
+      ]
     },
     {
       "id": "eski-anadolu-b",
@@ -67,7 +76,12 @@
       "status": "completed",
       "mainImage": "/placeholder.svg?height=400&width=600",
       "gallery": [],
-      "features": ["Kentsel dönüşüm projesi", "Depreme dayanıklı yapı", "Modern altyapı", "Yalıtım sistemi"]
+      "features": [
+        "Kentsel dönüşüm projesi",
+        "Depreme dayanıklı yapı",
+        "Modern altyapı",
+        "Yalıtım sistemi"
+      ]
     }
   ],
   "ongoing": [
@@ -87,7 +101,10 @@
       "progress": 65,
       "status": "ongoing",
       "mainImage": "/placeholder.svg?height=400&width=600",
-      "gallery": ["/placeholder.svg?height=400&width=600", "/placeholder.svg?height=400&width=600"],
+      "gallery": [
+        "/placeholder.svg?height=400&width=600",
+        "/placeholder.svg?height=400&width=600"
+      ],
       "features": [
         "Kentsel dönüşüm projesi",
         "Modern mimari",
