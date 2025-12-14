@@ -22,7 +22,7 @@
       "status": "completed",
       "mainImage": "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/c%C3%8C%C2%A72-DZRD9gEln8iTBoah8KB1nAVdrcxQSr.jpg",
       "gallery": [
-        "/placeholder.svg?height=400&width=600",
+        "https://h0s2okufymxhjmci.public.blob.vercel-storage.com/go%C3%8C%C2%88rsel2-rB0C7MdGX9EXHmrb9SdUhvcwZTyMTh.jpg",
         "/placeholder.svg?height=400&width=600",
         "/placeholder.svg?height=400&width=600"
       ],
@@ -33,6 +33,13 @@
         "Güvenlik sistemi",
         "Jeneratör",
         "Asansör"
+      ],
+      "updates": [
+        {
+          "date": "debneme",
+          "title": "deneme",
+          "description": "deneme"
+        }
       ]
     },
     {
