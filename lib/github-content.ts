@@ -4,6 +4,7 @@ const GITHUB_OWNER = process.env.GITHUB_OWNER
 const GITHUB_REPO = process.env.GITHUB_REPO
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || "main"
 
+// Türkçe karakter uyumlu slug
 function generateSlug(title: string): string {
   return title
     .toLowerCase()
@@ -17,48 +18,41 @@ function generateSlug(title: string): string {
     .replace(/^-+|-+$/g, "")
 }
 
-export async function getContent<T>(file: string, timestamp?: number): Promise<T> {
+// 🔥 CACHE'SİZ – GERÇEK ZAMANLI CONTENT
+export async function getContent<T>(file: string): Promise<T> {
   if (!GITHUB_TOKEN || !GITHUB_OWNER || !GITHUB_REPO) {
     throw new Error(`GitHub config missing for ${file}`)
   }
 
-  try {
-    const ts = timestamp || Date.now()
-    const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/${file}.json?t=${ts}`
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/content/${file}.json?ref=${GITHUB_BRANCH}`
 
-    console.log(`[v0] Fetching ${file} from GitHub RAW`)
+  const res = await fetch(apiUrl, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github.v3.raw",
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      Pragma: "no-cache",
+    },
+  })
 
-    const res = await fetch(rawUrl, {
-      cache: "no-store",
-      headers: {
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
-        "Cache-Control": "no-cache",
-      },
-    })
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch ${file}: ${res.status}`)
-    }
-
-    const data = await res.json()
-    console.log(`[v0] Successfully loaded ${file} from GitHub`)
-    return data as T
-  } catch (err) {
-    console.error(`[v0] Error fetching ${file}:`, err)
-    throw err
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${file}: ${res.status}`)
   }
+
+  return (await res.json()) as T
 }
 
-export async function getProjects(timestamp?: number) {
-  const data = await getContent<any>("projects", timestamp)
+// 🔥 PROJELER – ID + SLUG GARANTİLİ
+export async function getProjects() {
+  const data = await getContent<any>("projects")
 
-  const processProjects = (projects: any[]) => {
-    return projects.map((project, index) => ({
+  const processProjects = (projects: any[]) =>
+    projects.map((project, index) => ({
       ...project,
       id: project.id || `${generateSlug(project.title)}-${index}`,
       slug: project.slug || generateSlug(project.title),
     }))
-  }
 
   return {
     ...data,
