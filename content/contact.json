@@ -5,5 +5,13 @@
   "email": "info@alkanyapi.com.tr",
   "fax": "0216 310 90 74",
   "authorized": "Erdem Alkan",
-  "hours": "Pazartesi - Cuma: 09:00 - 18:00"
+  "hours": "Pazartesi - Cuma: 09:00 - 18:00",
+  "team": [
+    {
+      "name": "deneme",
+      "title": "deneme",
+      "icon": "User",
+      "phone": "deneme"
+    }
+  ]
 }
