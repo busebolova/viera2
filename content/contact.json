@@ -8,16 +8,16 @@
   "hours": "Pazartesi - Cuma: 09:00 - 18:00",
   "team": [
     {
-      "name": "deneme",
-      "title": "deneme",
-      "icon": "User",
-      "phone": "deneme"
-    },
-    {
       "name": "Veysel Köse",
       "title": "Şirket Ortağı",
       "icon": "User",
       "phone": "05332074885"
+    },
+    {
+      "name": "Erdem Alkan",
+      "title": "Şirket Ortağı",
+      "icon": "User",
+      "phone": "05334798387"
     }
   ]
 }
