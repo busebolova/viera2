@@ -1,5 +1,5 @@
 {
-  "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul",
+  "address": "Altunizade Mah. Ord. Prof Fahrettin Kerim Gökay Cad. No7/8 Üsküdar/ İstanbul 2",
   "phone": "0216 391 49 40",
   "mobile": "0533 479 83 87",
   "email": "erdemalkan72@gmail.com",
@@ -8,10 +8,11 @@
   "hours": "Pazartesi - Cuma: 09:00 - 18:00",
   "team": [
     {
-      "name": "Veysel Köse",
-      "title": "Şirket Yetkilisi",
+      "name": "deneme",
+      "title": "deneme",
       "icon": "User",
-      "phone": "05332074885"
+      "phone": "deneme"
     }
-  ]
+  ],
+  "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25171.250283834826!2d40.15296233476562!3d37.94429844049205!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40751fa80abac46b%3A0x53070c279310852c!2sDiyarbak%C4%B1r!5e0!3m2!1str!2str!4v1765800612319!5m2!1str!2str\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen="
 }
