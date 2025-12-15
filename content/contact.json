@@ -9,15 +9,9 @@
   "team": [
     {
       "name": "Veysel Köse",
-      "title": "Şirket Ortağı",
+      "title": "Şirket Yetkilisi",
       "icon": "User",
       "phone": "05332074885"
-    },
-    {
-      "name": "Erdem Alkan",
-      "title": "Şirket Ortağı",
-      "icon": "User",
-      "phone": "05334798387"
     }
   ]
 }
